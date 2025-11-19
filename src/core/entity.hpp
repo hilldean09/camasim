@@ -12,22 +12,22 @@ namespace CSIM {
   public:
     // Constructors //
     Entity();
-    Entity( PosVec<PrecT> position, VelVec<PrecT> velocity, PrecT mass );
+    Entity( Vector<PrecT> position, Vector<PrecT> velocity, PrecT mass );
 
 
     // Accessors //
-    inline PosVec<PrecT> getPosition() const { return m_position; }
-    inline VelVec<PrecT> getVeloctiy() const { return m_velocity; }
+    inline Vector<PrecT> getPosition() const { return m_position; }
+    inline Vector<PrecT> getVeloctiy() const { return m_velocity; }
     inline PrecT getMass() const { return m_mass; }
 
 
     // Mutators //
-    void setPosition( PrecT x, PrecT y, PrecT z );
-    void setVelocity( PrecT x, PrecT y, PrecT z );
+    void setPosition( Vector<PrecT> position );
+    void setVelocity( Vector<PrecT> velocity );
     inline void setMass( PrecT mass ) { m_mass = mass; }
 
-    void applyForce( PrecT x, PrecT y, PrecT z );
-    void applyAcceleration( PrecT x, PrecT y, PrecT z );
+    void applyForce( Vector<PrecT> force );
+    void applyAcceleration( Vector<PrecT> acceleration );
 
 
     // Logger //
@@ -36,10 +36,16 @@ namespace CSIM {
 
   private:
     // Attributes //
-    PosVec<PrecT> m_position;
-    VelVec<PrecT> m_velocity;
+    Vector<PrecT> m_position;
+    Vector<PrecT> m_velocity;
+
+    Vector<PrecT> m_acceleration;
+    Vector<PrecT> m_force
 
     const PrecT m_mass;
+
+    // Initialisers //
+    void initDefaults();
 
   };
 
