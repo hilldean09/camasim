@@ -9,3 +9,9 @@
 - All contents will be kept under the ```Camasim``` namespace which will often be aliased to ```Csim```.
 - Pre-processor controls will be included in a dedicated header file ```pre_controls.hpp```.
 - GPU accelerated functionality for any given family of source files will be included in separate CUDA files named ```[Family Name]_gpua.cu```. Exceptional circumstances will be explicitly noted.
+- The project will include ```PrecT``` as a common template type meant to represent any floating point type, allowing for easily variable levels of precision.
+
+# Vector Struct
+- The ```Vector``` struct will used to store the Cartesian coordinates of various vector values in the project.
+- ```Vector``` will contain a method to calculate various values of the represented, including magnitude and the vector's radial representation.
+- Note that the current method of calculating the absolute of the vector will utilise ```std::hypot```. As calculating vector magnitudes can be an expensive computation, this should be revisited during optimisation.

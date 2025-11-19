@@ -2,20 +2,19 @@
 #ifndef CSIM_STRUCTS_H
 #define CSIM_STRUCTS_H
 
+#include <cmath>
+
 namespace {
 
   template <class PrecT>
-  struct PosVec {
-    PrecT x;
-    PrecT y;
-    PrecT z;
-  };
+  struct Vector{
 
-  template <class PrecT>
-  struct VelVec {
     PrecT x;
     PrecT y;
     PrecT z;
+
+    PrecT getAbs() { return std::hypot<PrecT>( x, y, z ); }
+
   };
 
 }
