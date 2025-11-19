@@ -3,6 +3,7 @@
 #define CSIM_ENTITY_HPP
 
 #include "pre_controls.hpp"
+#include "structs.hpp"
 #include <string>
 
 namespace CSIM {
@@ -13,7 +14,9 @@ namespace CSIM {
   
   private:
     // Attributes //
-
+    PosVec m_position;
+    VelVec m_velocity;
+    PrecT m_mass;
 
   };
 
