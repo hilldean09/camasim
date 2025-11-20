@@ -33,15 +33,20 @@ namespace CSIM {
       PrecT* m_masses;
 
       unsigned long long int m_p_number;
+      char* m_statuses;
 
 
       // Initialisers //
       void initDefaults();
 
       void initPNumber( unsigned long long int p_number );
+      void initStatuses();
 
       void initPositions();
       void initVelocities();
+
+      void initAccelerations();
+      void initForces();
 
       void initMasses();
 

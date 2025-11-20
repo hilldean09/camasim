@@ -20,6 +20,7 @@ namespace {
   template <class PrecT>
   struct Vec_Arrs {
 
+    PrecT* arenaPtr;
     PrecT* x;
     PrecT* y;
     PrecT* z;
