@@ -13,11 +13,10 @@ namespace CSIM {
     public:
       // Constructors //
       Particle_Cloud();
-      Particle_Cloud( unsigned int seed );
 
 
       // Initialisers //
-      void initialise( unsigned long long int p_number, unsigned int seed );
+      void initialise( unsigned long long int p_number );
 
 
       // Misc //
@@ -33,14 +32,13 @@ namespace CSIM {
       
       PrecT* m_masses;
 
-      unsigned int m_seed;
       unsigned long long int m_p_number;
 
 
       // Initialisers //
       void initDefaults();
 
-      void initSeed();
+      void initPNumber( unsigned long long int p_number );
 
       void initPositions();
       void initVelocities();

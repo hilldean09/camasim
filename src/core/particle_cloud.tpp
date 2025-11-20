@@ -6,7 +6,11 @@ namespace CSIM {
   
   // Initialisers //
   template <class PrecT>
-  void Particle_Cloud<PrecT>::initialise() {
+  void Particle_Cloud<PrecT>::initialise( unsigned long long int p_number );
+    initDefautls();
+
+    initPNumber( p_number );
+
 
 
   }
@@ -20,7 +24,6 @@ namespace CSIM {
 
     m_masses = nullptr;
 
-    m_seed = 0;
     m_p_number = 1;
 
 }
