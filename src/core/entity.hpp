@@ -23,7 +23,9 @@ namespace CSIM {
 
     // Mutators //
     void setPosition( Vector<PrecT> position );
+    void setPosition( Vector<PrecT>* positionPtr );
     void setVelocity( Vector<PrecT> velocity );
+    void setVelocity( Vector<PrecT>* velocityPtr );
     inline void setMass( PrecT mass ) { m_mass = mass; }
 
     void applyForce( Vector<PrecT> force );
@@ -42,7 +44,7 @@ namespace CSIM {
     Vector<PrecT> m_acceleration;
     Vector<PrecT> m_force
 
-    const PrecT m_mass;
+    PrecT m_mass;
 
     // Initialisers //
     void initDefaults();
