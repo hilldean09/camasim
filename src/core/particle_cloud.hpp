@@ -12,7 +12,8 @@ namespace CSIM {
       // Constructors //
       Particle_Cloud();
 
-      
+      // Misc //
+      ~Particle_Cloud();
 
     private:
       // Attributes //
@@ -25,9 +26,13 @@ namespace CSIM {
       PrecT* masses;
 
 
-
       // Initialisers //
-      init
+      void initDefaults();
+
+      void initPositions();
+      void initVelocities();
+
+      void initMasses();
 
   };
 
