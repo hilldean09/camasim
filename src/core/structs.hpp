@@ -17,6 +17,15 @@ namespace {
 
   };
 
+  template <class PrecT>
+  struct Vec_Arrs {
+
+    PrecT* x;
+    PrecT* y;
+    PrecT* z;
+
+  }
+
 }
 
 #endif
