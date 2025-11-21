@@ -2,15 +2,19 @@
 #ifndef CSIM_PARTICLE_CLOUD_TPP
 #define CSIM_PARTICLE_CLOUD_TPP
 
+#include <cstdlib>
+#include <random>
+
 namespace CSIM {
   
   // Initialisers //
   template <class PrecT>
-  void Particle_Cloud<PrecT>::initialise( unsigned long long int p_number );
+  void Particle_Cloud<PrecT>::initialise( unsigned long long int p_number, std::default_random_engine* randomEnginePtr );
 
     initDefautls();
 
     initPNumber( p_number );
+    initRandomEngine( randomEnginePtr );
     initStatuses();
 
     initPositions();
@@ -19,12 +23,15 @@ namespace CSIM {
     initForces();
 
     initMasses();
+    initRadii();
+    initPartialRestitutions();
 
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::initDefautls() {
     m_p_number = 1;
+    m_randomEningePtr = nullptr;
     m_statuses = nullptr;
 
     m_positions = { nullptr, nullptr, nullptr, nullptr };
@@ -40,6 +47,11 @@ namespace CSIM {
   template <class PrecT>
   void Particle_Cloud<PrecT>::initPNumber( unsigned long long int p_number ) {
     m_p_number = p_number;
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::initRandomEngine( std::default_random_engine* randomEnginePtr ) {
+    m_randomEningePtr = randomEnginePtr;
   }
 
   template <class PrecT>
@@ -117,12 +129,37 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void Particle_Cloud<PrecT>::initPartialRestitution() {
+  void Particle_Cloud<PrecT>::initPartialRestitutions() {
     m_partial_restitution = ( PrecT* ) std::malloc( m_p_number * sizeof( PrecT ) );
 
     for( int idx = 0; idx < m_p_number; idx++ ) {
       generateRandomPartialRestitution( m_partial_restitutions );
     }
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::generateRandomPosition( PrecT* arenaPtr, unsigned long long int p_number ) {
+
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::generateRandomVelocity( PrecT* arenaPtr, unsigned long long int p_number ) {
+
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::generateRandomMass( PrecT* arenaPtr, unsigned long long int p_number ) {
+
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::generateRandomRadius( PrecTPosition* arenaPtr, unsigned long long int p_number ) {
+
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::generateRandomPartialRestitution( PrecT* arenaPtr, unsigned long long int p_number ) {
+
   }
 
 
