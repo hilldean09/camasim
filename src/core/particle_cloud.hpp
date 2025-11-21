@@ -70,12 +70,12 @@ namespace CSIM {
       void initRadii();
       void initPartialRestitutions();
 
-      void generateRandomPosition( PrecT* arenaPtr, unsigned long long int p_number );
-      void generateRandomVelocity( PrecT* arenaPtr, unsigned long long int p_number );
+      void generateRandomPosition( unsigned long long int idx );
+      void generateRandomVelocity( unsigned long long int idx );
 
-      void generateRandomMass( PrecT* masses );
-      void generateRandomRadius( PrecT* radii );
-      void generateRandomPartialRestitution( PrecT* partial_restitutions );
+      void generateRandomMass( unsigned long long int idx );
+      void generateRandomRadius( unsigned long long int idx);
+      void generateRandomPartialRestitution( unsigned long long int idx );
 
   };
 
