@@ -25,6 +25,14 @@ namespace {
     PrecT* y;
     PrecT* z;
 
+    void setPtrs( unsigned long long int p_number ) {
+
+      x = arenaPtr;
+      y = arenaPtr + p_number;
+      z = arenaPtr + p_number + p_number;
+
+    }
+
   }
 
 }
