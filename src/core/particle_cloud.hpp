@@ -22,6 +22,7 @@ namespace CSIM {
       // Misc //
       ~Particle_Cloud();
 
+
     private:
       // Attributes //
       Vec_Arrs<PrecT> m_positions;
@@ -31,6 +32,8 @@ namespace CSIM {
       Vec_Arrs<PrecT> m_forces;
       
       PrecT* m_masses;
+      PrecT* m_radii;
+      PrecT* m_partial_restitution;
 
       unsigned long long int m_p_number;
       char* m_statuses;
@@ -49,6 +52,8 @@ namespace CSIM {
       void initForces();
 
       void initMasses();
+      void initRadii();
+      void initPartialRestitution();
 
   };
 

@@ -1,3 +1,6 @@
+---
+Created: 2025-11-19
+---
 # Restructuring
 While contemplating the most efficient way to handle the massive amounts of ```Entity``` I realised the massive inefficiency that using a separate object for every particle would cause. I had originally planned to use an arena allocator (allocating a large amount of hopefully contiguous memory to read cold reads). From a CPU standard I do believe this would still have been a viable options, however, I forget this would be massively inefficient in regards to GPU programming (i.e. the whole base of this project).
 
@@ -21,4 +24,4 @@ As the arrays within ```Particle_Cloud``` will nearly always used in embarrassin
 
 Additionally, Structure 1 will allow for more fine tuned memory handling between the host and the device as memory can be transferred on a component by component basis while Structure 2 cannot (trivially at least). Furthermore, Structure 1's and Structure 2's performance will be likely be comparable especially with the use of Arena Allocators.
 
-As eluded to before, by the nature of the Cartesian coordinates, that is all components are linearly independent, a large proportion of the algorithms will likely be able to be done on a component by component basis, further supporting Structure 1.
+As eluded to before, by the nature of the Cartesian coordinates, that is all components are linearly independent, a large proportion of the algorithms will likely be able to be done on a component by component basis, further supporting Structure 1.2

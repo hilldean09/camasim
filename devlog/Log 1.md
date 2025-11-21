@@ -1,3 +1,6 @@
+---
+Created: 2025-11-18
+---
 # Core
 - The core of CAMASIM will be written as a library and utilised by the ```main.cpp```
 - A ```Manager``` class will act as the central connection for all aspects of CAMASIM.
