@@ -163,6 +163,34 @@ namespace CSIM {
   }
 
 
+  // Mutators //
+  template <class PrecT>
+  Particle_Cloud<PrecT>::setDistribution( const char distribution, PrecT mean, PrecT standardDeviation ) {
+    /* 'p' for postion, 'v' for velocity,
+     * 'm' for mass. 'r' for radius, and
+     * 'e' for partial restitution (elasticity).
+     */
+    switch( distribution ) {
+      case 'p':
+        m_positionDistribution = std::normalDistribution( mean, standardDeviation );
+        break;
+      case 'v':
+        m_velocityDistribution = std::normalDistribution( mean, standardDeviation );
+        break;
+      case 'm':
+        m_massDistribution = std::normalDistribution( mean, standardDeviation );
+        break;
+      case 'r':
+        m_radiusDistribution = std::normalDistribution( mean, standardDeviation );
+        break;
+      case 'e':
+        m_partialRestitutionDistribution = std::normalDistribution( mean, standardDeviation );
+        break;
+
+    }
+
+  }
+
   // Misc //
   template <class PrecT>
   Particle_Cloud<PrecT>::~Particle_Cloud() {

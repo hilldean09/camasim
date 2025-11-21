@@ -20,6 +20,9 @@ namespace CSIM {
       void initialise( unsigned long long int p_number, std::default_random_engine* randomEnginePtr );
 
 
+      // Mutators //
+      void setDistribution( char distribution, PrecT mean, PrecT standardDeviaion );
+
       // Misc //
       ~Particle_Cloud();
 
@@ -38,8 +41,17 @@ namespace CSIM {
 
       unsigned long long int m_p_number;
       char* m_statuses;
+
       std::default_random_engine* m_randomEnginePtr;
 
+      /* Note that std::normal_distribution defaults to
+       * a mean of 0 and standard deviation of 1
+       */
+      std::normal_distribution<PrecT> m_positionDistribution;
+      std::normal_distribution<PrecT> m_velocityDistribution;
+      std::normal_distribution<PrecT> m_massDistribution;
+      std::normal_distribution<PrecT> m_radiusDistribution;
+      std::normal_distribution<PrecT> m_partialRestitutionDistribution;
 
       // Initialisers //
       void initDefaults();
