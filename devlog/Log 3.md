@@ -18,3 +18,6 @@ While considering collision handling I recalled my need for a output structure t
 - gravity calculations are independent of velocity (as positions will not be updated).and
 - gravity calculations are independent of collisions.
 >[!note] Possible Opportunity for simultaneous collision handling (on CPU) and gravity simulation (on GPU).
+
+# Random Initialisation Formulas
+For the many of the randomly generated starting values, normal distributions are preferred as opposed to uniform distributions. To achieve this, the ```Manager``` class will contain the seeded generator while the 
