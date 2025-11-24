@@ -139,7 +139,7 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomPosition( unsigned long long int idx ) {
-    
+    static 
   }
 
   template <class PrecT>
