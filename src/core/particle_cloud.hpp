@@ -2,7 +2,7 @@
 #ifndef CSIM_PARTICLE_CLOUD_HPP
 #define CSIM_PARTICLE_CLOUD_HPP
 
-#include "struct.hpp"
+#include "structs.hpp"
 
 #include <cstdlib>
 #include <random>
@@ -38,7 +38,7 @@ namespace CSIM {
       
       PrecT* m_masses;
       PrecT* m_radii;
-      PrecT* m_partial_restitution;
+      PrecT* m_partial_restitutions;
 
       unsigned long long int m_p_number;
       char* m_statuses;
@@ -48,18 +48,22 @@ namespace CSIM {
       /* Note that std::normal_distribution defaults to
        * a mean of 0 and standard deviation of 1
        */
-      std::normal_distribution<PrecT> m_positionDistribution;
-      std::normal_distribution<PrecT> m_velocityDistribution;
+      std::normal_distribution<PrecT> m_radialPositionDistribution;
+      std::normal_distribution<PrecT> m_radialVelocityDistribution;
       std::normal_distribution<PrecT> m_massDistribution;
       std::normal_distribution<PrecT> m_radiusDistribution;
       std::normal_distribution<PrecT> m_partialRestitutionDistribution;
+
+      std::uniform_real_distribution<PrecT> m_anglesDistribution;
 
       // Initialisers //
       void initDefaults();
 
       void initPNumber( unsigned long long int p_number );
-      void initGenerator( std::default_random_engine* randomEnginePtr );
       void initStatuses();
+
+      void initGenerator( std::default_random_engine* randomEnginePtr );
+      void initAnglesDistribution();
 
       void initPositions();
       void initVelocities();

@@ -3,7 +3,11 @@
 #define CSIM_PARTICLE_CLOUD_TPP
 
 #include <cstdlib>
+#include <cmath>
 #include <random>
+#include <numbers>
+
+#include "structs.hpp"
 
 namespace CSIM {
   
@@ -14,8 +18,10 @@ namespace CSIM {
     initDefautls();
 
     initPNumber( p_number );
-    initRandomEngine( randomEnginePtr );
     initStatuses();
+
+    initRandomEngine( randomEnginePtr );
+    initAnglesDistribution();
 
     initPositions();
     initVelocities();
@@ -31,7 +37,7 @@ namespace CSIM {
   template <class PrecT>
   void Particle_Cloud<PrecT>::initDefautls() {
     m_p_number = 1;
-    m_randomEningePtr = nullptr;
+    m_randomEnginePtr  = nullptr;
     m_statuses = nullptr;
 
     m_positions = { nullptr, nullptr, nullptr, nullptr };
@@ -41,17 +47,12 @@ namespace CSIM {
 
     m_masses = nullptr;
     m_radii = nullptr;
-    m_partial_restitution = nullptr;
+    m_partial_restitutions = nullptr;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::initPNumber( unsigned long long int p_number ) {
     m_p_number = p_number;
-  }
-
-  template <class PrecT>
-  void Particle_Cloud<PrecT>::initRandomEngine( std::default_random_engine* randomEnginePtr ) {
-    m_randomEningePtr = randomEnginePtr;
   }
 
   template <class PrecT>
@@ -62,6 +63,16 @@ namespace CSIM {
     for( int idx = 0; idx < m_p_number; idx++ ) {
       m_statuses[ idx ] = (char) 1;
     }
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::initRandomEngine( std::default_random_engine* randomEnginePtr ) {
+    m_randomEningePtr = randomEnginePtr;
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::initAnglesDistribution() {
+    m_anglesDistribution = std::uniform_real_distribution<PrecT( -1 * std::numbers::pi_v<PrecT>, std::numbers::pi_v<PrecT> );
   }
 
   template <class PrecT>
@@ -130,7 +141,7 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::initPartialRestitutions() {
-    m_partial_restitution = ( PrecT* ) std::malloc( m_p_number * sizeof( PrecT ) );
+    m_partial_restitutions = ( PrecT* ) std::malloc( m_p_number * sizeof( PrecT ) );
 
     for( int idx = 0; idx < m_p_number; idx++ ) {
       generateRandomPartialRestitution( idx );
@@ -139,27 +150,74 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomPosition( unsigned long long int idx ) {
+<<<<<<< HEAD
     static 
+=======
+    // Creating polar representation
+    PrecT newPolar = m_anglesDistribution( *m_randomEnginePtr );
+    PrecT newAzimuth = m_anglesDistribution( *m_randomEnginePtr );
+    PrecT newRadius = m_radialPositionDistribution( *m_randomEnginePtr );
+
+    Radial_Vector<PrecT> newRadialVector = { newPolar, newAzimuth, newRadius };
+
+    // Cartesian representation
+    Vector<PrecT> newVector = newRadialVector.toCartesian();
+
+    // Assigning new values
+    m_positions.x[ idx ] = newVector.x;
+    m_positions.y[ idx ] = newVector.y;
+    m_positions.z[ idx ] =  newVector.z;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomVelocity( unsigned long long int idx ) {
+    // Creating polar representation
+    PrecT newPolar = m_anglesDistribution( *m_randomEnginePtr );
+    PrecT newAzimuth = m_anglesDistribution( *m_randomEnginePtr );
+    PrecT newRadius = m_radialVelocityDistribution( *m_randomEnginePtr );
 
+    Radial_Vector<PrecT> newRadialVector = { newPolar, newAzimuth, newRadius };
+
+    // Cartesian representation
+    Vector<PrecT> newVector = newRadialVector.toCartesian();
+
+    // Assigning new values
+    m_velocities.x[ idx ] = newVector.x;
+    m_velocities.y[ idx ] = newVector.y;
+    m_velocities.z[ idx ] =  newVector.z;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomMass( unsigned long long int idx ) {
+    // Ensuring non-negative, non-zero mass
+    PrecT newMass = -1;
+    while( newMass <= 0 ) {
+      newMass = m_massDistribution( *m_randomEnginePtr );
+    }
 
+    m_masses[ idx ] = newMass;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomRadius( unsigned long long int idx ) {
+    // Ensuring non-negative, non-zero radius 
+    PrecT newRadius = -1;
+    while( newRadius <= 0 ) {
+      newRadius = m_radiusDistribution( *m_randomEnginePtr );
+    }
 
+    m_radii[ idx ] = newRadius;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomPartialRestitution( unsigned long long int idx ) {
+    // Ensuring 0 - 0.5 range
+    PrecT newPartialRestitution = -1;
+    while( newPartialRestitution < 0 || newPartialRestitution > 0.5 ) {
+      newPartialRestitution = m_partialRestitutionDistribution( *m_randomEnginePtr );
+    }
 
+    m_partial_restitutions[ idx ] = newPartialRestitution;
   }
 
 
@@ -172,10 +230,10 @@ namespace CSIM {
      */
     switch( distribution ) {
       case 'p':
-        m_positionDistribution = std::normalDistribution( mean, standardDeviation );
+        m_radialPositionDistribution = std::normalDistribution( mean, standardDeviation );
         break;
       case 'v':
-        m_velocityDistribution = std::normalDistribution( mean, standardDeviation );
+        m_radialVelocityDistribution = std::normalDistribution( mean, standardDeviation );
         break;
       case 'm':
         m_massDistribution = std::normalDistribution( mean, standardDeviation );
@@ -204,7 +262,7 @@ namespace CSIM {
 
     std::free( m_masses );
     std::free( m_radii );
-    std::free( m_partial_restitution );
+    std::free( m_partial_restitutions );
 
   }
 
