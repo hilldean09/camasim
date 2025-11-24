@@ -3,7 +3,10 @@
 #define CSIM_PARTICLE_CLOUD_TPP
 
 #include <cstdlib>
+#include <cmath>
 #include <random>
+
+#include "structs.hpp"
 
 namespace CSIM {
   
@@ -172,10 +175,10 @@ namespace CSIM {
      */
     switch( distribution ) {
       case 'p':
-        m_positionDistribution = std::normalDistribution( mean, standardDeviation );
+        m_radialPositionDistribution = std::normalDistribution( mean, standardDeviation );
         break;
       case 'v':
-        m_velocityDistribution = std::normalDistribution( mean, standardDeviation );
+        m_radialVelocityDistribution = std::normalDistribution( mean, standardDeviation );
         break;
       case 'm':
         m_massDistribution = std::normalDistribution( mean, standardDeviation );
