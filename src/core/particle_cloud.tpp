@@ -150,9 +150,6 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomPosition( unsigned long long int idx ) {
-<<<<<<< HEAD
-    static 
-=======
     // Creating polar representation
     PrecT newPolar = m_anglesDistribution( *m_randomEnginePtr );
     PrecT newAzimuth = m_anglesDistribution( *m_randomEnginePtr );
