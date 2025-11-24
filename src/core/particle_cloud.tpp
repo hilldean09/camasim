@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <random>
+#include <numbers>
 
 #include "structs.hpp"
 
@@ -17,8 +18,10 @@ namespace CSIM {
     initDefautls();
 
     initPNumber( p_number );
-    initRandomEngine( randomEnginePtr );
     initStatuses();
+
+    initRandomEngine( randomEnginePtr );
+    initAnglesDistribution();
 
     initPositions();
     initVelocities();
@@ -53,11 +56,6 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void Particle_Cloud<PrecT>::initRandomEngine( std::default_random_engine* randomEnginePtr ) {
-    m_randomEningePtr = randomEnginePtr;
-  }
-
-  template <class PrecT>
   void Particle_Cloud<PrecT>::initStatuses() {
     m_statuses = (char*) std::malloc( m_p_number * sizeof( char ) );
 
@@ -65,6 +63,16 @@ namespace CSIM {
     for( int idx = 0; idx < m_p_number; idx++ ) {
       m_statuses[ idx ] = (char) 1;
     }
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::initRandomEngine( std::default_random_engine* randomEnginePtr ) {
+    m_randomEningePtr = randomEnginePtr;
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::initAnglesDistribution() {
+    m_anglesDistribution = std::uniform_real_distribution<PrecT( -1 * std::numbers::pi_v<PrecT>, std::numbers::pi_v<PrecT> );
   }
 
   template <class PrecT>

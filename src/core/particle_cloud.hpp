@@ -2,7 +2,7 @@
 #ifndef CSIM_PARTICLE_CLOUD_HPP
 #define CSIM_PARTICLE_CLOUD_HPP
 
-#include "struct.hpp"
+#include "structs.hpp"
 
 #include <cstdlib>
 #include <random>
@@ -53,12 +53,16 @@ namespace CSIM {
       std::normal_distribution<PrecT> m_radiusDistribution;
       std::normal_distribution<PrecT> m_partialRestitutionDistribution;
 
+      std::uniform_real_distribution<PrecT> m_anglesDistribution;
+
       // Initialisers //
       void initDefaults();
 
       void initPNumber( unsigned long long int p_number );
-      void initGenerator( std::default_random_engine* randomEnginePtr );
       void initStatuses();
+
+      void initGenerator( std::default_random_engine* randomEnginePtr );
+      void initAnglesDistribution();
 
       void initPositions();
       void initVelocities();
