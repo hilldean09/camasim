@@ -37,7 +37,7 @@ namespace CSIM {
   template <class PrecT>
   void Particle_Cloud<PrecT>::initDefautls() {
     m_p_number = 1;
-    m_randomEningePtr = nullptr;
+    m_randomEnginePtr  = nullptr;
     m_statuses = nullptr;
 
     m_positions = { nullptr, nullptr, nullptr, nullptr };
@@ -47,7 +47,7 @@ namespace CSIM {
 
     m_masses = nullptr;
     m_radii = nullptr;
-    m_partial_restitution = nullptr;
+    m_partial_restitutions = nullptr;
   }
 
   template <class PrecT>
@@ -141,7 +141,7 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::initPartialRestitutions() {
-    m_partial_restitution = ( PrecT* ) std::malloc( m_p_number * sizeof( PrecT ) );
+    m_partial_restitutions = ( PrecT* ) std::malloc( m_p_number * sizeof( PrecT ) );
 
     for( int idx = 0; idx < m_p_number; idx++ ) {
       generateRandomPartialRestitution( idx );
@@ -186,17 +186,35 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomMass( unsigned long long int idx ) {
+    // Ensuring non-negative, non-zero mass
+    PrecT newMass = -1;
+    while( newMass <= 0 ) {
+      newMass = m_massDistribution( *m_randomEnginePtr );
+    }
 
+    m_masses[ idx ] = newMass;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomRadius( unsigned long long int idx ) {
+    // Ensuring non-negative, non-zero radius 
+    PrecT newRadius = -1;
+    while( newRadius <= 0 ) {
+      newRadius = m_radiusDistribution( *m_randomEnginePtr );
+    }
 
+    m_radii[ idx ] = newRadius;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomPartialRestitution( unsigned long long int idx ) {
+    // Ensuring 0 - 0.5 range
+    PrecT newPartialRestitution = -1;
+    while( newPartialRestitution < 0 || newPartialRestitution > 0.5 ) {
+      newPartialRestitution = m_partialRestitutionDistribution( *m_randomEnginePtr );
+    }
 
+    m_partial_restitutions[ idx ] = newPartialRestitution;
   }
 
 
@@ -241,7 +259,7 @@ namespace CSIM {
 
     std::free( m_masses );
     std::free( m_radii );
-    std::free( m_partial_restitution );
+    std::free( m_partial_restitutions );
 
   }
 

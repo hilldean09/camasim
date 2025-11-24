@@ -38,7 +38,7 @@ namespace CSIM {
       
       PrecT* m_masses;
       PrecT* m_radii;
-      PrecT* m_partial_restitution;
+      PrecT* m_partial_restitutions;
 
       unsigned long long int m_p_number;
       char* m_statuses;
