@@ -150,12 +150,38 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomPosition( unsigned long long int idx ) {
-    
+    // Creating polar representation
+    PrecT newPolar = m_anglesDistribution( *m_randomEnginePtr );
+    PrecT newAzimuth = m_anglesDistribution( *m_randomEnginePtr );
+    PrecT newRadius = m_radialPositionDistribution( *m_randomEnginePtr );
+
+    Radial_Vector<PrecT> newRadialVector = { newPolar, newAzimuth, newRadius };
+
+    // Cartesian representation
+    Vector<PrecT> newVector = newRadialVector.toCartesian();
+
+    // Assigning new values
+    m_positions.x[ idx ] = newVector.x;
+    m_positions.y[ idx ] = newVector.y;
+    m_positions.z[ idx ] =  newVector.z;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateRandomVelocity( unsigned long long int idx ) {
+    // Creating polar representation
+    PrecT newPolar = m_anglesDistribution( *m_randomEnginePtr );
+    PrecT newAzimuth = m_anglesDistribution( *m_randomEnginePtr );
+    PrecT newRadius = m_radialVelocityDistribution( *m_randomEnginePtr );
 
+    Radial_Vector<PrecT> newRadialVector = { newPolar, newAzimuth, newRadius };
+
+    // Cartesian representation
+    Vector<PrecT> newVector = newRadialVector.toCartesian();
+
+    // Assigning new values
+    m_velocities.x[ idx ] = newVector.x;
+    m_velocities.y[ idx ] = newVector.y;
+    m_velocities.z[ idx ] =  newVector.z;
   }
 
   template <class PrecT>

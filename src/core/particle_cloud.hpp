@@ -23,6 +23,7 @@ namespace CSIM {
       // Mutators //
       void setDistribution( char distribution, PrecT mean, PrecT standardDeviaion );
 
+
       // Misc //
       ~Particle_Cloud();
 
