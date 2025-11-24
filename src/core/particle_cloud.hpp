@@ -86,4 +86,6 @@ namespace CSIM {
 
 }
 
+#include "particle_cloud.tpp"
+
 #endif
