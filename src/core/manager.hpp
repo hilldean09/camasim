@@ -21,15 +21,23 @@ namespace CSIM {
       void initialiseWithoutSeed();
       void initialiseWithSeed( unsigned int seed );
 
+      void initialiseParticleCloud();
+
 
     private:
       // Attributes //
       std::default_random_engine m_randomEngine;
       Particle_Cloud<PrecT> m_particleCloud;
 
+      unsigned long long int m_p_number;
+
+      bool m_isPNumberInitialised;
+      bool m_isRandomEngineInitialised;
+
 
       // Initialisers //
-      void initRandomEngine();
+      void initDefaults();
+
       void initRandomEngine( unsigned int seed );
 
       void initParticleCloud();
