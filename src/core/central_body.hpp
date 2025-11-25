@@ -11,7 +11,6 @@ namespace CSIM {
   class Central_Body {
     public:
       // Constructors //
-      Central_Body();
 
       // Initialisers //
       void initialise( PrecT mass, PrecT radius, Vector<PrecT> position = { 0.0, 0.0, 0.0 } );

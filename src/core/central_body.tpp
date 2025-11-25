@@ -13,10 +13,17 @@ namespace CSIM {
 
     initDefaults();
 
-    initPosition( positon );
+    initPosition( position );
     initMass( mass );
     initRadius( radius );
 
+  }
+
+  template <class PrecT>
+  void Central_Body<PrecT>::initDefaults() {
+    m_position = { 0.0, 0.0, 0.0 };
+    m_mass = 0.0;
+    m_radius = 0.0;
   }
 
   template <class PrecT>

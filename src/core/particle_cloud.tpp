@@ -60,7 +60,7 @@ namespace CSIM {
     m_statuses = (char*) std::malloc( m_p_number * sizeof( char ) );
 
     // Initialising all particles to active
-    for( int idx = 0; idx < m_p_number; idx++ ) {
+    for( unsigned int idx = 0; idx < m_p_number; idx++ ) {
       m_statuses[ idx ] = (char) 1;
     }
   }
@@ -82,7 +82,7 @@ namespace CSIM {
     m_positions.setPtrs( m_p_number );
 
     // Initialising random particle positions
-    for( int idx = 0; idx < m_p_number; idx++ ) {
+    for( unsigned int idx = 0; idx < m_p_number; idx++ ) {
       generateRandomPosition( idx );
     }
   }
@@ -94,7 +94,7 @@ namespace CSIM {
     m_velocities.setPtrs( m_p_number );
 
     // Initialising ranndom particle velocities
-    for( int idx = 0; idx < m_p_number; idx++ ) {
+    for( unsigned int idx = 0; idx < m_p_number; idx++ ) {
       generateRandomVelocity( idx );
     }
   }
@@ -105,7 +105,7 @@ namespace CSIM {
 
     m_accelerations.setPtrs( m_p_number );
 
-    for( int idx = 0; idx < 3 * m_p_number; idx++ ) {
+    for( unsigned int idx = 0; idx < 3 * m_p_number; idx++ ) {
       m_accelerations.arenaPtr[ idx ] = 0;
     }
   }
@@ -116,7 +116,7 @@ namespace CSIM {
 
     m_forces.setPtrs( m_p_number );
 
-    for( int idx = 0; idx < 3 * m_p_number; idx++ ) {
+    for( unsigned int idx = 0; idx < 3 * m_p_number; idx++ ) {
       m_forces.arenaPtr[ idx ] = 0;
     }
   }
@@ -125,7 +125,7 @@ namespace CSIM {
   void Particle_Cloud<PrecT>::initMasses() {
     m_masses = ( PrecT* ) std::malloc( m_p_number * sizeof( PrecT ) );
 
-    for( int idx = 0; idx < m_p_number; idx++ ) {
+    for( unsigned int idx = 0; idx < m_p_number; idx++ ) {
       generateRandomMass( idx );
     }
   }
@@ -134,7 +134,7 @@ namespace CSIM {
   void Particle_Cloud<PrecT>::initRadii() {
     m_radii = ( PrecT* ) std::malloc( m_p_number * sizeof( PrecT ) );
 
-    for( int idx = 0; idx < m_p_number; idx++ ) {
+    for( unsigned int idx = 0; idx < m_p_number; idx++ ) {
       generateRandomRadius( idx );
     }
   }
@@ -143,7 +143,7 @@ namespace CSIM {
   void Particle_Cloud<PrecT>::initPartialRestitutions() {
     m_partial_restitutions = ( PrecT* ) std::malloc( m_p_number * sizeof( PrecT ) );
 
-    for( int idx = 0; idx < m_p_number; idx++ ) {
+    for( unsigned int idx = 0; idx < m_p_number; idx++ ) {
       generateRandomPartialRestitution( idx );
     }
   }
@@ -158,7 +158,7 @@ namespace CSIM {
     Radial_Vector<PrecT> newRadialVector = { newPolar, newAzimuth, newRadius };
 
     // Cartesian representation
-    Vector<PrecT> newVector = newRadialVector.toCartesian();
+    Vector<PrecT> newVector = newRadialVector.getCartesian();
 
     // Assigning new values
     m_positions.x[ idx ] = newVector.x;
@@ -176,7 +176,7 @@ namespace CSIM {
     Radial_Vector<PrecT> newRadialVector = { newPolar, newAzimuth, newRadius };
 
     // Cartesian representation
-    Vector<PrecT> newVector = newRadialVector.toCartesian();
+    Vector<PrecT> newVector = newRadialVector.getCartesian();
 
     // Assigning new values
     m_velocities.x[ idx ] = newVector.x;
