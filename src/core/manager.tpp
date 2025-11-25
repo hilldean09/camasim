@@ -35,22 +35,20 @@ namespace CSIM {
     initRandomEngne( seed );
   }
 
-  template <class PrecT>
-  void initRandomEngine( unsigned int seed) {
-    m_randomEngine = ran
-  }
   
   template <class PrecT>
   void Manager<PrecT>::initDefaults() {
 
     m_isPNumberInitialised = false;
-    m_isRandomEngineInitialised; = false;
+    m_isRandomEngineInitialised = false;
 
   }
 
   template <class PrecT>
   void initRandomEngine( unsigned int seed) {
     m_randomEngine = std::default_random_engine( seed );
+
+    m_isRandomEngineInitialised = true;
   }
 
 }
