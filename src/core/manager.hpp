@@ -26,10 +26,14 @@ namespace CSIM {
 
       void initialiseCentralBody( PrecT mass, PrecT radius, Vector<PrecT> position = { 0.0, 0.0, 0.0 } );
 
+      void initialiseSimulation( PrecT step );
 
       // Accessors //
       Vec_Arrs<PrecT> getParticlePositions();
       Vector<PrecT> getCentralBodyPosition();
+
+
+      // Methods //
 
     private:
       // Attributes //
@@ -40,8 +44,11 @@ namespace CSIM {
 
       unsigned long long int m_p_number;
 
+      PrecT m_step;
+
       bool m_isPNumberInitialised;
       bool m_isRandomEngineInitialised;
+      bool m_isSimulationInitialised;
 
 
       // Initialisers //

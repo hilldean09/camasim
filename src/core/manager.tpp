@@ -49,12 +49,21 @@ namespace CSIM {
 
   }
 
+  template <class PrecT>
+  void Manager<PrecT>::initSimulation( PrecT step ) {
+    m_step = step;
+
+    m_isSimulationInitialised = true;
+  }
   
   template <class PrecT>
   void Manager<PrecT>::initDefaults() {
 
+    m_step = 0;
+
     m_isPNumberInitialised = false;
     m_isRandomEngineInitialised = false;
+    m_isSimulationInitialised = false;
 
   }
 
