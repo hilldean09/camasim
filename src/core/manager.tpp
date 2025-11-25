@@ -65,6 +65,18 @@ namespace CSIM {
     m_isRandomEngineInitialised = true;
   }
 
+
+  // Accessors //
+  template <class PrecT>
+  Vec_Arrs<PrecT> Manager<PrecT>::getParticlePositions() {
+    return m_particleCloud.m_positions;
+  }
+
+  template <class PrecT>
+  Vector<PrecT> Manager<PrecT>::getCentralBodyPosition() {
+    return m_centralBody.m_position;
+  }
+
 }
 
 #endif

@@ -27,6 +27,10 @@ namespace CSIM {
       void initialiseCentralBody( PrecT mass, PrecT radius, Vector<PrecT> position = { 0.0, 0.0, 0.0 } );
 
 
+      // Accessors //
+      Vec_Arrs<PrecT> getParticlePositions();
+      Vector<PrecT> getCentralBodyPosition();
+
     private:
       // Attributes //
       std::default_random_engine m_randomEngine;
