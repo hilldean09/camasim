@@ -62,7 +62,7 @@ namespace CSIM {
       void initPNumber( unsigned long long int p_number );
       void initStatuses();
 
-      void initGenerator( std::default_random_engine* randomEnginePtr );
+      void initRandomEngine( std::default_random_engine* randomEnginePtr );
       void initAnglesDistribution();
 
       void initPositions();

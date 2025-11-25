@@ -13,9 +13,9 @@ namespace CSIM {
   
   // Initialisers //
   template <class PrecT>
-  void Particle_Cloud<PrecT>::initialise( unsigned long long int p_number, std::default_random_engine* randomEnginePtr );
+  void Particle_Cloud<PrecT>::initialise( unsigned long long int p_number, std::default_random_engine* randomEnginePtr ) {
 
-    initDefautls();
+    initDefaults();
 
     initPNumber( p_number );
     initStatuses();
@@ -35,7 +35,7 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void Particle_Cloud<PrecT>::initDefautls() {
+  void Particle_Cloud<PrecT>::initDefaults() {
     m_p_number = 1;
     m_randomEnginePtr  = nullptr;
     m_statuses = nullptr;
@@ -67,17 +67,17 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::initRandomEngine( std::default_random_engine* randomEnginePtr ) {
-    m_randomEningePtr = randomEnginePtr;
+    m_randomEnginePtr = randomEnginePtr;
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::initAnglesDistribution() {
-    m_anglesDistribution = std::uniform_real_distribution<PrecT( -1 * std::numbers::pi_v<PrecT>, std::numbers::pi_v<PrecT> );
+    m_anglesDistribution = std::uniform_real_distribution<PrecT>( -1.0 * std::numbers::pi_v<PrecT>, std::numbers::pi_v<PrecT> );
   }
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::initPositions() {
-    m_positios.arenaPtr = ( PrecT* ) std::malloc( 3 * m_p_number * sizeof( PrecT ) );
+    m_positions.arenaPtr = ( PrecT* ) std::malloc( 3 * m_p_number * sizeof( PrecT ) );
     
     m_positions.setPtrs( m_p_number );
 
@@ -220,26 +220,26 @@ namespace CSIM {
 
   // Mutators //
   template <class PrecT>
-  Particle_Cloud<PrecT>::setDistribution( const char distribution, PrecT mean, PrecT standardDeviation ) {
+  void Particle_Cloud<PrecT>::setDistribution( const char distribution, PrecT mean, PrecT standardDeviation ) {
     /* 'p' for postion, 'v' for velocity,
      * 'm' for mass. 'r' for radius, and
      * 'e' for partial restitution (elasticity).
      */
     switch( distribution ) {
       case 'p':
-        m_radialPositionDistribution = std::normalDistribution( mean, standardDeviation );
+        m_radialPositionDistribution = std::normal_distribution<PrecT>( mean, standardDeviation );
         break;
       case 'v':
-        m_radialVelocityDistribution = std::normalDistribution( mean, standardDeviation );
+        m_radialVelocityDistribution = std::normal_distribution<PrecT>( mean, standardDeviation );
         break;
       case 'm':
-        m_massDistribution = std::normalDistribution( mean, standardDeviation );
+        m_massDistribution = std::normal_distribution<PrecT>( mean, standardDeviation );
         break;
       case 'r':
-        m_radiusDistribution = std::normalDistribution( mean, standardDeviation );
+        m_radiusDistribution = std::normal_distribution<PrecT>( mean, standardDeviation );
         break;
       case 'e':
-        m_partialRestitutionDistribution = std::normalDistribution( mean, standardDeviation );
+        m_partialRestitutionDistribution = std::normal_distribution<PrecT>( mean, standardDeviation );
         break;
 
     }

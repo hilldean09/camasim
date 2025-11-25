@@ -12,7 +12,7 @@
 namespace CSIM {
 
   // Constructors //
-  template <PrecT>
+  template <class PrecT>
   Manager<PrecT>::Manager() {
     initDefaults();
   }
@@ -27,12 +27,12 @@ namespace CSIM {
 
   template <class PrecT>
   void Manager<PrecT>::initialiseWithoutSeed() {
-    initRandomEngne( (unsigned int) std::chrono::high_resolution_clock::now() );
+    initRandomEngine( (unsigned int) std::chrono::high_resolution_clock::now() );
   }
 
   template <class PrecT>
   void Manager<PrecT>::initialiseWithSeed( unsigned int seed ) {
-    initRandomEngne( seed );
+    initRandomEngine( seed );
   }
 
   
@@ -45,7 +45,7 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void initRandomEngine( unsigned int seed) {
+  void Manager<PrecT>::initRandomEngine( unsigned int seed) {
     m_randomEngine = std::default_random_engine( seed );
 
     m_isRandomEngineInitialised = true;
