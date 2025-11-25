@@ -5,6 +5,7 @@
 #include "pre_controls.hpp"
 #include "structs.hpp"
 #include "particle_cloud.hpp"
+#include "central_body.hpp"
 
 namespace CSIM {
 
@@ -23,11 +24,15 @@ namespace CSIM {
 
       void initialiseParticleCloud();
 
+      void initialiseCentralBody( PrecT mass, PrecT radius, Vector<PrecT> position = { 0.0, 0.0, 0.0 } );
+
 
     private:
       // Attributes //
       std::default_random_engine m_randomEngine;
+
       Particle_Cloud<PrecT> m_particleCloud;
+      Central_Body<PrecT> m_centralBody;
 
       unsigned long long int m_p_number;
 
@@ -39,9 +44,6 @@ namespace CSIM {
       void initDefaults();
 
       void initRandomEngine( unsigned int seed );
-
-      void initParticleCloud();
-
 
   };
 

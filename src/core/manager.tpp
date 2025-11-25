@@ -35,6 +35,20 @@ namespace CSIM {
     initRandomEngine( seed );
   }
 
+  template <class PrecT>
+  void Manager<PrecT>::initialiseParticleCloud() {
+    if( m_isPNumberInitialised && m_isRandomEngineInitialised ) {
+      m_particleCloud.initialise( m_p_number, &m_randomEngine );
+    }
+  }
+
+  template <class PrecT>
+  void Manager<PrecT>::initialiseCentralBody( PrecT mass, PrecT radius, Vector<PrecT> position ) {
+
+    m_centralBody.initialise( mass, radius, position );
+
+  }
+
   
   template <class PrecT>
   void Manager<PrecT>::initDefaults() {
