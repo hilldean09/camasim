@@ -2,9 +2,9 @@
 #ifndef CSIM_MANAGER_TPP
 #define CSIM_MANAGER_TPP
 
-#include "particle_cloud.hpp"
-#include "structs.hpp"
 #include "pre_controls.hpp"
+#include "structs.hpp"
+#include "particle_cloud.hpp"
 
 #include <random>
 #include <chrono>

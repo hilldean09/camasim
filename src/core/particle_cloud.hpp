@@ -13,7 +13,6 @@ namespace CSIM {
   class Particle_Cloud {
     public:
       // Constructors //
-      Particle_Cloud();
 
 
       // Initialisers //
