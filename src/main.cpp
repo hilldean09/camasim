@@ -1,8 +1,8 @@
 
-#include "core/manager.hpp"
-#include "core/particle_cloud.hpp"
-#include "core/structs.hpp"
-#include "core/pre_controls.hpp"
+#include "manager.hpp"
+#include "particle_cloud.hpp"
+#include "structs.hpp"
+#include "pre_controls.hpp"
 
 int main() {
 

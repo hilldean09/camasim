@@ -1,5 +1,0 @@
-/home/inkandflowers/Work/camasim/build/CMakeFiles/main.dir
-/home/inkandflowers/Work/camasim/build/CMakeFiles/edit_cache.dir
-/home/inkandflowers/Work/camasim/build/CMakeFiles/rebuild_cache.dir
-/home/inkandflowers/Work/camasim/build/core/CMakeFiles/edit_cache.dir
-/home/inkandflowers/Work/camasim/build/core/CMakeFiles/rebuild_cache.dir

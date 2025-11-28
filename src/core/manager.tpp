@@ -50,7 +50,7 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void Manager<PrecT>::initialiseSimulation( PrecT step ) {
+  void Manager<PrecT>::initSimulation( PrecT step ) {
     m_step = step;
 
     m_isSimulationInitialised = true;

@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/inkandflowers/Work/camasim/build/cmake_install.cmake",
-		"/home/inkandflowers/Work/camasim/build/core/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

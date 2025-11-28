@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wall -Wextra -pedantic -std=c++23 -Wl,--dependency-file=CMakeFiles/main.dir/link.d CMakeFiles/main.dir/main.cpp.o -o main
