@@ -11,6 +11,8 @@ namespace CSIM {
   template <class PrecT>
   class Recorder { 
     public:
+      // Constructor //
+      Recorder();
       
       // Initialisers //
       void initialiseManager( Manager<PrecT> &manager );
@@ -34,6 +36,7 @@ namespace CSIM {
       // Initialisers //
       void initDefaults();
       void initTotalFrames( unsigned long long int totalFrames );
+      void initSampling( unsigned long long int framesPerSample );
 
 
   };

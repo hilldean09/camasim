@@ -7,6 +7,12 @@
 #include <fstream>
 
 namespace CSIM {
+  // Constructors //
+  template <class PrecT>
+  Recorder<PrecT>::Recorder() {
+    initDefaults();
+  }
+
   // Initialisers //
   template <class PrecT>
   void Recorder<PrecT>::initialiseManager( Manager<PrecT>* &manager ) {
@@ -28,6 +34,40 @@ namespace CSIM {
   void Recorder<PrecT>::initialiseLengthWithTime( PrecT totalTime ) {
     unsigned long long int totalFrames = ( unsigned long long int ) totalTime / m_step;
     initTotalFrames( totalFrames );
+  }
+
+  template <class PrecT>
+  void Recorder<PrecT>::initialiseSamplingWithFrames( unsigned long long int framesPerSample ) {
+    initSampling( framesPerSample );
+  }
+
+  template <class PrecT>
+  void Recorder<PrecT>::initialiseSamplingWithTime( PrecT timePerSample ) {
+    unsigned long long int framesPerSample = ( unsinged long long int ) timePerSample / m_step;
+    initSampling( framesPerSample );
+  }
+  
+  template <class PrecT> 
+  void Recorder<PrecT>::initDefaults() {
+    m_step = 0;
+    m_totalFrames = 0;
+    m_framesPerSamples = 0;
+  }
+
+  template <class PrecT>
+  void Recorder<PrecT>::initialiseSamplingWithSamples( unsigned long long int totalSamples ) {
+    unsigned long long int framesPerSample = ( unsinged long long int ) totalFrames / totalSamples;
+    initSampling( framesPerSample );
+  }
+  
+  template <class PrecT>
+  void Recorder<PrecT>::initTotalFrames( unsigned long long int totalFrames ) {
+    m_totalFrames = totalFrames;
+  }
+
+  template <class PrecT>
+  void Recorder<PrecT>::initSampling( unsigned long long int framesPerSample ) {
+    m_framesPerSamples = framesPerSample;
   }
 
 }
