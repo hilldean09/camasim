@@ -1,5 +1,6 @@
 
 #include "core/manager.hpp"
+#include "core/recorder.hpp"
 #include "core/particle_cloud.hpp"
 #include "core/structs.hpp"
 #include "core/pre_controls.hpp"
@@ -18,9 +19,9 @@ int main() {
 
   CSIM::Recorder<float> recorder;
 
-  recorder.initialiseManager( manager );
+  recorder.initialiseManager( &manager );
   recorder.initialiseOutputFile( "testOuts.txt" );
-  recorder.initialiseWithTime( 1'000'000 );
+  recorder.initialiseLengthWithTime( 1'000'000 );
   recorder.initialiseSamplingWithFrames( 1'000'000'000 );
 
 

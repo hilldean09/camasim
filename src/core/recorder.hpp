@@ -15,7 +15,7 @@ namespace CSIM {
       Recorder();
       
       // Initialisers //
-      void initialiseManager( Manager<PrecT> &manager );
+      void initialiseManager( Manager<PrecT>* manager );
       void initialiseOutputFile( const char* fileName );
       void initialiseLengthWithFrames( unsigned long long int totalFrames );
       void initialiseLengthWithTime( PrecT totalTime );
@@ -42,5 +42,7 @@ namespace CSIM {
   };
 
 }
+
+#include "recorder.tpp"
 
 #endif
