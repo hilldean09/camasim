@@ -10,9 +10,19 @@ int main() {
 
   manager.initialiseParticleNumber( 1'000'00 );
   manager.initialiseWithSeed( 4 );
-  manager.initialiseParticleCloud();
 
+  manager.initialiseParticleCloud();
   manager.initialiseCentralBody( 1'000'000'000, 1'000'000 );
+
+  manager.initialiseSimulation( 0.000001 );
+
+  CSIM::Recorder<float> recorder;
+
+  recorder.initialiseManager( manager );
+  recorder.initialiseOutputFile( "testOuts.txt" );
+  recorder.initialiseWithTime( 1'000'000 );
+  recorder.initialiseSamplingWithFrames( 1'000'000'000 );
+
 
   return 0;
 }
