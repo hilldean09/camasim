@@ -1,7 +1,11 @@
 cmake_minimum_required( VERSION 4.2.0 )
 project( camasim )
 
-set( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -std=c++23" )
+set( CMAKE_CXX_STANDARD 23 )
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+set( CMAKE_CXX_EXTENSIONS OFF )
+
+set( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic" )
 
 add_executable( main )
 
