@@ -3,8 +3,11 @@
 #define CSIM_RECORDER_HPP
 
 #include "manager.hpp"
+#include "pre_controls.hpp"
+#include "structs.hpp"
 
 #include <fstream>
+#include <string>
 
 namespace CSIM {
 
@@ -24,6 +27,10 @@ namespace CSIM {
       void initialiseSamplingWithTime( PrecT timePerSample );
       void initialiseSamplingWithSamples( unsigned long long int totalSamples );
 
+
+      // Methods //
+      void recordInitial();
+
     private:
       // Attributes //
       Manager<PrecT>* m_managerPtr;
@@ -33,12 +40,16 @@ namespace CSIM {
       unsigned long long int m_totalFrames;
       unsigned long long int m_framesPerSample;
 
+
       // Initialisers //
       void initDefaults();
       void initTotalFrames( unsigned long long int totalFrames );
       void initSampling( unsigned long long int framesPerSample );
 
 
+      // Methods //
+      void writeOutputHeader();
+      void writeFrameData();
   };
 
 }

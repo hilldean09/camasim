@@ -55,6 +55,15 @@ namespace CSIM {
 
   };
 
+  template <class PrecT>
+  struct OutputHeader {
+
+    unsigned long long int p_number; 
+    unsigned long long int totalFrames;
+    PrecT step;
+    PrecT* radii;
+
+  };
 }
 
 #endif
