@@ -71,6 +71,19 @@ namespace CSIM {
     m_framesPerSample = framesPerSample;
   }
 
+  
+  // Methods //
+  template <class PrecT>
+  void Recorder<PrecT>::recordInitial() {
+    writeOutputHeader();
+    writeFrameData();
+  }
+
+  template <class PrecT>
+  void Recorder<PrecT>::writeOutputHeader() {
+    
+  }
+
 }
 
 #endif

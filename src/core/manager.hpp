@@ -31,6 +31,8 @@ namespace CSIM {
       // Accessors //
       Vec_Arrs<PrecT> getParticlePositions();
       Vector<PrecT> getCentralBodyPosition();
+
+      unsigned long long int getParticleNumber() { return m_p_number; }
       PrecT getStep() { return m_step; }
 
 

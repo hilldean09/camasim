@@ -36,8 +36,11 @@ namespace CSIM {
       Manager<PrecT>* m_managerPtr;
       std::ofstream m_outputFile;
 
-      PrecT m_step;
+      unsigned long long int m_p_number;
       unsigned long long int m_totalFrames;
+      PrecT m_step;
+      PrecT* m_radii;
+
       unsigned long long int m_framesPerSample;
 
 
