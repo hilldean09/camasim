@@ -111,7 +111,14 @@ namespace CSIM {
 
   template <class PrecT>
   void Recorder<PrecT>::writeFrameData() {
+    write( &( m_centralBodyPosition.x ), sizeof( PrecT ) );
+    write( m_positions.x, m_p_number * sizeof( PrecT ) );
     
+    write( &( m_centralBodyPosition.y ), sizeof( PrecT ) );
+    write( m_positions.y, m_p_number * sizeof( PrecT ) );
+
+    write( &( m_centralBodyPosition.z ), sizeof( PrecT ) );
+    write( m_positions.z, m_p_number * sizeof( PrecT ) );
   }
 
 }
