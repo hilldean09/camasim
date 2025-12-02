@@ -1,3 +1,9 @@
+# General
+.*
+
+# Exceptions
+!.gitignore
+
 # CUDA
 *.i
 *.ii
@@ -13,6 +19,3 @@
 
 # CMake
 build/*
-
-# General
-*.obsidian
