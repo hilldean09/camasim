@@ -34,7 +34,7 @@ namespace CSIM {
 
       unsigned long long int getParticleNumber() { return m_p_number; }
       PrecT getStep() { return m_step; }
-
+      PrecT* getRadiiPtr() { return m_particleCloud->getRadiiPtr(); }
 
       // Methods //
 

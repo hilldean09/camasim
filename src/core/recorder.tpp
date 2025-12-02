@@ -18,7 +18,10 @@ namespace CSIM {
   template <class PrecT>
   void Recorder<PrecT>::initialiseManager( Manager<PrecT>* manager ) {
     m_managerPtr = manager;
+
+    m_p_number = manager->getParticleNumber();
     m_step = manager->getStep();
+    m_radii = manager->getRadiiPtr();
   }
 
   template <class PrecT>
@@ -50,8 +53,11 @@ namespace CSIM {
   
   template <class PrecT> 
   void Recorder<PrecT>::initDefaults() {
-    m_step = 0;
+    m_p_number = 0;
     m_totalFrames = 0;
+    m_step = 0;
+    m_radii = nullptr;
+
     m_framesPerSample = 0;
   }
 
