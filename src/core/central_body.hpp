@@ -12,8 +12,14 @@ namespace CSIM {
     public:
       // Constructors //
 
+
       // Initialisers //
       void initialise( PrecT mass, PrecT radius, Vector<PrecT> position = { 0.0, 0.0, 0.0 } );
+
+
+      // Accessors //
+      Vector<PrecT> getPosition() { return m_position; }
+      PrecT getRadius() { return m_radius; }
 
     private:
       // Attributes //

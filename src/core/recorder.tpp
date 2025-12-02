@@ -87,7 +87,7 @@ namespace CSIM {
 
   template <class PrecT>
   void Recorder<PrecT>::writeOutputHeader() {
-    
+
   }
 
 }

@@ -36,6 +36,8 @@ namespace CSIM {
       PrecT getStep() { return m_step; }
       PrecT* getRadiiPtr() { return m_particleCloud->getRadiiPtr(); }
 
+      Central_Body<PrecT> getCentralBody() { return m_centralBody; }
+
       // Methods //
 
 
