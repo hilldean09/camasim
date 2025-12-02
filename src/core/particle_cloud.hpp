@@ -21,6 +21,7 @@ namespace CSIM {
 
       // Accessors //
       PrecT* getRadiiPtr() { return m_radii; }
+      Vec_Arrs<PrecT> getPositions() { return m_positions; }
 
 
       // Mutators //

@@ -36,13 +36,15 @@ namespace CSIM {
       Manager<PrecT>* m_managerPtr;
       std::ofstream m_outputFile;
 
+      // Output Header format
       unsigned long long int m_p_number;
       unsigned long long int m_totalFrames;
       PrecT m_step;
-      PrecT* m_radii;
-      
-      Vector<PrecT> m_centralBodyPosition;
       PrecT m_centralBodyRadius;
+      PrecT* m_radii;
+
+      Vector<PrecT> m_centralBodyPosition;
+      Vec_Arrs<PrecT> m_positions;
 
       unsigned long long int m_framesPerSample;
 

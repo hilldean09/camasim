@@ -21,10 +21,11 @@ namespace CSIM {
 
     m_p_number = manager->getParticleNumber();
     m_step = manager->getStep();
+    m_centralBodyRadius = manager->getCentralBody()->getRadius();
     m_radii = manager->getRadiiPtr();
 
-    m_centralBodyRadius = manager->getCentralBody()->getRadius();
     m_centralBodyPosition = manager->getCentralBody()->getPosition();
+    m_positions = manager->getPositions();
   }
 
   template <class PrecT>
@@ -59,10 +60,11 @@ namespace CSIM {
     m_p_number = 0;
     m_totalFrames = 0;
     m_step = 0;
+    m_centralBodyRadius = 0;
     m_radii = nullptr;
 
     m_centralBodyPosition = { 0, 0, 0 };
-    m_centralBodyRadius = 0;
+    m_positions = nullptr;
 
     m_framesPerSample = 0;
   }
@@ -109,7 +111,7 @@ namespace CSIM {
 
   template <class PrecT>
   void Recorder<PrecT>::writeFrameData() {
-
+    
   }
 
 }
