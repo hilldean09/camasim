@@ -40,6 +40,9 @@ namespace CSIM {
       unsigned long long int m_totalFrames;
       PrecT m_step;
       PrecT* m_radii;
+      
+      Vector<PrecT> m_centralBodyPosition;
+      PrecT m_centralBodyRadius;
 
       unsigned long long int m_framesPerSample;
 
