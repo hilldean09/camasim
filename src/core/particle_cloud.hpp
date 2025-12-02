@@ -19,6 +19,10 @@ namespace CSIM {
       void initialise( unsigned long long int p_number, std::default_random_engine* randomEnginePtr );
 
 
+      // Accessors //
+      PrecT* getRadiiPtr() { return m_radii; }
+
+
       // Mutators //
       void setDistribution( char distribution, PrecT mean, PrecT standardDeviaion );
 
