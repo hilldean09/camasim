@@ -54,8 +54,10 @@ namespace CSIM {
 
 
       // Methods //
+      inline void write( void* ptr, size_t size ) const;
       void writeOutputHeader();
       void writeFrameData();
+
   };
 
 }

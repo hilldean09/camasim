@@ -92,8 +92,24 @@ namespace CSIM {
   }
 
   template <class PrecT>
+  void Recorder<PrecT>::write( void* ptr, size_t size ) {
+    m_outputFile.write( ( const char* ) ptr, size );
+  }
+
+  template <class PrecT>
   void Recorder<PrecT>::writeOutputHeader() {
-    
+    write( &m_p_number, sizeof( m_p_number ) );
+
+    write( &m_totalFrames, sizeof( totalFramesO) ) );
+    write( &m_step, sizeof( m_step ) );
+
+    write( &m_centralBodyRadius, sizeof( PrecT ) );
+    write( m_radii, m_p_number * sizeof( PrecT) );
+  }
+
+  template <class PrecT>
+  void Recorder<PrecT>::writeFrameData() {
+
   }
 
 }
