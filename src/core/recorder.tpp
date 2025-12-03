@@ -64,7 +64,7 @@ namespace CSIM {
     m_radii = nullptr;
 
     m_centralBodyPosition = { 0, 0, 0 };
-    m_positions = nullptr;
+    m_positions = { nullptr, nullptr, nullptr, nullptr };
 
     m_framesPerSample = 0;
   }
@@ -94,7 +94,7 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void Recorder<PrecT>::write( void* ptr, size_t size ) {
+  inline void Recorder<PrecT>::write( void* ptr, size_t size ) {
     m_outputFile.write( ( const char* ) ptr, size );
   }
 
@@ -102,7 +102,7 @@ namespace CSIM {
   void Recorder<PrecT>::writeOutputHeader() {
     write( &m_p_number, sizeof( m_p_number ) );
 
-    write( &m_totalFrames, sizeof( totalFramesO) ) );
+    write( &m_totalFrames, sizeof( m_totalFrames ) );
     write( &m_step, sizeof( m_step ) );
 
     write( &m_centralBodyRadius, sizeof( PrecT ) );

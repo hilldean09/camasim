@@ -24,6 +24,8 @@ int main() {
   recorder.initialiseLengthWithTime( 1'000'000 );
   recorder.initialiseSamplingWithFrames( 1'000'000'000 );
 
+  recorder.recordInitial();
+
 
   return 0;
 }
