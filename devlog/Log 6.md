@@ -26,4 +26,7 @@ As the VTK textbook is rather dense, I will consolidate my notes here.
 - ```vtkRenderWindow```, ```vtkRenderer```, ```vtkLight```, ```vtkCamera```, ```vtkActor```, ```vtkMapper```, ```vtkRenderWindowInteractor``` (p.g.74)
 - ```vtkNew```, ```vtkSmartPointer```, ```vtkDelete``` for VTK object creation (p.g.75)
 - See page 76 for ```vtkSmartPointer``` VTK object array creation and handling
-- 
+
+# VTK General Notes
+- [Point generation](https://examples.vtk.org/site/Cxx/GeometricObjects/Point/)
+- Using imposter sphere mappers to maintain performance through the pipeline (```vtkPointGaussianMapper``` seems like a decent choice). [Researched with ChatGPT](https://chatgpt.com). 
