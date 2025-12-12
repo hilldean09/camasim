@@ -4,6 +4,7 @@ CAMASIM, as of now, will not utilise any higher privileges, will not utilise any
 # Dependencies
 Comprised dependencies will be considered as a non-negligible threat model. Trusted dependencies, will be considered as the following:
 - C++, CUDA, and Python standard libraries,
+- Visualisation Toolkit (VTK), and
 - Numpy
 
 Untrusted dependencies will audited where possible. In the case of auditing being impossible or too great a task, this will be noted in [[README]].
