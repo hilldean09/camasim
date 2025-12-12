@@ -31,6 +31,10 @@ namespace CSIM {
       // Constructors //
       Visualiser();
 
+      void initialise( std::string inputFileName );
+
+      void startInitial();
+
     private:
       // Attributes //
       std::ifstream m_inputFile;
@@ -59,10 +63,20 @@ namespace CSIM {
       vtkSmartPointer<vtkActor> m_cb_actor;
       vtkSmartPointer<vtkProperty> m_cb_actorProperty;
 
-      // Rendering
+      // Rendering VTK objects
       vtkSmartPointer<vtkRenderer> m_renderer;
       vtkSmartPointer<vtkRenderWindow> m_renderWindow;
       vtkSmartPointer<vtkRenderWindowInteractor> m_interactor;
+
+      
+      // Initialisers //
+      void initInputFile( std::string inputFileName );
+      void initInputHeader();
+
+
+      // Methods //
+      void loadFrame( unsigned long long int frameIdx );
+      void updateRender();
   };
 
 }
