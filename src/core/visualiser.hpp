@@ -70,7 +70,8 @@ namespace CSIM {
 
       
       // Initialisers //
-      void initInputFile( std::string inputFileName );
+      void initDefaults();
+      void initInputFile( const char* inputFileName );
       void initInputHeader();
 
 
@@ -80,5 +81,7 @@ namespace CSIM {
   };
 
 }
+
+#include "visualiser.tpp"
 
 #endif
