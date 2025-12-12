@@ -77,6 +77,11 @@ namespace CSIM {
       void initDefaults();
       void initInputFile( const char* inputFileName );
       void initInputHeader();
+      void initPositionsBuffer();
+
+      
+      // Inlines //
+      inline unsigned long long int getPositionsBufferSize() { return 3 * ( m_p_number + 1 ); }
 
 
       // Methods //

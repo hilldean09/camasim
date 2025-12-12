@@ -72,9 +72,17 @@ namspace CSIM{
     m_radii = std::malloc( ( m_p_number + 1 ) * sizeof( PrecT) );
     m_inputFile.read( reinterpret_cast<char*>( m_radii ), ( m_p_number + 1 ) * sizeof( PrecT ) );
     
+  }
+
+  template <class PrecT>
+  void Visualiser<PrecT>::initPositionsBuffer() {
+
     // Position buffer allocation
-    m_positionsBuffer.arenaPtr = std::malloc( 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
+    m_positionsBuffer.arenaPtr = std::malloc( getPositionsBufferSize() * sizeof( PrecT ) );
     m_positionsBuffer.setPtrs( ( m_p_number + 1 ) );
+
+    m_inputFile.read( reinterpret_cast<char*>( m_positionsBuffer.arenaPtr ), getPositionsBufferSize() * sizeof( PrecT ) );
+
   }
 
   template <class PrecT>
