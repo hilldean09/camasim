@@ -17,6 +17,7 @@
 #include <vtkSmartPointer.h>
 #include <vtkSphereSource.h>
 
+#include <cstdlib>
 #include <fstream>
 #include <string>
 
@@ -59,6 +60,29 @@ namspace CSIM{
   template <class PrecT>
   void Visualiser<PrecT>::initInputFile( const char* inputFileName ) {
     m_inputFile = std::ifstream( inputFileName, std::ios::in | std::ios::binary );
+  }
+
+  template <class PrecT>
+  void Visualiser<PrecT>::initInputHeader() {
+    m_inputFile.read( reinterpret_cast<char*>( &m_p_number ), sizeof( unsigned long long int ) );
+    m_inputFile.read( reinterpret_cast<char*>( &m_totalFrames ), sizeof( unsigned long long int ) );
+    m_inputFile.read( reinterpret_cast<char*>( &m_step ), sizeof( PrecT ) );
+
+    // Radii allocation and initialisation
+    m_radii = std::malloc( ( m_p_number + 1 ) * sizeof( PrecT) );
+    m_inputFile.read( reinterpret_cast<char*>( m_radii ), ( m_p_number + 1 ) * sizeof( PrecT ) );
+    
+    // Position buffer allocation
+    m_positionsBuffer.arenaPtr = std::malloc( 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
+    m_positionsBuffer.setPtrs( ( m_p_number + 1 ) );
+  }
+
+  template <class PrecT>
+  void Visualiser<PrecT>::~Visualiser() {
+
+    std::free( m_radii );
+    std::free( m_positionsBuffer.arenaPtr );
+
   }
 }
 

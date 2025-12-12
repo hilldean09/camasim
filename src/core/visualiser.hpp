@@ -35,6 +35,10 @@ namespace CSIM {
 
       void startInitial();
 
+      
+      // Misc //
+      ~Visualiser();
+
     private:
       // Attributes //
       std::ifstream m_inputFile;

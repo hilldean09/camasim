@@ -95,7 +95,7 @@ namespace CSIM {
 
   template <class PrecT>
   inline void Recorder<PrecT>::write( void* ptr, size_t size ) {
-    m_outputFile.write( ( const char* ) ptr, size );
+    m_outputFile.write( reinterpret_cast<const char*>( ptr ), size );
   }
 
   template <class PrecT>
