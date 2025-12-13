@@ -86,6 +86,14 @@ namspace CSIM{
   }
 
   template <class PrecT>
+  void Visualiser<PrecT>::initVtkObjects() {
+
+    m_p_radii->SetName( "radii" );
+    m_p_radii->SetNumberOfComponents( 1 );
+
+  }
+
+  template <class PrecT>
   void Visualiser<PrecT>::~Visualiser() {
 
     std::free( m_radii );
