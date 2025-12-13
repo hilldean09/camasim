@@ -32,7 +32,7 @@ namespace CSIM {
   void Recorder<PrecT>::initialiseOutputFile( const char* fileName ) {
     m_outputFileName = std::string( fileName )
 
-    m_outputFile = std::ofstream( ( const char* ) ( m_outputFileName + ".raw" ), std::ios::out | std::ios::binary );
+    m_outputFile = std::ofstream( ( const char* ) m_outputFileName.append( "bin" ), std::ios::out | std::ios::binary );
   }
 
   template <class PrecT>
@@ -93,6 +93,13 @@ namespace CSIM {
   void Recorder<PrecT>::recordInitial() {
     writeOutputHeader();
     writeFrameData();
+  }
+
+  template <class PrecT>
+  void Recorder<PrecT>::interpretToVTK() {
+
+    
+
   }
 
   template <class PrecT>

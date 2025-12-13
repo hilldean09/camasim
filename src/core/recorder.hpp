@@ -31,6 +31,8 @@ namespace CSIM {
       // Methods //
       void recordInitial();
 
+      void interpretToVTK();
+
     private:
       // Attributes //
       Manager<PrecT>* m_managerPtr;
