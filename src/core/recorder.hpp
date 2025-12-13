@@ -35,6 +35,7 @@ namespace CSIM {
       // Attributes //
       Manager<PrecT>* m_managerPtr;
       std::ofstream m_outputFile;
+      std::string m_outputFileName;
 
       // Output Header format
       unsigned long long int m_p_number;
