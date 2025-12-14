@@ -7,6 +7,7 @@
 #include "structs.hpp"
 
 #include <fstream>
+#include <filesystem>
 #include <string>
 
 namespace CSIM {
@@ -30,8 +31,6 @@ namespace CSIM {
 
       // Methods //
       void recordInitial();
-
-      void interpretToVTK();
 
     private:
       // Attributes //

@@ -5,6 +5,8 @@
 #include "manager.hpp"
 
 #include <fstream>
+#include <filesystem>
+#include <string>
 
 namespace CSIM {
 
@@ -93,13 +95,6 @@ namespace CSIM {
   void Recorder<PrecT>::recordInitial() {
     writeOutputHeader();
     writeFrameData();
-  }
-
-  template <class PrecT>
-  void Recorder<PrecT>::interpretToVTK() {
-
-    
-
   }
 
   template <class PrecT>
