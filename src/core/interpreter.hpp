@@ -9,25 +9,32 @@
 #include <filesystem>
 #include <std::string>
 
-template <class PrecT>
-class Interpreter {
-  public:
-    // Constructos //
-    Interpreter();
+namespace CSIM {
+
+  template <class PrecT>
+  class Interpreter {
+    public:
+      // Constructos //
+      Interpreter();
 
 
-    // Initialisers //
-    void initialise( std::string inputFileName );
+      // Initialisers //
+      void initialise( std::string inputFileName );
 
-  private:
-    // Attributes //
-    std::ifstream m_inputFile;
-    std::filesystem::path m_outputDirectory;
+    private:
+      // Attributes //
+      std::ifstream m_inputFile;
+      std::filesystem::path m_outputDirectory;
 
-    unsigned long long int m_p_number;
-    unsigned long long int m_totalFrames;
-    PrecT m_step;
+      unsigned long long int m_p_number;
+      unsigned long long int m_totalFrames;
+      PrecT m_step;
 
-};
+
+      // Initialisers //
+      void intiDefaults();
+  };
+
+}
 
 #endif 
