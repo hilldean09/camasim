@@ -50,6 +50,13 @@ namespace CSIM {
     writePvd();
   }
 
+  template <class PrecT>
+  void Interpreter<PrecT>::readHeaderWithoutRadii() {
+    ifstream.read( reinterpret_cast<char*>( &m_p_number ), sizeof( unsigned long long int ) );
+    ifstream.read( reinterpret_cast<char*>( &m_totalFrames ), sizeof( unsigned long long int ) );
+    ifstream.read( reinterpret_cast<char*>( &m_step ), sizeof( PrecT ) );
+  }
+
 
   // Misc //
   template <class PrecT>\

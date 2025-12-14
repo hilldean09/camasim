@@ -47,7 +47,7 @@ namespace CSIM {
 
 
       // Methods //
-      void readHeader();
+      void readHeaderWithoutRadii();
       void writeRadiiBinary();
       void allocateBuffers();
       void writeFrame();
