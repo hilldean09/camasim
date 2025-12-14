@@ -2,6 +2,8 @@
 #ifndef CSIM_INTERPRETER_TPP
 #define CSIM_INTERPRETER_TPP
 
+#include "pre_controls.hpp"
+
 #include <cstdlib>
 #include <fstream>
 #include <filesystem>
@@ -30,7 +32,7 @@ namespace CSIM {
     m_totalFrames = 0;
     m_step = 0;
 
-    m_outputDirectory = std::filesystem::path( "csim_vtk_output" );
+    m_outputDirectory = std::filesystem::path( CSIM_VTK_OUTPUT_DIRECTORY_NAME );
 
     m_positionsBuffer = { nullptr, nullptr, nullptr, nullptr };
   }
@@ -55,6 +57,34 @@ namespace CSIM {
     ifstream.read( reinterpret_cast<char*>( &m_p_number ), sizeof( unsigned long long int ) );
     ifstream.read( reinterpret_cast<char*>( &m_totalFrames ), sizeof( unsigned long long int ) );
     ifstream.read( reinterpret_cast<char*>( &m_step ), sizeof( PrecT ) );
+  }
+
+  template <class PrecT>
+  void Interpreter<PrecT>::writeRadiiBinary() {
+    std::ofstream radiiOutputFile;
+
+    std::filesystem::path radiiOutputPath = m_outputDirectory;
+    radiiOutputPath /= CSIM_VTK_RADII_BINARY_NAME;
+
+    radiiOutputFile.open( radiiOutputPath, std::ios::out | std::ios::binary );
+    
+    PrecT* radiiPrecT = std::malloc( ( m_p_number + 1 ) * sizeof( PrecT ) );
+    float* radiiFloat = std::malloc( ( m_p_number + 1 ) * sizeof( float ) );
+
+    m_inputFile.read( reinterpret_cast<char*>( radiiPrecT ), ( m_p_number + 1 ) * sizeof( PrecT ) );
+    
+    // Converting types
+    for( int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
+      radiiFloat[ idx ] = ( float ) radiiPrecT[ idx ];
+    }
+
+    radiiOutputFile.write( reinterpret_cast<const char*>( radiiFlaot ), ( m_p_number + 1 ) * sizeof( float ) );
+    
+    // Clean up
+    radiiOutputFile.close();
+
+    std::free( radiiPrecT );
+    std::free( radiiFloat );
   }
 
 

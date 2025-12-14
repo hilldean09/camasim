@@ -22,3 +22,5 @@ To maintain deterministic particle storage within the ```.vtp``` frame file coll
 
 The ```.pvd``` files seems to need to be written manually.
 
+# File-system navigation
+Note the migration to the use of the ```<filesystem>``` standard library in the ```Interpreter``` class. As well as increased use of ```std::string```. This is a result of my becoming more comfortable with these tools.

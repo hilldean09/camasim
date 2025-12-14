@@ -9,9 +9,12 @@
 * Ignore the unfortunate American spelling. Done for 
 * consistency with VTK
 */
-#define CSIM_PARTICLE_COLOR
-#define CSIM_CENTRAL_BODY_COLOR
-#define CSIM_BACKGROUND_COLOR
+#define CSIM_PARTICLE_COLOR "Peru"
+#define CSIM_CENTRAL_BODY_COLOR "Maroon"
+#define CSIM_BACKGROUND_COLOR "DarkSlateGray"
+
+#define CSIM_VTK_OUTPUT_DIRECTORY_NAME "csim_vtk_output"
+#define CSIM_VTK_RADII_BINARY_NAME "radii.bin"
 
 
 #endif
