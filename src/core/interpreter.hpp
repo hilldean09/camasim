@@ -21,6 +21,15 @@ namespace CSIM {
       // Initialisers //
       void initialise( std::string inputFileName );
 
+
+      // Methods //
+      void interpretToVtk();
+
+
+      // Misc //
+      ~Interpreter();
+
+
     private:
       // Attributes //
       std::ifstream m_inputFile;
@@ -30,9 +39,20 @@ namespace CSIM {
       unsigned long long int m_totalFrames;
       PrecT m_step;
 
+      Vec_Arrs<PrecT> m_positionsBuffer;
+
 
       // Initialisers //
       void intiDefaults();
+
+
+      // Methods //
+      void readHeader();
+      void writeRadiiBinary();
+      void allocateBuffers();
+      void writeFrame();
+      void writePvd();
+
   };
 
 }
