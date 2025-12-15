@@ -25,7 +25,8 @@ namespace CSIM {
     
     m_inputFile.open( inputFileName, std::ios::in | std::ios::binary );
 
-    m_polyDataWriter = vtkSmartPointer<vtkPolyDataWriter>::New();
+    m_radiiArray->SetName( "Radii" );
+    m_radiiArray->SetNumberOfComponents( 1 );
   }
 
   template <class PrecT>
@@ -44,7 +45,7 @@ namespace CSIM {
   template <class PrecT>
   void Interpreter<PrecT>::interpretToVtk() {
     readHeaderWithoutRadii();
-    writeRadiiBinary();
+    readRadii();
     allocateBuffers();
     
     for( int frameIdx = 0; frameIdx < m_totalFrames; frameIdx++ ) {
@@ -62,31 +63,22 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void Interpreter<PrecT>::writeRadiiBinary() {
-    std::ofstream radiiOutputFile;
-
-    std::filesystem::path radiiOutputPath = m_outputDirectory;
-    radiiOutputPath /= CSIM_VTK_RADII_BINARY_NAME;
-
-    radiiOutputFile.open( radiiOutputPath, std::ios::out | std::ios::binary );
+  void Interpreter<PrecT>::readRadii() {
     
+    // Setting sizes
     PrecT* radiiPrecT = std::malloc( ( m_p_number + 1 ) * sizeof( PrecT ) );
-    float* radiiFloat = std::malloc( ( m_p_number + 1 ) * sizeof( float ) );
+    m_radiiArray->SetNumberOfTuples( m_p_number );
 
+    // Reading
     m_inputFile.read( reinterpret_cast<char*>( radiiPrecT ), ( m_p_number + 1 ) * sizeof( PrecT ) );
     
     // Converting types
     for( int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
-      radiiFloat[ idx ] = ( float ) radiiPrecT[ idx ];
+      m_radiiArray->SetValue( idx, ( float ) radiiPrecT[ idx ] );
     }
 
-    radiiOutputFile.write( reinterpret_cast<const char*>( radiiFlaot ), ( m_p_number + 1 ) * sizeof( float ) );
-    
     // Clean up
-    radiiOutputFile.close();
-
     std::free( radiiPrecT );
-    std::free( radiiFloat );
   }
 
   template <class PrecT>

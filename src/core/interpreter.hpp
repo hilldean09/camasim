@@ -5,6 +5,7 @@
 #include "pre_controls.hpp"
 #include "structs.hpp"
 
+#include <vtkFloatArray.h>
 #include <vtkPoints.h>
 #include <vtkPolyData.h>
 #include <vtkPolyDataWriter.h>
@@ -44,11 +45,12 @@ namespace CSIM {
       unsigned long long int m_totalFrames;
       PrecT m_step;
 
-      unsigned long long int m_particlesPerPiece;
+      vtkSmartPointer<vtkFloatArray> m_radiiArray;
+
+      unsigned long long int m_totalPiecesPerFrame;
 
       Vec_Arrs<PrecT> m_positionsBuffer;
 
-      vtkSmartPointer<vtkPolyDataWriter> m_polyDataWriter;
       vtkSmartPointer<vtkPoints> m_pointsBuffer;
       vtkSmartPointer<vtkPolyData> m_polyDataBuffer;
 
@@ -58,7 +60,7 @@ namespace CSIM {
 
       // Methods //
       void readHeaderWithoutRadii();
-      void writeRadiiBinary();
+      void readRadii();
       void allocateBuffers();
       void writeFrame();
       void writePvd();
