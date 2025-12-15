@@ -129,7 +129,18 @@ namespace CSIM {
   
     std::string frameName = buildFrameName( frameIdx );
 
-    m_pPolyDataWriter.SetFileName( 
+    std::filesystem::path frameDirectory = m_outputDirectory;
+    frameDirectory /= frameName;
+
+    std::filesystem::create_directory( frameDirectory );
+
+    std::filesystem::path framePvtpPath = frameDirectory;
+    framePvtpPath /= frameName;
+    framePvtpPath += ".pvtp";
+
+    m_pPolyDataWriter.SetFileName( framePvtpPath );
+
+    m_pPolyDataWriter.Write();
   }
 
   template <class PrecT>
