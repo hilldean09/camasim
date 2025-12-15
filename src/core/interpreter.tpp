@@ -24,6 +24,8 @@ namespace CSIM {
     std::filesystem::create_directory( m_outputDirectory );
     
     m_inputFile.open( inputFileName, std::ios::in | std::ios::binary );
+
+    m_polyDataWriter = vtkSmartPointer<vtkPolyDataWriter>::New();
   }
 
   template <class PrecT>
@@ -85,6 +87,19 @@ namespace CSIM {
 
     std::free( radiiPrecT );
     std::free( radiiFloat );
+  }
+
+  template <class PrecT>
+  void Interpreter<PrecT>::allocateBuffers() {
+    m_positionsBuffer = std::malloc( 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
+
+    m_pointsBuffer = vtkSmartPointer<vtkPoints>::New();
+    m_polyDataBuffer = vtkSmartPointer<vtkPolyData>::New();
+  }
+
+  template <class PrecT>
+  void Interpreter<PrecT>::writeFrame() {
+
   }
 
 

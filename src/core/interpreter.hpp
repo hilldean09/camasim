@@ -5,6 +5,11 @@
 #include "pre_controls.hpp"
 #include "structs.hpp"
 
+#include <vtkPoints.h>
+#include <vtkPolyData.h>
+#include <vtkPolyDataWriter.h>
+#include <vtkSmartPointer.h>
+
 #include <fstream>
 #include <filesystem>
 #include <std::string>
@@ -41,6 +46,9 @@ namespace CSIM {
 
       Vec_Arrs<PrecT> m_positionsBuffer;
 
+      vtkSmartPointer<vtkPolyDataWriter> m_polyDataWriter;
+      vtkSmartPointer<vtkPoints> m_pointsBuffer;
+      vtkSmartPointer<vtkPolyData> m_polyDataBuffer;
 
       // Initialisers //
       void intiDefaults();
