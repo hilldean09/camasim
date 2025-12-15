@@ -74,12 +74,12 @@ namespace CSIM {
     long long int rank = mpiController ? mpiController->GetLocalProcessId() : 0;
     long long int totalProcesses = mpiController ? mpiController->GetNumberOfProcesses() : 1;
 
+    m_pPolyDataWriter->SetInput( m_polyDataBuffer );
+    m_pPolyDataWriter->SetDataModeToAppended();
+
     m_pPolyDataWriter->SetNumberOfPieces( totalProcesses );
     m_pPolyDataWriter->SetStartPiece( rank );
     m_pPolyDataWriter->SetEndPiece( rank );
-
-    m_pPolyDataWriter->SetInput( m_polyDataBuffer );
-    m_pPolyDataWriter->SetDataModeToAppended();
   }
 
   template <class PrecT>
@@ -126,8 +126,24 @@ namespace CSIM {
     readFrameIntoPrecTBuffer();
     convertPrecTBufferToPoints();
     updateVtkObjects();
+  
+    std::string frameName = buildFrameName( frameIdx );
 
-    
+    m_pPolyDataWriter.SetFileName( 
+  }
+
+  template <class PrecT>
+  std::string Interpreter<PrecT>::buildFrameName( unsigned long long int frameIdx ) {
+    std::string output = "frame_";
+
+    // Determining '0' padding
+    std::string frameNumber = ( std::string ) frameIdx;
+    int padding = CSIM_VTK_FRAME_NUMBER_PADDING - frameNumber.length();
+
+    output.add( std::string( padding, '0' ) );
+    output.add( frameNumber );
+
+    return output;
   }
 
 

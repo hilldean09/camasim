@@ -63,9 +63,13 @@ namespace CSIM {
 
       // Methods //
       void readHeaderWithoutRadii();
+      void configreWriters();
       void readRadii();
       void allocateBuffers();
-      void writeFrame();
+      void writeFrame( unsigned long long int frameIdx );
+
+      std::string buildFrameName( unsigned long long int frameIdx );
+
       void writePvd();
 
   };

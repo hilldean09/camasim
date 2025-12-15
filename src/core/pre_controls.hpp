@@ -16,5 +16,7 @@
 #define CSIM_VTK_OUTPUT_DIRECTORY_NAME "csim_vtk_output"
 #define CSIM_VTK_RADII_BINARY_NAME "radii.bin"
 
+#define CSIM_VTK_FRAME_NUMBER_PADDING 6
+
 
 #endif
