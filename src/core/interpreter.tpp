@@ -142,6 +142,11 @@ namespace CSIM {
 
     m_pPolyDataWriter.Write();
   }
+  
+  template <class PrecT>
+  void readFrameIntoPrecTBuffer() {
+    m_inputFile.read( reinterpret_cast<char*>( m_positionsBuffer.arenaPtr ), 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
+  }
 
   template <class PrecT>
   std::string Interpreter<PrecT>::buildFrameName( unsigned long long int frameIdx ) {

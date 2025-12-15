@@ -68,6 +68,7 @@ namespace CSIM {
       void allocateBuffers();
       void writeFrame( unsigned long long int frameIdx );
 
+      void readFrameIntoPrecTBuffer();
       std::string buildFrameName( unsigned long long int frameIdx );
 
       void writePvd();
