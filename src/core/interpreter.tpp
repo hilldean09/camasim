@@ -144,8 +144,19 @@ namespace CSIM {
   }
   
   template <class PrecT>
-  void readFrameIntoPrecTBuffer() {
+  void Interpreter<PrecT>::readFrameIntoPrecTBuffer() {
     m_inputFile.read( reinterpret_cast<char*>( m_positionsBuffer.arenaPtr ), 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
+  }
+
+  template <class PrecT>
+  void Interpreter<PrecT>::convertPrecTBufferToPoints() {
+    
+    for( int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
+      m_pointsBuffer->SetPoint( idx, { ( float ) m_positionsBuffer.x[ idx ],
+                                       ( float ) m_positionsBuffer.y[ idx ],
+                                       ( float ) m_positionsBuffer.z[ idx ] } )
+    }
+
   }
 
   template <class PrecT>

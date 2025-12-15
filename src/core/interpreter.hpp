@@ -69,6 +69,8 @@ namespace CSIM {
       void writeFrame( unsigned long long int frameIdx );
 
       void readFrameIntoPrecTBuffer();
+      void convertPrecTBufferToPoints();
+      void updateVtkObjects();
       std::string buildFrameName( unsigned long long int frameIdx );
 
       void writePvd();
