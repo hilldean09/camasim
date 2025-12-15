@@ -25,6 +25,10 @@ namespace CSIM {
     
     m_inputFile.open( inputFileName, std::ios::in | std::ios::binary );
 
+    m_radiiArray = vtkSmartPointer<vtkFloatArray>::New();
+    m_pointsBuffer = vtkSmartPointer<vtkPoints>::New();
+    m_polyDataBuffer = vtkSmartPointer<vtkPolyData>::New();
+
     m_radiiArray->SetName( "Radii" );
     m_radiiArray->SetNumberOfComponents( 1 );
   }
@@ -45,8 +49,8 @@ namespace CSIM {
   template <class PrecT>
   void Interpreter<PrecT>::interpretToVtk() {
     readHeaderWithoutRadii();
-    readRadii();
     allocateBuffers();
+    readRadii();
     
     for( int frameIdx = 0; frameIdx < m_totalFrames; frameIdx++ ) {
       writeFrame();
@@ -67,7 +71,7 @@ namespace CSIM {
     
     // Setting sizes
     PrecT* radiiPrecT = std::malloc( ( m_p_number + 1 ) * sizeof( PrecT ) );
-    m_radiiArray->SetNumberOfTuples( m_p_number );
+    m_radiiArray->SetNumberOfTuples( m_p_number + 1 );
 
     // Reading
     m_inputFile.read( reinterpret_cast<char*>( radiiPrecT ), ( m_p_number + 1 ) * sizeof( PrecT ) );
@@ -76,6 +80,10 @@ namespace CSIM {
     for( int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
       m_radiiArray->SetValue( idx, ( float ) radiiPrecT[ idx ] );
     }
+
+    // Adding radii to poly data
+    m_polyDataBuffer->GetPointData()->AddArray( m_radiiArray );
+    m_polyDataBuffer->GetPointData()->SetActiveScalars( "Radii" );
 
     // Clean up
     std::free( radiiPrecT );
@@ -86,8 +94,8 @@ namespace CSIM {
     m_positionsBuffer.arenaPtr = std::malloc( 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
     m_positionsBuffer.setPtrs( m_p_number + 1 );
 
-    m_pointsBuffer = vtkSmartPointer<vtkPoints>::New();
-    m_polyDataBuffer = vtkSmartPointer<vtkPolyData>::New();
+    m_pointsBuffer->SetNumberOfPoints( m_p_number + 1 );
+    m_polyDataBuffer->SetPoints( m_positionsBuffer );
   }
 
   template <class PrecT>

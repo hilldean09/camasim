@@ -6,6 +6,7 @@
 #include "structs.hpp"
 
 #include <vtkFloatArray.h>
+#include <vtkPointData.h>
 #include <vtkPoints.h>
 #include <vtkPolyData.h>
 #include <vtkPolyDataWriter.h>
