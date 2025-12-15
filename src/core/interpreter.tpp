@@ -91,7 +91,8 @@ namespace CSIM {
 
   template <class PrecT>
   void Interpreter<PrecT>::allocateBuffers() {
-    m_positionsBuffer = std::malloc( 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
+    m_positionsBuffer.arenaPtr = std::malloc( 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
+    m_positionsBuffer.setPtrs( m_p_number + 1 );
 
     m_pointsBuffer = vtkSmartPointer<vtkPoints>::New();
     m_polyDataBuffer = vtkSmartPointer<vtkPolyData>::New();
@@ -99,7 +100,11 @@ namespace CSIM {
 
   template <class PrecT>
   void Interpreter<PrecT>::writeFrame() {
-
+    readFrameIntoPrecTBuffer();
+    convertPrecTBufferToPoints();
+    updateVtkObjects();
+    
+    writePvtp
   }
 
 

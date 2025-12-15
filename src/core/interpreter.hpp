@@ -44,6 +44,8 @@ namespace CSIM {
       unsigned long long int m_totalFrames;
       PrecT m_step;
 
+      unsigned long long int m_particlesPerPiece;
+
       Vec_Arrs<PrecT> m_positionsBuffer;
 
       vtkSmartPointer<vtkPolyDataWriter> m_polyDataWriter;
