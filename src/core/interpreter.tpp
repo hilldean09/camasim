@@ -11,9 +11,11 @@
 #include <vtkXMLPPolyDataWriter.h>
 #include <vtkSmartPointer.h>
 
+#include <chrono>
 #include <cstdlib>
-#include <fstream>
 #include <filesystem>
+#include <format>
+#include <fstream>
 #include <string>
 
 namespace CSIM {
@@ -52,6 +54,9 @@ namespace CSIM {
     m_step = 0;
 
     m_outputDirectory = std::filesystem::path( CSIM_VTK_OUTPUT_DIRECTORY_NAME );
+    m_outputDirectory += "_";
+    m_outputDirectory += std::format( "{:%Y%m%d_%H%M%S}", std::chrono::system_clock::now() );
+}
 
     m_positionsBuffer = { nullptr, nullptr, nullptr, nullptr };
   }
@@ -186,6 +191,17 @@ namespace CSIM {
     output.add( frameNumber );
 
     return output;
+  }
+
+  template <class PrecT>
+  void Interpreter<PrecT>::writePVD() {
+    std::ofstream outputFile;
+
+    std::filesystem::path outputFilePath = m_outputDirectory;
+    outputFilePath /= "csim_simulation.pvd";
+
+    
+
   }
 
 
