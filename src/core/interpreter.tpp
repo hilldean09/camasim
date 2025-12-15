@@ -160,6 +160,14 @@ namespace CSIM {
   }
 
   template <class PrecT>
+  void Interpreter<PrecT>::updateVtkObjects() {
+
+    m_pointsBuffer->Modified();
+    m_polyDataBuffer->Modified();
+
+  }
+
+  template <class PrecT>
   std::string Interpreter<PrecT>::buildFrameName( unsigned long long int frameIdx ) {
     std::string output = "frame_";
 
