@@ -9,7 +9,7 @@
 #include <vtkPointData.h>
 #include <vtkPoints.h>
 #include <vtkPolyData.h>
-#include <vtkPolyDataWriter.h>
+#include <vtkXMLPPolyDataWriter.h>
 #include <vtkSmartPointer.h>
 
 #include <fstream>

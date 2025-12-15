@@ -4,6 +4,13 @@
 
 #include "pre_controls.hpp"
 
+#include <vtkFloatArray.h>
+#include <vtkPointData.h>
+#include <vtkPoints.h>
+#include <vtkPolyData.h>
+#include <vtkXMLPPolyDataWriter.h>
+#include <vtkSmartPointer.h>
+
 #include <cstdlib>
 #include <fstream>
 #include <filesystem>
