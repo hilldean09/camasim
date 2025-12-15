@@ -71,7 +71,7 @@ namespace CSIM {
     allocateBuffers();
     readRadii();
     
-    for( int frameIdx = 0; frameIdx < m_totalFrames; frameIdx++ ) {
+    for( unsigned long long int frameIdx = 0; frameIdx < m_totalFrames; frameIdx++ ) {
       writeFrame();
     }
 
@@ -112,7 +112,7 @@ namespace CSIM {
     m_inputFile.read( reinterpret_cast<char*>( radiiPrecT ), ( m_p_number + 1 ) * sizeof( PrecT ) );
     
     // Converting types
-    for( int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
+    for( unsigned long long int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
       m_radiiArray->SetValue( idx, ( float ) radiiPrecT[ idx ] );
     }
 
@@ -163,7 +163,7 @@ namespace CSIM {
   template <class PrecT>
   void Interpreter<PrecT>::convertPrecTBufferToPoints() {
     
-    for( int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
+    for( unsigned long long int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
       m_pointsBuffer->SetPoint( idx, { ( float ) m_positionsBuffer.x[ idx ],
                                        ( float ) m_positionsBuffer.y[ idx ],
                                        ( float ) m_positionsBuffer.z[ idx ] } )
@@ -200,8 +200,40 @@ namespace CSIM {
     std::filesystem::path outputFilePath = m_outputDirectory;
     outputFilePath /= "csim_simulation.pvd";
 
+    outputFile.open( outputFilePath, std::ios::out );
     
+    outputFile << "<?xml version=\"1.0\"?>" << std::endl;
+    outputFile << "VTKFile type=\"Collection\" version=\"0.1\" byte_order=\"LittleEndian\">" << std::endl;
+    outputFile << "\t<Collection>" << std::endl;
+    outputFile << std::endl;
+  
+    for( unsigned long long int frameIdx = 0; frameIdx < m_totalFrames; frameIdx++ ) {
+      outputFIle << buildDataSet( frameIdx ) << std::endl;
+    }
 
+    outputFile << "\t</Collection>" << std::endl;
+    outputFile << "</VTKFile>" << std::endl;
+  }
+
+  template <class PrecT>
+  std::string buildDataSet( unsigned long long int frameIdx ) {
+
+    std::string output;
+
+    output.add( "\t\t<DataSet timestep=\"" );
+    output.add( ( std::string ) ( float ) ( frameIdx * m_step ) );
+    output.add( "\" group=\"\" part=\"0\"\n" );
+    output.add( "\t\t\tfile=\"" );
+    
+    std::filesystem::path pvtpFilePath = m_outputDirectory;
+    pvtpFilePath /= buildFrameName( frameIdx );
+    pvtpFilePath /= buildFrameName( frameIdx );
+    pvtpFilePath += .pvtp;
+
+    output.add( ( std::string ) pvtpFilePath );
+    output.add( "\"/>\n" );
+
+    return output;
   }
 
 

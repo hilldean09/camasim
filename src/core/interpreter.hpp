@@ -74,6 +74,7 @@ namespace CSIM {
       std::string buildFrameName( unsigned long long int frameIdx );
 
       void writePvd();
+      std::string buildDataSet( unsigned long long int );
 
   };
 
