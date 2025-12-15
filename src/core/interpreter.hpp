@@ -41,6 +41,8 @@ namespace CSIM {
       // Attributes //
       std::ifstream m_inputFile;
       std::filesystem::path m_outputDirectory;
+      
+      vtkSmartPointer<vtkXMLPPolyDataWriter> m_pPolyDataWriter;
 
       unsigned long long int m_p_number;
       unsigned long long int m_totalFrames;

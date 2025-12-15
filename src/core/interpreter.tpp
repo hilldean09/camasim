@@ -25,10 +25,15 @@ namespace CSIM {
     
     m_inputFile.open( inputFileName, std::ios::in | std::ios::binary );
 
+    // Initialising writer
+    m_pPolyDataWriter = vtkSmartPointer<vtkXMLPPolyDataWriter>::New();
+
+    // Initialising data buffers
     m_radiiArray = vtkSmartPointer<vtkFloatArray>::New();
     m_pointsBuffer = vtkSmartPointer<vtkPoints>::New();
     m_polyDataBuffer = vtkSmartPointer<vtkPolyData>::New();
 
+    // Configuring poly data components
     m_radiiArray->SetName( "Radii" );
     m_radiiArray->SetNumberOfComponents( 1 );
   }
@@ -48,6 +53,8 @@ namespace CSIM {
   // Methods //
   template <class PrecT>
   void Interpreter<PrecT>::interpretToVtk() {
+    configureWriters();
+
     readHeaderWithoutRadii();
     allocateBuffers();
     readRadii();
@@ -57,6 +64,22 @@ namespace CSIM {
     }
 
     writePvd();
+  }
+
+  template <class PrecT>
+  void Interpreter<PrecT>::configureWriters() {
+    vtkMultiProcessController* mpiController = vtkMultiProcessController::GetGlobalController();
+    
+    // Using ternary operator to seperate between parallel and serial responses
+    long long int rank = mpiController ? mpiController->GetLocalProcessId() : 0;
+    long long int totalProcesses = mpiController ? mpiController->GetNumberOfProcesses() : 1;
+
+    m_pPolyDataWriter->SetNumberOfPieces( totalProcesses );
+    m_pPolyDataWriter->SetStartPiece( rank );
+    m_pPolyDataWriter->SetEndPiece( rank );
+
+    m_pPolyDataWriter->SetInput( m_polyDataBuffer );
+    m_pPolyDataWriter->SetDataModeToAppended();
   }
 
   template <class PrecT>
@@ -99,12 +122,12 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void Interpreter<PrecT>::writeFrame() {
+  void Interpreter<PrecT>::writeFrame( unsigned long long int frameIdx ) {
     readFrameIntoPrecTBuffer();
     convertPrecTBufferToPoints();
     updateVtkObjects();
+
     
-    writePvtp
   }
 
 
