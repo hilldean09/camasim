@@ -99,8 +99,9 @@ namespace CSIM {
     
     unsigned long long int totalTimeSteps = m_readerInfo->Length( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
     
-    std::vector<float> times( totalTimeSteps );
-    m_readerInfo->Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS(), times.data() );
+    // Copying 
+    double* timesRaw = m_readerInfo->Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
+    std::vector<double> times( timesRaw, timesRaw + totalTimeSteps );
 
     auto [ tmpMinTime, tmpMaxTime ] = std::minmax_element( times.begin(), times.end() );
     m_minTime = *tmpMinTime;
@@ -108,7 +109,7 @@ namespace CSIM {
 
   }
   
-  void Visualiser::CueCallback::Execute( vtkObject* caller, unsigned long eventId, void* callData ) override {
+  void CueCallback::Execute( vtkObject* caller, unsigned long eventId, void* callData ) {
     // Ensuring tick based response
     if( eventId != vtkCommand::AnimationCueTickEvent ) return;
 

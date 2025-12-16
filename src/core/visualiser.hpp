@@ -20,29 +20,23 @@
 
 namespace CSIM {
 
+  class CueCallback : public vtkCommand {
+    public:
+      static CueCallback* New() { return new CueCallback; } // VTK compatbility
+      
+      void setCompositeFilter( vtkCompositeDataGeometryFilter* filter ) { m_filter = filter; }
+      void setRenderWindow( vtkRenderWindow* window ) { m_window = window; }
+
+      void Execute( vtkObject* caller, unsigned long eventId, void* callData ) override;
+
+
+    private:
+      vtkCompositeDataGeometryFilter* m_filter = nullptr;
+      vtkRenderWindow* m_window = nullptr;
+
+  };
+
   class Visualiser {
-    private: 
-      // Classes //
-      class CueCallback : vtkCommand {
-        public:
-          static CueCallback* New() { return new CueCallback; } // VTK compatbility
-          
-          CueCallback() {
-            m_filter = nullptr;
-            m_window = nullptr;
-          }
-
-          void setCompositeFilter( vtkCompositeDataGeometryFilter* filter ) { m_filter = filter; }
-          void setRenderWindow( vtkRenderWindow* window ) { m_window = window; }
-
-          void Execute( vtkObject* caller, unsigned long eventId, void* callData ) override;
-
-
-        private:
-          vtkCompositeDataGeometryFilter* m_filter;
-          vtkRenderWindow* m_window;
-      };
-
     public:
       // Constructors //
       Visualiser();
