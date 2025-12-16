@@ -29,8 +29,10 @@ find_package(VTK COMPONENTS
   ParallelMPI
 )
 
+find_package( ParaView COMPONENTS VTKExtensionIOCore )
+
 if (NOT VTK_FOUND)
-  message(FATAL_ERROR "SphereSource: Unable to find the VTK build folder.")
+  message(FATAL_ERROR "Unable to find the VTK build folder.")
 endif()
 
 
@@ -46,7 +48,7 @@ target_sources( main
     main.cpp
 )
 
-target_link_libraries( main PRIVATE ${VTK_LIBRARIES} )
+target_link_libraries( main PRIVATE ${VTK_LIBRARIES} ParaView::VTKExtensionIOCore )
 
 
 # Visualise
@@ -57,7 +59,7 @@ target_sources( visualise
     visualise.cpp
 )
 
-target_link_libraries( visualise PRIVATE ${VTK_LIBRARIES} )
+target_link_libraries( visualise PRIVATE ${VTK_LIBRARIES} ParaView::VTKExtensionIOCore )
 
 
 # vtk_module_autoinit is needed
