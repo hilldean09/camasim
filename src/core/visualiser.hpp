@@ -20,7 +20,6 @@
 
 namespace CSIM {
 
-  template <class PrecT>
   class Visualiser {
     public:
       // Constructors //

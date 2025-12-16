@@ -23,14 +23,12 @@
 namespace CSIM {
 
   // Constructors //
-  template <class PrecT>
-  Visualiser<PrecT>::Visualiser() {
+  Visualiser::Visualiser() {
     initDefaults();
   }
 
   // Initialisers //
-  template <class PrecT>
-  void Visualiser<PrecT>::initialise( std::string collectionFile ) {
+  void Visualiser::initialise( std::string collectionFile ) {
     m_reader->SetFileName( collectionFile.c_str() );
     m_reader->UpdateInformation();
 
@@ -57,8 +55,7 @@ namespace CSIM {
     m_cue->SetEndTime( m_maxTime );
   }
 
-  template <class PrecT>
-  void Visualiser<PrecT>::initDefaults() {
+  void Visualiser::initDefaults() {
 
     m_reader = vtkSmartPointer<vtkXMLCollectionReader>::New();
     m_compositeFiler = vtkSmartPointer<vtkCompositeGeometryFilter>::New();
@@ -78,20 +75,18 @@ namespace CSIM {
 
   }
 
-  template <class PrecT>
-  void Visualiser<PrecT>::extractTimeSteps() {
+  void Visualiser::extractTimeSteps() {
 
     m_readerInfo = m_reader->GetOutputInformation( 0 ); // 0 indicating an output port
     
     unsigned long long int totalTimeSteps = m_readerInfo->Length( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
     
-    {
-      std::vector<float> times( totalTimeSteps );
-      m_readerInfo>Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS(), times.data() );
+    std::vector<float> times( totalTimeSteps );
+    m_readerInfo>Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS(), times.data() );
 
-      auto [ tmpMinTime, tmpMaxTime ] = std::minmax_element( times.begin(), times.end() );
-
-    } // To limit content and especially vector lifespan
+    auto [ tmpMinTime, tmpMaxTime ] = std::minmax_element( times.begin(), times.end() );
+    m_minTime = tmpMinTime;
+    m_maxTime = tmpMaxTime;
 
   }
 
