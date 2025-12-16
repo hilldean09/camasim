@@ -234,8 +234,7 @@ namespace CSIM {
     output += "\" group=\"\" part=\"0\"\n";
     output += "\t\t\tfile=\"";
     
-    std::filesystem::path pvtpFilePath = m_outputDirectory;
-    pvtpFilePath /= buildFrameName( frameIdx );
+    std::filesystem::path pvtpFilePath = buildFrameName( frameIdx );
     pvtpFilePath /= buildFrameName( frameIdx );
     pvtpFilePath += ".pvtp";
 
