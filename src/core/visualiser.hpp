@@ -51,6 +51,7 @@ namespace CSIM {
 
       vtkSmartPointer<vtkAnimationScene> m_scene;
       vtkSmartPointer<vtkAnimationCue> m_cue;
+      vtkSmartPointer<CueCallback> m_callback;
 
       // Initialisers //
       void initDefaults();
@@ -73,7 +74,7 @@ namespace CSIM {
           void setCompositeFilter( vtkCompositeGeometryFilter* filter ) { m_filter = filter; }
           void setRenderWindow( vtkRenderWindow* window ) { m_window = window; }
 
-          void Execute(vtkObject* caller, unsigned long eventId, void* callData) override;
+          void Execute( vtkObject* caller, unsigned long eventId, void* callData ) override;
 
 
         private:

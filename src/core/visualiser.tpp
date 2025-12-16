@@ -51,8 +51,12 @@ namespace CSIM {
     m_scene->SetEndTime( m_maxTime );
     m_scene->AddCue( m_cue );
 
+    m_callback->setCompositeFiler( m_compositeFilter );
+    m_callback->setRenderWindow( m_window );
+
     m_cue->SetStartTime( m_minTime );
     m_cue->SetEndTime( m_maxTime );
+    m_cue->AddObserver( vtkCommand::AnimationCueTickEvent, m_callback );
   }
 
   void Visualiser::initDefaults() {
@@ -72,6 +76,7 @@ namespace CSIM {
 
     m_scene = vtkSmartPointer<vtkAnimationScene>::New();
     m_cue = vtkSmartPointer<vtkAnimationCue>::New();
+    m_callback = vtkSmartPointer<CueCallback>::New();
 
   }
 
