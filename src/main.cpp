@@ -10,8 +10,11 @@ int main() {
 
   CSIM::Manager<float> manager;
 
-  manager.initialiseParticleNumber( 10'000 );
+  manager.initialiseParticleNumber( 100'000 );
   manager.initialiseWithSeed( 4 );
+
+  manager.initialiseParticleDistribution( 'p', 30'000'000, 5'000'000 );
+  manager.initialiseParticleDistribution( 'r', 1000, 10000 );
 
   manager.initialiseParticleCloud();
   manager.initialiseCentralBody( 1'000'000, 1'000'000 );
