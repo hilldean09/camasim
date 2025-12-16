@@ -9,7 +9,9 @@
 #include <vtkAnimationScene.h>
 #include <vtkCommand.h>
 #include <vtkCompositeDataGeometryFilter.h>
+#include <vtkNamedColors.h>
 #include <vtkPointGaussianMapper.h>
+#include <vtkProperty.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -52,10 +54,14 @@ namespace CSIM {
 
     private:
       // Attributes //
+      vtkSmartPointer<vtkNamedColors> m_colors;
+  
       vtkSmartPointer<vtkXMLCollectionReader> m_reader;
       vtkSmartPointer<vtkCompositeDataGeometryFilter> m_compositeFilter;
       vtkSmartPointer<vtkPointGaussianMapper> m_pointMapper;
+
       vtkSmartPointer<vtkActor> m_pointActor;
+      vtkSmartPointer<vtkProperty> m_pointProperty;
 
       vtkInformation* m_readerInfo;
       float m_minTime;

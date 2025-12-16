@@ -10,7 +10,9 @@
 #include <vtkCommand.h>
 #include <vtkCompositeDataGeometryFilter.h>
 #include <vtkInformation.h>
+#include <vtkNamedColors.h>
 #include <vtkPointGaussianMapper.h>
+#include <vtkProperty.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -45,7 +47,10 @@ namespace CSIM {
     m_pointMapper->SetScaleArrayComponenet( 0 );
     m_pointMapper->SetScaleFactor( CSIM_POINT_SCALE_FACTOR );
 
+    m_pointProperty->SetColor( m_colors->GetColor3d( "Peru" ).GetData() );
+
     m_pointActor->SetMapper( m_pointMapper );
+    m_pointActor->SetProperty( m_pointProperty );
 
     m_renderer->AddActor( m_pointActor );
 
@@ -69,11 +74,14 @@ namespace CSIM {
   }
 
   void Visualiser::initDefaults() {
+    m_colors = vtkSmartPointer<vtkNamedColors>::New();
 
     m_reader = vtkSmartPointer<vtkXMLCollectionReader>::New();
     m_compositeFilter = vtkSmartPointer<vtkCompositeDataGeometryFilter>::New();
     m_pointMapper = vtkSmartPointer<vtkPointGaussianMapper>::New();
+
     m_pointActor = vtkSmartPointer<vtkActor>::New();
+    m_pointProperty = vtkSmartPointer<vtkProperty>::New();
 
     m_readerInfo = nullptr;
     m_minTime = 0.0;
