@@ -1,4 +1,5 @@
 
+#include "core/interpreter.hpp"
 #include "core/manager.hpp"
 #include "core/recorder.hpp"
 #include "core/particle_cloud.hpp"
@@ -15,16 +16,20 @@ int main() {
   manager.initialiseParticleCloud();
   manager.initialiseCentralBody( 1'000'000'000, 1'000'000 );
 
-  manager.initialiseSimulation( 0.000001 );
+  manager.initialiseSimulation( 0.0001 );
 
   CSIM::Recorder<float> recorder;
 
   recorder.initialiseManager( &manager );
-  recorder.initialiseOutputFile( "testOuts.txt" );
+  recorder.initialiseOutputFile( "testOuts" );
   recorder.initialiseLengthWithTime( 1'000'000 );
   recorder.initialiseSamplingWithFrames( 1'000'000'000 );
 
   recorder.recordInitial();
+
+  CSIM::Interpreter<float> interpreter;
+  interpreter.initialise( "testOuts.bin" );
+  interpreter.interpretToVtk();
 
 
   return 0;
