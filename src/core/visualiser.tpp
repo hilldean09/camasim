@@ -51,10 +51,7 @@ namespace CSIM {
     extractTimeSteps();
 
     // Configuring
-    m_compositeFilter->SetInputConnection( m_reader->GetOutputPort() );
-    m_compositeFilter->UpdateTimeStep( m_minTime );
-
-    m_pointMapper->SetInputConnection( m_compositeFilter->GetOutputPort() );
+    m_pointMapper->SetInputConnection( m_reader->GetOutputPort() );
     m_pointMapper->SetScaleArray( "Radii" );
     m_pointMapper->SetScaleArrayComponent( 0 );
     m_pointMapper->SetScaleFactor( CSIM_POINT_SCALE_FACTOR );
@@ -78,8 +75,9 @@ namespace CSIM {
     m_scene->SetEndTime( m_maxTime );
     m_scene->AddCue( m_cue );
 
-    m_callback->setCompositeFilter( m_compositeFilter );
     m_callback->setRenderWindow( m_window );
+    m_callback->setReader( m_reader );
+    m_callback->setReaderInfo( m_readerInfo = m_reader->GetOutputInformation( 0 ) );
 
     m_cue->SetStartTime( m_minTime );
     m_cue->SetEndTime( m_maxTime );
@@ -94,7 +92,6 @@ namespace CSIM {
     m_colors = vtkSmartPointer<vtkNamedColors>::New();
 
     m_reader = vtkSmartPointer<vtkPVDReader>::New();
-    m_compositeFilter = vtkSmartPointer<vtkCompositeDataGeometryFilter>::New();
     m_pointMapper = vtkSmartPointer<vtkPointGaussianMapper>::New();
 
     m_pointActor = vtkSmartPointer<vtkActor>::New();
@@ -172,7 +169,8 @@ namespace CSIM {
 
     const float time = cue->GetAnimationTime();
 
-    m_filter->UpdateTimeStep( time );
+    m_readerInfo->Set( vtkStreamingDemandDrivenPipeline::UPDATE_TIME_STEP(), time );
+    m_reader->Update();
 
     m_window->Render();
   }

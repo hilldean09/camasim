@@ -27,15 +27,17 @@ namespace CSIM {
     public:
       static CueCallback* New() { return new CueCallback; } // VTK compatbility
       
-      void setCompositeFilter( vtkCompositeDataGeometryFilter* filter ) { m_filter = filter; }
       void setRenderWindow( vtkRenderWindow* window ) { m_window = window; }
+      void setReader( vtkPVDReader* reader ) { m_reader = reader; }
+      void setReaderInfo( vtkInformation* readerInfo ) { m_readerInfo = readerInfo; }
 
       void Execute( vtkObject* caller, unsigned long eventId, void* callData ) override;
 
 
     private:
-      vtkCompositeDataGeometryFilter* m_filter = nullptr;
       vtkRenderWindow* m_window = nullptr;
+      vtkPVDReader* m_reader = nullptr;
+      vtkInformation* m_readerInfo = nullptr;
 
   };
 
@@ -58,7 +60,6 @@ namespace CSIM {
       vtkSmartPointer<vtkNamedColors> m_colors;
   
       vtkSmartPointer<vtkPVDReader> m_reader;
-      vtkSmartPointer<vtkCompositeDataGeometryFilter> m_compositeFilter;
       vtkSmartPointer<vtkPointGaussianMapper> m_pointMapper;
 
       vtkSmartPointer<vtkActor> m_pointActor;
