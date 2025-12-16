@@ -97,7 +97,17 @@ namespace CSIM {
 
     m_readerInfo = m_reader->GetOutputInformation( 0 ); // 0 indicating an output port
     
+    #if( CSIM_DEBUG == 1 )
+    if( m_readerInfo == nullptr ) {
+      CSIM_M_DEBUG_LOG( "#CSIM# extractTimeSteps : m_readerInfo is null" );
+    }
+    #endif
+    
     unsigned long long int totalTimeSteps = m_readerInfo->Length( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
+    
+    #if( CSIM_DEBUG == 1 )
+    CSIM_M_DEBUG_LOG( "#CSIM# extractTimeSteps : \n\ttotalTimeSteps : " << std::to_string( totalTimeSteps ) );
+    #endif
     
     // Copying 
     double* timesRaw = m_readerInfo->Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
