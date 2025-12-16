@@ -80,6 +80,17 @@ namespace CSIM {
 
   }
 
+
+  // Methods //
+  void Visualiser::visualise() {
+    m_window->Render();
+    m_interactor->Initialise();
+    
+    m_scene->Play();
+
+    m_interactor->Start();
+  }
+
   void Visualiser::extractTimeSteps() {
 
     m_readerInfo = m_reader->GetOutputInformation( 0 ); // 0 indicating an output port
