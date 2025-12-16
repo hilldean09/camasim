@@ -33,24 +33,12 @@ namespace CSIM {
 
       void initialise( std::string inputFileName );
 
-      void startInitial();
-
       
       // Misc //
       ~Visualiser();
 
     private:
       // Attributes //
-      std::ifstream m_inputFile;
-
-      unsigned long long int m_p_number;
-      unsigned long long int m_totalFrames;
-      PrecT m_step;
-      PrecT* m_radii;
-
-      Vec_Arrs<PrecT> m_positionsBuffer;
-
-      // General VTK objects
       vtkSmartPointer<vtkNamedColors> m_colors;
 
       // Particle VTK objects
@@ -75,9 +63,6 @@ namespace CSIM {
       
       // Initialisers //
       void initDefaults();
-      void initInputFile( const char* inputFileName );
-      void initInputHeader();
-      void initPositionsBuffer();
       void initVtkObjects();
       
       // Inlines //
