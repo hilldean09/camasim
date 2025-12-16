@@ -28,7 +28,7 @@ namespace CSIM {
 
   // Initialisers //
   template <class PrecT>
-  void initialise( std::string collectionFile ) {
+  void Interpreter<PrecT>::initialise( std::string collectionFile ) {
     m_reader->SetFileName( collectionFile.c_str() );
     m_reader->UpdateInformation();
 
@@ -45,6 +45,25 @@ namespace CSIM {
 
     m_scene->SetModeSequence();
     m_scene->SetFrameRate( 60 );
+  }
+
+  template <class PrecT>
+  void Interpreter<PrecT>::initDefaults() {
+
+    m_reader = vtkSmartPointer<vtkXMLCollectionReader>::New();
+    m_compositeFiler = vtkSmartPointer<vtkCompositeGeometryFilter>::New();
+    m_pointMapper = vtkSmartPointer<vtkPointGaussianMapper>::New();
+    m_pointActor = vtkSmartPointer<vtkActor>::New();
+
+    vtkInformation* m_readerInfo = nullptr;
+
+    m_renderer = vtkSmartPointer<vtkRenderer>::New();
+    m_window = vtkSmartPointer<vtkRenderWindow>::New();
+    m_interactor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+
+    m_scene = vtkSmartPointer<vtkAnimationScene>::New();
+    m_cue = vtkSmartPointer<vtkAnimationCue>::New();
+
   }
 
 
