@@ -21,7 +21,8 @@ namespace CSIM {
 
       void initialiseWithoutSeed();
       void initialiseWithSeed( unsigned int seed );
-
+  
+      void initialiseParticleDistribution( const char distribution, PrecT mean, PrecT standardDeviation );
       void initialiseParticleCloud();
 
       void initialiseCentralBody( PrecT mass, PrecT radius, Vector<PrecT> position = { 0.0, 0.0, 0.0 } );

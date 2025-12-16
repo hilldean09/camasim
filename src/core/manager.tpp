@@ -36,6 +36,11 @@ namespace CSIM {
   }
 
   template <class PrecT>
+  void Manager<PrecT>::initialiseParticleDistribution( const char distribution, PrecT mean, PrecT standardDeviation ) {
+    m_particleCloud.setDistribution( distribution, mean, standardDeviation );
+  }
+
+  template <class PrecT>
   void Manager<PrecT>::initialiseParticleCloud() {
     if( m_isPNumberInitialised && m_isRandomEngineInitialised ) {
       m_particleCloud.initialise( m_p_number, &m_randomEngine );

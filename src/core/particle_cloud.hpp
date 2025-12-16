@@ -25,7 +25,7 @@ namespace CSIM {
 
 
       // Mutators //
-      void setDistribution( char distribution, PrecT mean, PrecT standardDeviaion );
+      void setDistribution( const char distribution, PrecT mean, PrecT standardDeviaion );
 
 
       // Misc //
