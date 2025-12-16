@@ -94,9 +94,10 @@ namespace CSIM {
   template <class PrecT>
   void Recorder<PrecT>::recordInitial() {
     unsigned long long int tmpTotalFrames = m_totalFrames;
-    m_totalFrames = 1;
+    m_totalFrames = 2;
     
     writeOutputHeader();
+    writeFrameData();
     writeFrameData();
 
     m_totalFrames = tmpTotalFrames;

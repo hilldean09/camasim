@@ -44,7 +44,10 @@ namespace CSIM {
     m_pointActor->SetMapper( m_pointMapper );
 
     m_renderer->AddActor( m_pointActor );
+
     m_window->AddRenderer( m_renderer );
+    m_window->SetSize( 800, 600 );
+
     m_interactor->SetRenderWindow( m_window );
 
     m_scene->SetModeToSequence();
@@ -95,6 +98,7 @@ namespace CSIM {
 
   void Visualiser::extractTimeSteps() {
 
+    m_reader->UpdateInformation();
     m_readerInfo = m_reader->GetOutputInformation( 0 ); // 0 indicating an output port
     
     #if( CSIM_DEBUG == 1 )
@@ -105,13 +109,20 @@ namespace CSIM {
     
     unsigned long long int totalTimeSteps = m_readerInfo->Length( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
     
-    #if( CSIM_DEBUG == 1 )
-    CSIM_M_DEBUG_LOG( "#CSIM# extractTimeSteps : \n\ttotalTimeSteps : " << std::to_string( totalTimeSteps ) );
-    #endif
+    if( totalTimeSteps <= 0 ) {
+      m_minTime = 0.0;
+      m_maxTime = 0.0;
+
+      return;
+    }
     
     // Copying 
-    double* timesRaw = m_readerInfo->Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
-    std::vector<double> times( timesRaw, timesRaw + totalTimeSteps );
+    std::vector<double> times;
+    times.reserve( totalTimeSteps );
+
+    for( unsigned long long int idx = 0; idx < totalTimeSteps; idx++ ) {
+      times.push_back( m_readerInfo->Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS(), idx ) );
+    }
 
     auto [ tmpMinTime, tmpMaxTime ] = std::minmax_element( times.begin(), times.end() );
     m_minTime = *tmpMinTime;
