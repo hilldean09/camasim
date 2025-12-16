@@ -14,7 +14,7 @@
 #include <vtkObject.h>
 #include <vtkPointGaussianMapper.h>
 #include <vtkProperty.h>
-#include <vtkPvdReader.h>
+#include <vtkPVDReader.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -93,7 +93,7 @@ namespace CSIM {
 
     m_colors = vtkSmartPointer<vtkNamedColors>::New();
 
-    m_reader = vtkSmartPointer<vtkPvdReader>::New();
+    m_reader = vtkSmartPointer<vtkPVDReader>::New();
     m_compositeFilter = vtkSmartPointer<vtkCompositeDataGeometryFilter>::New();
     m_pointMapper = vtkSmartPointer<vtkPointGaussianMapper>::New();
 
