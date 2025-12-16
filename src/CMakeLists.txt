@@ -11,33 +11,32 @@ set( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic" )
 find_package( Python3 REQUIRED COMPONENTS Development Development.Module )
 find_package( CLI11 CONFIG REQUIRED )
 find_package( Viskores CONFIG REQUIRED )
+find_package( X11 REQUIRED )
+find_package( Freetype REQUIRED )
 
 # VTK
 find_package( nlohmann_json REQUIRED )
 
-find_package( VTK REQUIRED COMPONENTS 
-  CommonColor
-  CommonCore
-  CommonDataModel
-  FiltersSources
-  InteractionStyle
-  InteractionWidgets
-  RenderingContextOpenGL2
-  RenderingCore
-  RenderingFreeType
-  RenderingGL2PSOpenGL2
-  RenderingOpenGL2
-  IOXML
-  IOParallelXML
-  ParallelCore
-  ParallelMPI
-)
-
 find_package( ParaView REQUIRED COMPONENTS VTKExtensionsIOCore )
 
-if (NOT VTK_FOUND)
-  message(FATAL_ERROR "Unable to find the VTK build folder.")
-endif()
+set( CSIM_VTK_MODULES 
+  VTK::CommonColor
+  VTK::CommonCore
+  VTK::CommonDataModel
+  VTK::FiltersSources
+  VTK::FiltersGeometry
+  VTK::InteractionStyle
+  VTK::InteractionWidgets
+  VTK::RenderingContextOpenGL2
+  VTK::RenderingCore
+  VTK::RenderingFreeType
+  VTK::RenderingGL2PSOpenGL2
+  VTK::RenderingOpenGL2
+  VTK::IOXML
+  VTK::IOParallelXML
+  VTK::ParallelCore
+  VTK::ParallelMPI
+)
 
 
 # Libraries
@@ -52,7 +51,10 @@ target_sources( main
     main.cpp
 )
 
-target_link_libraries( main PRIVATE ${VTK_LIBRARIES} ParaView::VTKExtensionsIOCore )
+target_link_libraries( main PRIVATE 
+  ParaView::VTKExtensionsIOCore 
+  ${CSIM_VTK_MODULES}
+)
 
 
 # Visualise
@@ -63,7 +65,10 @@ target_sources( visualise
     visualise.cpp
 )
 
-target_link_libraries( visualise PRIVATE ${VTK_LIBRARIES} ParaView::VTKExtensionsIOCore )
+target_link_libraries( visualise PRIVATE 
+  ParaView::VTKExtensionsIOCore 
+  ${CSIM_VTK_MODULES}
+)
 
 
 # vtk_module_autoinit is needed

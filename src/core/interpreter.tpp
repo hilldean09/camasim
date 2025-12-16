@@ -212,7 +212,7 @@ namespace CSIM {
     outputFile.open( outputFilePath, std::ios::out );
     
     outputFile << "<?xml version=\"1.0\"?>" << std::endl;
-    outputFile << "VTKFile type=\"Collection\" version=\"0.1\" byte_order=\"LittleEndian\">" << std::endl;
+    outputFile << "<VTKFile type=\"Collection\" version=\"0.1\" byte_order=\"LittleEndian\">" << std::endl;
     outputFile << "\t<Collection>" << std::endl;
     outputFile << std::endl;
   
