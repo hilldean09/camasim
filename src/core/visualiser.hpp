@@ -12,6 +12,7 @@
 #include <vtkNamedColors.h>
 #include <vtkPointGaussianMapper.h>
 #include <vtkProperty.h>
+#include <vtkPvdReader.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -56,7 +57,7 @@ namespace CSIM {
       // Attributes //
       vtkSmartPointer<vtkNamedColors> m_colors;
   
-      vtkSmartPointer<vtkXMLCollectionReader> m_reader;
+      vtkSmartPointer<vtkPvdReader> m_reader;
       vtkSmartPointer<vtkCompositeDataGeometryFilter> m_compositeFilter;
       vtkSmartPointer<vtkPointGaussianMapper> m_pointMapper;
 

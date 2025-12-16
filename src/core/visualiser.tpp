@@ -11,8 +11,10 @@
 #include <vtkCompositeDataGeometryFilter.h>
 #include <vtkInformation.h>
 #include <vtkNamedColors.h>
+#include <vtkObject.h>
 #include <vtkPointGaussianMapper.h>
 #include <vtkProperty.h>
+#include <vtkPvdReader.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -21,6 +23,7 @@
 #include <vtkXMLCollectionReader.h>
 
 #include <algorithm>
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -33,7 +36,16 @@ namespace CSIM {
 
   // Initialisers //
   void Visualiser::initialise( std::string collectionFile ) {
+    #if( CSIM_DEBUG == 1 )
+    m_reader->SetAbortExecute( 0 );
+
+    if( !std::filesystem::exists( collectionFile.c_str() ) ) {
+      CSIM_M_DEBUG_LOG( "#CSIM# initialise : file does not exist" );
+    }
+    #endif
+
     m_reader->SetFileName( collectionFile.c_str() );
+    m_reader->Update();
     m_reader->UpdateInformation();
 
     extractTimeSteps();
@@ -75,9 +87,13 @@ namespace CSIM {
   }
 
   void Visualiser::initDefaults() {
+    #if( CSIM_DEBUG == 1 )
+    vtkObject::GlobalWarningDisplayOn();
+    #endif
+
     m_colors = vtkSmartPointer<vtkNamedColors>::New();
 
-    m_reader = vtkSmartPointer<vtkXMLCollectionReader>::New();
+    m_reader = vtkSmartPointer<vtkPvdReader>::New();
     m_compositeFilter = vtkSmartPointer<vtkCompositeDataGeometryFilter>::New();
     m_pointMapper = vtkSmartPointer<vtkPointGaussianMapper>::New();
 
@@ -115,17 +131,21 @@ namespace CSIM {
     m_readerInfo = m_reader->GetOutputInformation( 0 ); // 0 indicating an output port
     
     #if( CSIM_DEBUG == 1 )
-    if( m_readerInfo == nullptr ) {
-      CSIM_M_DEBUG_LOG( "#CSIM# extractTimeSteps : m_readerInfo is null" );
+    if( !( m_readerInfo->Has( vtkStreamingDemandDrivenPipeline::TIME_STEPS() ) ) ) {
+      CSIM_M_DEBUG_LOG( "#CSIM# extractTimeSteps : m_readerInfo has no TIME_STEPS()" );
     }
     #endif
     
     unsigned long long int totalTimeSteps = m_readerInfo->Length( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
     
+    #if( CSIM_DEBUG == 1)
+    CSIM_M_DEBUG_LOG( "#CSIM# extractTimeSteps : \n\ttotalTimeSteps : " << std::to_string( totalTimeSteps ) );
+    #endif
+
     if( totalTimeSteps <= 0 ) {
       m_minTime = 0.0;
       m_maxTime = 0.0;
-
+      
       return;
     }
     
