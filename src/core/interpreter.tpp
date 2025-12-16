@@ -98,6 +98,13 @@ namespace CSIM {
     m_inputFile.read( reinterpret_cast<char*>( &m_p_number ), sizeof( unsigned long long int ) );
     m_inputFile.read( reinterpret_cast<char*>( &m_totalFrames ), sizeof( unsigned long long int ) );
     m_inputFile.read( reinterpret_cast<char*>( &m_step ), sizeof( PrecT ) );
+
+    #if( CSIM_DEBUG == 1 )
+    CSIM_M_DEBUG_LOG( "#CSIM# readHeaderWithoutRadii : \n"
+                      << "\tm_p_number : " << std::to_string( m_p_number )
+                      << ", m_totalFrames : " << std::to_string( m_totalFrames )
+                      << ", m_step : " << std::to_string( m_step ) );
+    #endif
   }
 
   template <class PrecT>

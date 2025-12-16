@@ -34,7 +34,7 @@ namespace CSIM {
   void Recorder<PrecT>::initialiseOutputFile( const char* fileName ) {
     m_outputFileName = std::string( fileName );
 
-    m_outputFile = std::ofstream( m_outputFileName.append( "bin" ).c_str(), std::ios::out | std::ios::binary );
+    m_outputFile = std::ofstream( m_outputFileName.append( ".bin" ).c_str(), std::ios::out | std::ios::binary );
   }
 
   template <class PrecT>

@@ -4,7 +4,6 @@
 
 #include <iostream>
 
-
 /* 
 * Ignore the unfortunate American spelling. Done for 
 * consistency with VTK
@@ -17,6 +16,9 @@
 #define CSIM_VTK_RADII_BINARY_NAME "radii.bin"
 
 #define CSIM_VTK_FRAME_NUMBER_PADDING 6
+
+#define CSIM_DEBUG 1
+#define CSIM_M_DEBUG_LOG( message ) std::cout << message << std::endl
 
 
 #endif
