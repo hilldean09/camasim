@@ -2,13 +2,13 @@
 #ifndef CSIM_VISUALISER_HPP
 #define CSIM_VISUALISER_HPP
 
-#include "pre_controls"
+#include "pre_controls.hpp"
 #include "structs.hpp"
 
 #include <vtkAnimationCue.h>
 #include <vtkAnimationScene.h>
 #include <vtkCommand.h>
-#include <vtkCompositeGeometryFilter.h>
+#include <vtkCompositeDataGeometryFilter.h>
 #include <vtkPointGaussianMapper.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -37,7 +37,7 @@ namespace CSIM {
     private:
       // Attributes //
       vtkSmartPointer<vtkXMLCollectionReader> m_reader;
-      vtkSmartPointer<vtkCompositeGeometryFilter> m_compositeFiler;
+      vtkSmartPointer<vtkCompositeDataGeometryFilter> m_compositeFiler;
       vtkSmartPointer<vtkPointGaussianMapper> m_pointMapper;
       vtkSmartPointer<vtkActor> m_pointActor;
 
@@ -71,14 +71,14 @@ namespace CSIM {
             m_window = nullptr;
           }
 
-          void setCompositeFilter( vtkCompositeGeometryFilter* filter ) { m_filter = filter; }
+          void setCompositeFilter( vtkCompositeDataGeometryFilter* filter ) { m_filter = filter; }
           void setRenderWindow( vtkRenderWindow* window ) { m_window = window; }
 
           void Execute( vtkObject* caller, unsigned long eventId, void* callData ) override;
 
 
         private:
-          vtkCompositeGeometryFilter* m_filter;
+          vtkCompositeDataGeometryFilter* m_filter;
           vtkRenderWindow* m_window;
       };
   };

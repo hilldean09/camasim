@@ -8,7 +8,7 @@
 #include <vtkAnimationCue.h>
 #include <vtkAnimationScene.h>
 #include <vtkCommand.h>
-#include <vtkCompositeGeometryFilter.h>
+#include <vtkCompositeDataGeometryFilter.h>
 #include <vtkPointGaussianMapper.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -62,7 +62,7 @@ namespace CSIM {
   void Visualiser::initDefaults() {
 
     m_reader = vtkSmartPointer<vtkXMLCollectionReader>::New();
-    m_compositeFiler = vtkSmartPointer<vtkCompositeGeometryFilter>::New();
+    m_compositeFiler = vtkSmartPointer<vtkCompositeDataGeometryFilter>::New();
     m_pointMapper = vtkSmartPointer<vtkPointGaussianMapper>::New();
     m_pointActor = vtkSmartPointer<vtkActor>::New();
 

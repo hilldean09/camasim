@@ -48,8 +48,20 @@ target_sources( main
 
 target_link_libraries( main PRIVATE ${VTK_LIBRARIES} )
 
+
+# Visualise
+add_executable( visualise )
+
+target_sources( visualise 
+  PRIVATE
+    visualise.cpp
+)
+
+target_link_libraries( visualise PRIVATE ${VTK_LIBRARIES} )
+
+
 # vtk_module_autoinit is needed
 vtk_module_autoinit(
-  TARGETS main
+  TARGETS main visualise
   MODULES ${VTK_LIBRARIES}
 )
