@@ -65,7 +65,12 @@ namespace CSIM {
     m_renderer->GetBackground( m_colors->GetColor3d( CSIM_BACKGROUND_COLOR ).GetData() );
 
     m_window->AddRenderer( m_renderer );
+
+    #if( CSIM_USE_SCREEN_SIZE == 1 )
+    m_window->SetSize( m_window->GetScreenSize() );  
+    #else
     m_window->SetSize( 800, 600 );
+    #endif
 
     m_interactor->SetRenderWindow( m_window );
 
