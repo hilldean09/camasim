@@ -33,6 +33,7 @@ namespace CSIM {
       // Methods //
       void visualise();
 
+
     private:
       // Attributes //
       vtkSmartPointer<vtkXMLCollectionReader> m_reader;
@@ -57,6 +58,28 @@ namespace CSIM {
       
       // Methods //
       void extractTimeSteps();
+
+      
+      // Classes //
+      class CueCallback : vtkCommand {
+        public:
+          static CueCallback* New() { return new CueCallback; } // VTK compatbility
+          
+          CueCallback() {
+            m_filter = nullptr;
+            m_window = nullptr;
+          }
+
+          void setCompositeFilter( vtkCompositeGeometryFilter* filter ) { m_filter = filter; }
+          void setRenderWindow( vtkRenderWindow* window ) { m_window = window; }
+
+          void Execute(vtkObject* caller, unsigned long eventId, void* callData) override;
+
+
+        private:
+          vtkCompositeGeometryFilter* m_filter;
+          vtkRenderWindow* m_window;
+      };
   };
   
 }

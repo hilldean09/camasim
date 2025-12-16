@@ -89,7 +89,20 @@ namespace CSIM {
     m_maxTime = tmpMaxTime;
 
   }
+  
+  void Visualiser::CueCallback::Execute( vtkObject* caller, unsigned long eventId, void* callData ) override {
+    // Ensuring tick based response
+    if( eventID != vtkCommand::AnimationCueTickEvent ) return;
 
+    // Tbh I don't fully understand this but it seems common
+    auto* cue = vtkAnimationCue::SafeDownCast( caller );
+
+    const float time = cue->GetAnimationTime();
+
+    m_filter->UpdateTimeStep( time );
+
+    m_window->Render();
+  }
 
 }
 
