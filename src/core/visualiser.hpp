@@ -21,10 +21,10 @@
 namespace CSIM {
 
   template <class PrecT>
-  class Interpreter {
+  class Visualiser {
     public:
       // Constructors //
-      Interpreter();
+      Visualiser();
   
 
       // Initialisers //
@@ -42,6 +42,8 @@ namespace CSIM {
       vtkSmartPointer<vtkActor> m_pointActor;
 
       vtkInformation* m_readerInfo;
+      float m_minTime;
+      float m_maxTime;
 
       vtkSmartPointer<vtkRenderer> m_renderer;
       vtkSmartPointer<vtkRenderWindow> m_window;
@@ -59,5 +61,7 @@ namespace CSIM {
   };
   
 }
+
+#include "visualiser.tpp"
 
 #endif

@@ -16,19 +16,21 @@
 #include <vtkSmartPointer.h>
 #include <vtkXMLCollectionReader.h>
 
+#include <algorithm>
 #include <string>
+#include <vector>
 
 namespace CSIM {
 
   // Constructors //
   template <class PrecT>
-  Interpreter<PrecT>::Interpreter() {
+  Visualiser<PrecT>::Visualiser() {
     initDefaults();
   }
 
   // Initialisers //
   template <class PrecT>
-  void Interpreter<PrecT>::initialise( std::string collectionFile ) {
+  void Visualiser<PrecT>::initialise( std::string collectionFile ) {
     m_reader->SetFileName( collectionFile.c_str() );
     m_reader->UpdateInformation();
 
@@ -36,6 +38,8 @@ namespace CSIM {
 
     // Configuring
     m_compositeFilter->SetInputConnection( m_reader->GetOutputPort() );
+    m_compositeFilter->UpdateTimeStep( m_minTime );
+
     m_pointMapper->SetInputConnection( m_compositeFilter->GetOutputPort() );
     m_pointActor->SetInputConnection( m_pointMapper->GetOutputPort() );
 
@@ -45,17 +49,25 @@ namespace CSIM {
 
     m_scene->SetModeSequence();
     m_scene->SetFrameRate( 60 );
+    m_scene->SetStartTime( m_minTime );
+    m_scene->SetEndTime( m_maxTime );
+    m_scene->AddCue( m_cue );
+
+    m_cue->SetStartTime( m_minTime );
+    m_cue->SetEndTime( m_maxTime );
   }
 
   template <class PrecT>
-  void Interpreter<PrecT>::initDefaults() {
+  void Visualiser<PrecT>::initDefaults() {
 
     m_reader = vtkSmartPointer<vtkXMLCollectionReader>::New();
     m_compositeFiler = vtkSmartPointer<vtkCompositeGeometryFilter>::New();
     m_pointMapper = vtkSmartPointer<vtkPointGaussianMapper>::New();
     m_pointActor = vtkSmartPointer<vtkActor>::New();
 
-    vtkInformation* m_readerInfo = nullptr;
+    m_readerInfo = nullptr;
+    m_minTime = 0.0;
+    m_maxTime = 0.0;
 
     m_renderer = vtkSmartPointer<vtkRenderer>::New();
     m_window = vtkSmartPointer<vtkRenderWindow>::New();
@@ -63,6 +75,23 @@ namespace CSIM {
 
     m_scene = vtkSmartPointer<vtkAnimationScene>::New();
     m_cue = vtkSmartPointer<vtkAnimationCue>::New();
+
+  }
+
+  template <class PrecT>
+  void Visualiser<PrecT>::extractTimeSteps() {
+
+    m_readerInfo = m_reader->GetOutputInformation( 0 ); // 0 indicating an output port
+    
+    unsigned long long int totalTimeSteps = m_readerInfo->Length( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
+    
+    {
+      std::vector<float> times( totalTimeSteps );
+      m_readerInfo>Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS(), times.data() );
+
+      auto [ tmpMinTime, tmpMaxTime ] = std::minmax_element( times.begin(), times.end() );
+
+    } // To limit content and especially vector lifespan
 
   }
 
