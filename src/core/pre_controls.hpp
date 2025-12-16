@@ -17,6 +17,11 @@
 
 #define CSIM_VTK_FRAME_NUMBER_PADDING 6
 
+#define CSIM_WINDOW_SIZE_X 800
+#define CSIM_WINDOW_SIZE_Y 600
+
+#define CSIM_POINT_SCALE_FACTOR 10.0
+
 #define CSIM_DEBUG 1
 #define CSIM_M_DEBUG_LOG( message ) std::cout << message << std::endl
 

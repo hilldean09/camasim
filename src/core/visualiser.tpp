@@ -41,6 +41,10 @@ namespace CSIM {
     m_compositeFilter->UpdateTimeStep( m_minTime );
 
     m_pointMapper->SetInputConnection( m_compositeFilter->GetOutputPort() );
+    m_pointMapper->SetScaleArray( "Radii" );
+    m_pointMapper->SetScaleArrayComponenet( 0 );
+    m_pointMapper->SetScaleFactor( CSIM_POINT_SCALE_FACTOR );
+
     m_pointActor->SetMapper( m_pointMapper );
 
     m_renderer->AddActor( m_pointActor );
