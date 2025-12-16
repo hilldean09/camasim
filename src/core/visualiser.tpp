@@ -44,15 +44,16 @@ namespace CSIM {
 
     m_pointMapper->SetInputConnection( m_compositeFilter->GetOutputPort() );
     m_pointMapper->SetScaleArray( "Radii" );
-    m_pointMapper->SetScaleArrayComponenet( 0 );
+    m_pointMapper->SetScaleArrayComponent( 0 );
     m_pointMapper->SetScaleFactor( CSIM_POINT_SCALE_FACTOR );
 
-    m_pointProperty->SetColor( m_colors->GetColor3d( "Peru" ).GetData() );
+    m_pointProperty->SetColor( m_colors->GetColor3d( CSIM_PARTICLE_COLOR ).GetData() );
 
     m_pointActor->SetMapper( m_pointMapper );
     m_pointActor->SetProperty( m_pointProperty );
 
     m_renderer->AddActor( m_pointActor );
+    m_renderer->GetBackground( m_colors->GetColor3d( CSIM_BACKGROUND_COLOR ).GetData() );
 
     m_window->AddRenderer( m_renderer );
     m_window->SetSize( 800, 600 );
