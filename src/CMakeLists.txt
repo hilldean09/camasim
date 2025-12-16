@@ -8,10 +8,14 @@ set( CMAKE_CXX_EXTENSIONS OFF )
 set( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic" )
 
 
+find_package( Python3 REQUIRED COMPONENTS Development Development.Module )
+find_package( CLI11 CONFIG REQUIRED )
+find_package( Viskores CONFIG REQUIRED )
+
 # VTK
 find_package( nlohmann_json REQUIRED )
 
-find_package(VTK COMPONENTS 
+find_package( VTK REQUIRED COMPONENTS 
   CommonColor
   CommonCore
   CommonDataModel
@@ -29,7 +33,7 @@ find_package(VTK COMPONENTS
   ParallelMPI
 )
 
-find_package( ParaView COMPONENTS VTKExtensionIOCore )
+find_package( ParaView REQUIRED COMPONENTS VTKExtensionsIOCore )
 
 if (NOT VTK_FOUND)
   message(FATAL_ERROR "Unable to find the VTK build folder.")
@@ -48,7 +52,7 @@ target_sources( main
     main.cpp
 )
 
-target_link_libraries( main PRIVATE ${VTK_LIBRARIES} ParaView::VTKExtensionIOCore )
+target_link_libraries( main PRIVATE ${VTK_LIBRARIES} ParaView::VTKExtensionsIOCore )
 
 
 # Visualise
@@ -59,7 +63,7 @@ target_sources( visualise
     visualise.cpp
 )
 
-target_link_libraries( visualise PRIVATE ${VTK_LIBRARIES} ParaView::VTKExtensionIOCore )
+target_link_libraries( visualise PRIVATE ${VTK_LIBRARIES} ParaView::VTKExtensionsIOCore )
 
 
 # vtk_module_autoinit is needed

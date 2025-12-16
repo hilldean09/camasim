@@ -2,18 +2,20 @@
 #ifndef CSIM_INTERPRETER_TPP
 #define CSIM_INTERPRETER_TPP
 
-#include "pre_controls"
+#include "pre_controls.hpp"
 #include "structs.hpp"
 
 #include <vtkAnimationCue.h>
 #include <vtkAnimationScene.h>
 #include <vtkCommand.h>
 #include <vtkCompositeDataGeometryFilter.h>
+#include <vtkInformation.h>
 #include <vtkPointGaussianMapper.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkSmartPointer.h>
+#include <vtkStreamingDemandDrivenPipeline.h>
 #include <vtkXMLCollectionReader.h>
 
 #include <algorithm>
@@ -39,19 +41,19 @@ namespace CSIM {
     m_compositeFilter->UpdateTimeStep( m_minTime );
 
     m_pointMapper->SetInputConnection( m_compositeFilter->GetOutputPort() );
-    m_pointActor->SetInputConnection( m_pointMapper->GetOutputPort() );
+    m_pointActor->SetMapper( m_pointMapper );
 
     m_renderer->AddActor( m_pointActor );
     m_window->AddRenderer( m_renderer );
     m_interactor->SetRenderWindow( m_window );
 
-    m_scene->SetModeSequence();
+    m_scene->SetModeToSequence();
     m_scene->SetFrameRate( 60 );
     m_scene->SetStartTime( m_minTime );
     m_scene->SetEndTime( m_maxTime );
     m_scene->AddCue( m_cue );
 
-    m_callback->setCompositeFiler( m_compositeFilter );
+    m_callback->setCompositeFilter( m_compositeFilter );
     m_callback->setRenderWindow( m_window );
 
     m_cue->SetStartTime( m_minTime );
@@ -62,7 +64,7 @@ namespace CSIM {
   void Visualiser::initDefaults() {
 
     m_reader = vtkSmartPointer<vtkXMLCollectionReader>::New();
-    m_compositeFiler = vtkSmartPointer<vtkCompositeDataGeometryFilter>::New();
+    m_compositeFilter = vtkSmartPointer<vtkCompositeDataGeometryFilter>::New();
     m_pointMapper = vtkSmartPointer<vtkPointGaussianMapper>::New();
     m_pointActor = vtkSmartPointer<vtkActor>::New();
 
@@ -84,7 +86,7 @@ namespace CSIM {
   // Methods //
   void Visualiser::visualise() {
     m_window->Render();
-    m_interactor->Initialise();
+    m_interactor->Initialize();
     
     m_scene->Play();
 
@@ -98,17 +100,17 @@ namespace CSIM {
     unsigned long long int totalTimeSteps = m_readerInfo->Length( vtkStreamingDemandDrivenPipeline::TIME_STEPS() );
     
     std::vector<float> times( totalTimeSteps );
-    m_readerInfo>Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS(), times.data() );
+    m_readerInfo->Get( vtkStreamingDemandDrivenPipeline::TIME_STEPS(), times.data() );
 
     auto [ tmpMinTime, tmpMaxTime ] = std::minmax_element( times.begin(), times.end() );
-    m_minTime = tmpMinTime;
-    m_maxTime = tmpMaxTime;
+    m_minTime = *tmpMinTime;
+    m_maxTime = *tmpMaxTime;
 
   }
   
   void Visualiser::CueCallback::Execute( vtkObject* caller, unsigned long eventId, void* callData ) override {
     // Ensuring tick based response
-    if( eventID != vtkCommand::AnimationCueTickEvent ) return;
+    if( eventId != vtkCommand::AnimationCueTickEvent ) return;
 
     // Tbh I don't fully understand this but it seems common
     auto* cue = vtkAnimationCue::SafeDownCast( caller );
