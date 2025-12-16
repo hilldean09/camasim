@@ -6,6 +6,7 @@
 #include "structs.hpp"
 
 #include <vtkFloatArray.h>
+#include <vtkMultiProcessController.h>
 #include <vtkPointData.h>
 #include <vtkPoints.h>
 #include <vtkPolyData.h>
@@ -14,7 +15,7 @@
 
 #include <fstream>
 #include <filesystem>
-#include <std::string>
+#include <string>
 
 namespace CSIM {
 
@@ -58,12 +59,12 @@ namespace CSIM {
       vtkSmartPointer<vtkPolyData> m_polyDataBuffer;
 
       // Initialisers //
-      void intiDefaults();
+      void initDefaults();
 
 
       // Methods //
       void readHeaderWithoutRadii();
-      void configreWriters();
+      void configureWriters();
       void readRadii();
       void allocateBuffers();
       void writeFrame( unsigned long long int frameIdx );
@@ -79,5 +80,7 @@ namespace CSIM {
   };
 
 }
+
+#include "interpreter.tpp"
 
 #endif 

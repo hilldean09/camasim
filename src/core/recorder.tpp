@@ -32,9 +32,9 @@ namespace CSIM {
 
   template <class PrecT>
   void Recorder<PrecT>::initialiseOutputFile( const char* fileName ) {
-    m_outputFileName = std::string( fileName )
+    m_outputFileName = std::string( fileName );
 
-    m_outputFile = std::ofstream( ( const char* ) m_outputFileName.append( "bin" ), std::ios::out | std::ios::binary );
+    m_outputFile = std::ofstream( m_outputFileName.append( "bin" ).c_str(), std::ios::out | std::ios::binary );
   }
 
   template <class PrecT>
@@ -93,8 +93,13 @@ namespace CSIM {
   // Methods //
   template <class PrecT>
   void Recorder<PrecT>::recordInitial() {
+    unsigned long long int tmpTotalFrames = m_totalFrames;
+    m_totalFrames = 1;
+    
     writeOutputHeader();
     writeFrameData();
+
+    m_totalFrames = tmpTotalFrames;
   }
 
   template <class PrecT>

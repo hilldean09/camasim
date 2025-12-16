@@ -29,7 +29,7 @@ namespace CSIM {
   
   // Initialisers //
   template <class PrecT>
-  void initialise( std::string inputFileName ) { 
+  void Interpreter<PrecT>::initialise( std::string inputFileName ) { 
     std::filesystem::create_directory( m_outputDirectory );
     
     m_inputFile.open( inputFileName, std::ios::in | std::ios::binary );
@@ -56,7 +56,6 @@ namespace CSIM {
     m_outputDirectory = std::filesystem::path( CSIM_VTK_OUTPUT_DIRECTORY_NAME );
     m_outputDirectory += "_";
     m_outputDirectory += std::format( "{:%Y%m%d_%H%M%S}", std::chrono::system_clock::now() );
-}
 
     m_positionsBuffer = { nullptr, nullptr, nullptr, nullptr };
   }
@@ -72,7 +71,7 @@ namespace CSIM {
     readRadii();
     
     for( unsigned long long int frameIdx = 0; frameIdx < m_totalFrames; frameIdx++ ) {
-      writeFrame();
+      writeFrame( frameIdx );
     }
 
     writePvd();
@@ -86,7 +85,7 @@ namespace CSIM {
     long long int rank = mpiController ? mpiController->GetLocalProcessId() : 0;
     long long int totalProcesses = mpiController ? mpiController->GetNumberOfProcesses() : 1;
 
-    m_pPolyDataWriter->SetInput( m_polyDataBuffer );
+    m_pPolyDataWriter->SetInputData( m_polyDataBuffer );
     m_pPolyDataWriter->SetDataModeToAppended();
 
     m_pPolyDataWriter->SetNumberOfPieces( totalProcesses );
@@ -96,16 +95,16 @@ namespace CSIM {
 
   template <class PrecT>
   void Interpreter<PrecT>::readHeaderWithoutRadii() {
-    ifstream.read( reinterpret_cast<char*>( &m_p_number ), sizeof( unsigned long long int ) );
-    ifstream.read( reinterpret_cast<char*>( &m_totalFrames ), sizeof( unsigned long long int ) );
-    ifstream.read( reinterpret_cast<char*>( &m_step ), sizeof( PrecT ) );
+    m_inputFile.read( reinterpret_cast<char*>( &m_p_number ), sizeof( unsigned long long int ) );
+    m_inputFile.read( reinterpret_cast<char*>( &m_totalFrames ), sizeof( unsigned long long int ) );
+    m_inputFile.read( reinterpret_cast<char*>( &m_step ), sizeof( PrecT ) );
   }
 
   template <class PrecT>
   void Interpreter<PrecT>::readRadii() {
     
     // Setting sizes
-    PrecT* radiiPrecT = std::malloc( ( m_p_number + 1 ) * sizeof( PrecT ) );
+    PrecT* radiiPrecT = ( PrecT* ) std::malloc( ( m_p_number + 1 ) * sizeof( PrecT ) );
     m_radiiArray->SetNumberOfTuples( m_p_number + 1 );
 
     // Reading
@@ -126,11 +125,11 @@ namespace CSIM {
 
   template <class PrecT>
   void Interpreter<PrecT>::allocateBuffers() {
-    m_positionsBuffer.arenaPtr = std::malloc( 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
+    m_positionsBuffer.arenaPtr = ( PrecT* ) std::malloc( 3 * ( m_p_number + 1 ) * sizeof( PrecT ) );
     m_positionsBuffer.setPtrs( m_p_number + 1 );
 
     m_pointsBuffer->SetNumberOfPoints( m_p_number + 1 );
-    m_polyDataBuffer->SetPoints( m_positionsBuffer );
+    m_polyDataBuffer->SetPoints( m_pointsBuffer );
   }
 
   template <class PrecT>
@@ -150,9 +149,9 @@ namespace CSIM {
     framePvtpPath /= frameName;
     framePvtpPath += ".pvtp";
 
-    m_pPolyDataWriter.SetFileName( framePvtpPath );
+    m_pPolyDataWriter->SetFileName( framePvtpPath.c_str() );
 
-    m_pPolyDataWriter.Write();
+    m_pPolyDataWriter->Write();
   }
   
   template <class PrecT>
@@ -162,11 +161,14 @@ namespace CSIM {
 
   template <class PrecT>
   void Interpreter<PrecT>::convertPrecTBufferToPoints() {
+    static float singlePositionBuffer[ 3 ];
     
     for( unsigned long long int idx = 0; idx < ( m_p_number + 1 ); idx++ ) {
-      m_pointsBuffer->SetPoint( idx, { ( float ) m_positionsBuffer.x[ idx ],
-                                       ( float ) m_positionsBuffer.y[ idx ],
-                                       ( float ) m_positionsBuffer.z[ idx ] } )
+      singlePositionBuffer[ 0 ] = ( float ) m_positionsBuffer.x[ idx ];
+      singlePositionBuffer[ 1 ] = ( float ) m_positionsBuffer.y[ idx ];
+      singlePositionBuffer[ 2 ] = ( float ) m_positionsBuffer.z[ idx ];
+      
+      m_pointsBuffer->SetPoint( idx, singlePositionBuffer );
     }
 
   }
@@ -184,17 +186,17 @@ namespace CSIM {
     std::string output = "frame_";
 
     // Determining '0' padding
-    std::string frameNumber = ( std::string ) frameIdx;
+    std::string frameNumber = std::to_string( frameIdx );
     int padding = CSIM_VTK_FRAME_NUMBER_PADDING - frameNumber.length();
 
-    output.add( std::string( padding, '0' ) );
-    output.add( frameNumber );
+    output += std::string( padding, '0' );
+    output += frameNumber;
 
     return output;
   }
 
   template <class PrecT>
-  void Interpreter<PrecT>::writePVD() {
+  void Interpreter<PrecT>::writePvd() {
     std::ofstream outputFile;
 
     std::filesystem::path outputFilePath = m_outputDirectory;
@@ -208,7 +210,7 @@ namespace CSIM {
     outputFile << std::endl;
   
     for( unsigned long long int frameIdx = 0; frameIdx < m_totalFrames; frameIdx++ ) {
-      outputFIle << buildDataSet( frameIdx ) << std::endl;
+      outputFile << buildDataSet( frameIdx ) << std::endl;
     }
 
     outputFile << "\t</Collection>" << std::endl;
@@ -216,22 +218,22 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  std::string buildDataSet( unsigned long long int frameIdx ) {
+  std::string Interpreter<PrecT>::buildDataSet( unsigned long long int frameIdx ) {
 
     std::string output;
 
-    output.add( "\t\t<DataSet timestep=\"" );
-    output.add( ( std::string ) ( float ) ( frameIdx * m_step ) );
-    output.add( "\" group=\"\" part=\"0\"\n" );
-    output.add( "\t\t\tfile=\"" );
+    output += "\t\t<DataSet timestep=\"";
+    output += std::to_string( ( float ) ( frameIdx * m_step ) );
+    output += "\" group=\"\" part=\"0\"\n";
+    output += "\t\t\tfile=\"";
     
     std::filesystem::path pvtpFilePath = m_outputDirectory;
     pvtpFilePath /= buildFrameName( frameIdx );
     pvtpFilePath /= buildFrameName( frameIdx );
-    pvtpFilePath += .pvtp;
+    pvtpFilePath += ".pvtp";
 
-    output.add( ( std::string ) pvtpFilePath );
-    output.add( "\"/>\n" );
+    output += ( std::string ) pvtpFilePath;
+    output += "\"/>\n";
 
     return output;
   }
