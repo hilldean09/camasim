@@ -28,6 +28,10 @@ namespace CSIM {
       void setDistribution( const char distribution, PrecT mean, PrecT standardDeviaion );
 
 
+      // Methods //
+      void applyVelocity( PrecT step );
+
+
       // Misc //
       ~Particle_Cloud();
 

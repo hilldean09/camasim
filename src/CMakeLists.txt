@@ -13,6 +13,7 @@ find_package( CLI11 CONFIG REQUIRED )
 find_package( Viskores CONFIG REQUIRED )
 find_package( X11 REQUIRED )
 find_package( Freetype REQUIRED )
+find_package( MPI )
 
 # VTK
 find_package( nlohmann_json REQUIRED )
@@ -23,6 +24,7 @@ set( CSIM_VTK_MODULES
   VTK::CommonColor
   VTK::CommonCore
   VTK::CommonDataModel
+  VTK::CommonMPI
   VTK::FiltersSources
   VTK::FiltersGeometry
   VTK::InteractionStyle
@@ -53,6 +55,7 @@ target_sources( main
 
 target_link_libraries( main PRIVATE 
   ParaView::VTKExtensionsIOCore 
+  MPI::MPI_CXX
   ${CSIM_VTK_MODULES}
 )
 
@@ -67,6 +70,7 @@ target_sources( visualise
 
 target_link_libraries( visualise PRIVATE 
   ParaView::VTKExtensionsIOCore 
+  MPI::MPI_CXX
   ${CSIM_VTK_MODULES}
 )
 

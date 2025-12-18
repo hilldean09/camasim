@@ -8,14 +8,16 @@
 * Ignore the unfortunate American spelling. Done for 
 * consistency with VTK
 */
-#define CSIM_PARTICLE_COLOR "Peru"
-#define CSIM_CENTRAL_BODY_COLOR "Maroon"
-#define CSIM_BACKGROUND_COLOR "DarkSlateGray"
-
+// Filesystem
 #define CSIM_VTK_OUTPUT_DIRECTORY_NAME "csim_vtk_output"
 #define CSIM_VTK_RADII_BINARY_NAME "radii.bin"
 
 #define CSIM_VTK_FRAME_NUMBER_PADDING 6
+
+// Rendering
+#define CSIM_PARTICLE_COLOR "Peru"
+#define CSIM_CENTRAL_BODY_COLOR "Maroon"
+#define CSIM_BACKGROUND_COLOR "DarkSlateGray"
 
 #define CSIM_USE_SCREEN_SIZE 1
 #define CSIM_WINDOW_SIZE_X 800
@@ -23,6 +25,10 @@
 
 #define CSIM_POINT_SCALE_FACTOR 10.0
 
+// CUDA
+#define CSIM_USE_CUDA 1
+
+// Debug
 #define CSIM_DEBUG 1
 #define CSIM_M_DEBUG_LOG( message ) std::cout << message << std::endl
 
