@@ -1,11 +1,12 @@
 
 #include "csim_cuda.hpp"
-#include "structs.hpp"
+#include "../structs.hpp"
 
 
 namespace CSIM::CSIM_CUDA {
 
   namespace Kernel {
+
     template<class PrecT> __constant__ PrecT ker_step;
     template<class PrecT> __constant__ PrecT ker_p_number;
 
@@ -26,14 +27,16 @@ namespace CSIM::CSIM_CUDA {
 
 
   }
-
+  
   template <class PrecT>
-  void cu_p_applyVelocity<PrecT>( PrecT step, unsigned long long int p_number,
-                                  Vec_Arrs<PrecT> positions, Vec_Arrs<PrecT> velocities ) {
+  void cu_p_setConstants<PrecT>( PrecT step, unsigned long long int p_number ) {
     // Symbol initialisation 
     cudaMemcpyToSymbol( Kernel::ker_step, step, sizeof( PrecT ) );
     cudaMemcpyToSymbol( Kernel::ker_p_number, p_number, sizeof( PrecT ) );
+  }
 
+  template <class PrecT>
+  void cu_p_applyVelocity<PrecT>( Vec_Arrs<PrecT> positions, Vec_Arrs<PrecT> velocities ) {
     // Device memory initialisation
     PrecT* d_positions; 
     cudaMalloc( &d_positions, p_number * sizeof( PrecT ) );

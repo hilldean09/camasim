@@ -249,10 +249,16 @@ namespace CSIM {
   
   // Methods //
   template <class PrecT>
-  void Particle_Cloud<PrecT>::applyVelocity( PrecT step ) {
+  void Particle_Cloud<PrecT>::setCudaConstants( PrecT step ) {
+    #if( CSIM_CUDA == 1 )
+    CSIM_CUDA::cu_p_setConstants( step, m_p_number );
+    #endif
+  }
+
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::applyVelocity() {
     #if( CSIM_USE_CUDA == 1 )
-    CSIM_CUDA::cu_p_applyVelocity( step, m_p_number, 
-                                   m_positions, m_velocities );
+    CSIM_CUDA::cu_p_applyVelocity( m_positions, m_velocities );
     #else
     // TODO: Add CPU version
     #endif

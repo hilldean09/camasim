@@ -5,11 +5,17 @@
 #include "structs.hpp"
 
 namespace CSIM::CSIM_CUDA {
+  
+  namespace Kernel {
+
+  }
+  
+  template <class PrecT>
+  void cu_p_setConstants( PrecT step, unsigned long long int p_number );
 
   // particle_cloud.cu //
   template <class PrecT>
-  void cu_p_applyVelocity( PrecT step, unsigned long long int p_number,
-                           Vec_Arrs<Prec> positions, Vec_Arrs<PrecT> velocities );
+  void cu_p_applyVelocity( Vec_Arrs<Prec> positions, Vec_Arrs<PrecT> velocities );
   
 }
 

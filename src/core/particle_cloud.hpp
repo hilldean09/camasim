@@ -29,7 +29,8 @@ namespace CSIM {
 
 
       // Methods //
-      void applyVelocity( PrecT step );
+      void setCudaConstants( PrecT step );
+      void applyVelocity();
 
 
       // Misc //
