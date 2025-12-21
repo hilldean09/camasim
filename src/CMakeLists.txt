@@ -24,7 +24,6 @@ set( CSIM_VTK_MODULES
   VTK::CommonColor
   VTK::CommonCore
   VTK::CommonDataModel
-  VTK::CommonMPI
   VTK::FiltersSources
   VTK::FiltersGeometry
   VTK::InteractionStyle

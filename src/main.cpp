@@ -10,7 +10,7 @@ int main() {
 
   CSIM::Manager<float> manager;
 
-  manager.initialiseParticleNumber( 10'000'000 ); // Must be >= 204 for some reason
+  manager.initialiseParticleNumber( 100'000 ); // Must be >= 204 for some reason
   manager.initialiseWithSeed( 4 );
 
   manager.initialiseParticleDistribution( 'p', 30'000'000, 5'000'000 );

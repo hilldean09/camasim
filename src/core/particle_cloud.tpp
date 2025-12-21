@@ -251,8 +251,8 @@ namespace CSIM {
   template <class PrecT>
   void Particle_Cloud<PrecT>::applyVelocity( PrecT step ) {
     #if( CSIM_USE_CUDA == 1 )
-    CSIM_CUDA::cu_p_applyVelocity( step, m_p_number, 
-                                   m_positions, m_velocities );
+    // CSIM_CUDA::cu_p_applyVelocity( step, m_p_number, 
+    //                               m_positions, m_velocities );
     #else
     // TODO: Add CPU version
     #endif
