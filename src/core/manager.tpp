@@ -57,6 +57,9 @@ namespace CSIM {
   template <class PrecT>
   void Manager<PrecT>::initialiseSimulation( PrecT step ) {
     m_step = step;
+    #if( CSIM_CUDA == 1 )
+    m_particleCloud.setCudaConstants( step );
+    #endif
 
     m_isSimulationInitialised = true;
   }
@@ -89,6 +92,14 @@ namespace CSIM {
   template <class PrecT>
   Vector<PrecT> Manager<PrecT>::getCentralBodyPosition() {
     return m_centralBody.m_position;
+  }
+
+  
+  // Methods //
+  template <class PrecT>
+  void Manager<PrecT>::doStep() {
+    m_particleCloud.applyVelocity();
+
   }
 
 }
