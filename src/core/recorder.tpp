@@ -105,6 +105,23 @@ namespace CSIM {
   }
 
   template <class PrecT>
+  void Recorder<PreceT>::startRecording() {
+    writeOutputHeader();
+    writeFrameData();
+
+    for( unsigned long long int frameIdx = 0;
+         frameIdx < m_totalFrames;
+         frameIdx++; ) {
+      m_managerPtr->doStep();
+      
+      if( frameIdx % m_framesPerSample == 0 ) {
+        writeFrameData();
+      }
+
+    }
+  }
+
+  template <class PrecT>
   inline void Recorder<PrecT>::write( void* ptr, size_t size ) {
     m_outputFile.write( reinterpret_cast<const char*>( ptr ), size );
   }
@@ -115,6 +132,8 @@ namespace CSIM {
 
     write( &m_totalFrames, sizeof( m_totalFrames ) );
     write( &m_step, sizeof( m_step ) );
+
+    // TODO: write frame per sample
 
     write( &m_centralBodyRadius, sizeof( PrecT ) );
     write( m_radii, m_p_number * sizeof( PrecT) );

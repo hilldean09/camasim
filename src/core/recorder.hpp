@@ -31,6 +31,7 @@ namespace CSIM {
 
       // Methods //
       void recordInitial();
+      void statRecording();
 
     private:
       // Attributes //
