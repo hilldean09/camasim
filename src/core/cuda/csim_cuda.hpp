@@ -20,6 +20,12 @@ namespace CSIM::CSIM_CUDA {
                              PrecT* d_forces, 
                              unsigned long long int p_number );
 
+  template <class PrecT>
+  void cu_p_freeBuffers( PrecT* d_positions,
+                         PrecT* d_velocities,
+                         PrecT* d_accelerations,
+                         PrecT* d_forces );
+
   // particle_cloud.cu //
   template <class PrecT, bool preMemcpy, bool postMemcpy>
   void cu_p_applyVelocity( Vec_Arrs<PrecT> positions, PrecT* d_positions,

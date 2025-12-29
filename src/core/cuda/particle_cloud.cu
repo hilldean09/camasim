@@ -40,20 +40,32 @@ namespace CSIM::CSIM_CUDA {
     cudaMemcpyToSymbol( Kernel::ker_p_number, &p_number, sizeof( PrecT ) );
   }
 
-  // TODO: Allocate once structure
   template <class PrecT>
   void cu_p_allocateBuffers<Prect>( PrecT* d_positions,
-                             PrecT* d_velocities,
-                             PrecT* d_accelerations,
-                             PrecT* d_forces,
-                             unsigned long long int p_number ) {
+                                    PrecT* d_velocities,
+                                    PrecT* d_accelerations,
+                                    PrecT* d_forces,
+                                    unsigned long long int p_number ) {
     
     cudaMalloc( &d_positions, 3 * p_number * sizeof( PrecT ) );
     cudaMalloc( &d_velocities, 3 * p_number * sizeof( PrecT ) );
     cudaMalloc( &d_accelerations, 3 * p_number * sizeof( PrecT ) );
     cudaMalloc( &d_forces, 3 * p_number * sizeof( PrecT ) );
-
   }
+
+  template <class PrecT>
+  void cu_p_freeBuffers( PrecT* d_positions,
+                         PrecT* d_velocities,
+                         PrecT* d_accelerations,
+                         PrecT* d_forces ) {
+    cudaFree( d_positions );
+    cudaFree( d_velocities );
+    cudaFree( d_accelerations );
+    cudaFree( d_forces );
+  }
+
+  // TODO: implement allocate once structure
+
 
   template <class PrecT, bool preMemcpy, bool postMemcpy>
   void cu_p_applyVelocity<PrecT>( Vec_Arrs<PrecT> positions, PrecT* d_positions,
@@ -95,13 +107,14 @@ namespace CSIM::CSIM_CUDA {
 #define CSIM_CUDA_INSTANTIATE( x ) \
             template void cu_p_setConstants< x >( x step, unsigned long long int p_number ); \
             template void cu_p_allocateBuffers< x >( x* d_positions, x* d_velocities, x* d_accelerations, x* d_forces, unsigned long long int p_number  ); \
+            template void cu_p_freeBuffers< x >( x* d_positions, x* d_velocities, x* d_accelerations, x* d_forces ); \
             template void cu_p_applyVelocity< x, false, false >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
             template void cu_p_applyVelocity< x, false, true >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
             template void cu_p_applyVelocity< x, true, false >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
             template void cu_p_applyVelocity< x, true, true >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
-            template void cu_p_applyAcceleration< x, false, false >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); 
-            template void cu_p_applyAcceleration< x, false, true >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); 
-            template void cu_p_applyAcceleration< x, true, false >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); 
+            template void cu_p_applyAcceleration< x, false, false >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); \
+            template void cu_p_applyAcceleration< x, false, true >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); \
+            template void cu_p_applyAcceleration< x, true, false >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); \
             template void cu_p_applyAcceleration< x, true, true >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); 
 
 
