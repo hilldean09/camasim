@@ -139,10 +139,11 @@ namespace CSIM {
   void Recorder<PrecT>::writeOutputHeader() {
     write( &m_p_number, sizeof( m_p_number ) );
 
-    write( &m_totalFrames, sizeof( m_totalFrames ) );
-    write( &m_step, sizeof( m_step ) );
+    unsigned long long int totalRecordedFrames = m_totalFrames / m_framesPerSample;
+    PrecT recordedSteps = m_step * m_framesPerSample;
 
-    // TODO: write frame per sample
+    write( &totalRecordedFrames, sizeof( unsigned long long int ) );
+    write( &recordedSteps, sizeof( PrecT ) );
 
     write( &m_centralBodyRadius, sizeof( PrecT ) );
     write( m_radii, m_p_number * sizeof( PrecT) );
