@@ -11,8 +11,13 @@ namespace CSIM::CSIM_CUDA {
     template<class PrecT> __constant__ PrecT ker_step;
     __constant__ unsigned long long int ker_p_number;
 
+    /* 
+     * Applies a change to the d_dest pointer that is
+     * directly proportional to time, i.e. applying 
+     * velocity or acceleration.
+     */
     template <class PrecT>
-    __global__ void ker_p_applyVelocity( PrecT* __restrict__ positions, const PrecT* __restrict__ velocities ) {
+    __global__ void ker_p_applyTemporallyLinearChange( PrecT* __restrict__ d_dest, const PrecT* __restrict__ d_src ) {
       const unsigned long long int stride = blockDim.x * gridDim.x;
   
       // Grid-stride loop
@@ -20,22 +25,7 @@ namespace CSIM::CSIM_CUDA {
            pid < 3 * ker_p_number;
            pid += stride ) {
 
-        positions[ pid ] += velocities[ pid ] * ker_step<PrecT>;
-
-      }
-
-    }
-
-    template <class PrecT>
-    __global__ void ker_p_applyAcceleration( PrecT* __restrict__ positions, const PrecT* __restrict__ accelerations ) {
-      const unsigned long long int stride = blockDim.x * gridDim.x;
-  
-      // Grid-stride loop
-      for( unsigned long long int pid = threadIdx.x + blockIdx.x * blockDim.x;
-           pid < 3 * ker_p_number;
-           pid += stride ) {
-
-        positions[ pid ] += accelerations[ pid ] * ker_step<PrecT>;
+        d_dest[ pid ] += d_src[ pid ] * ker_step<PrecT>;
 
       }
 
@@ -77,7 +67,7 @@ namespace CSIM::CSIM_CUDA {
     cudaMemcpy( d_velocities, velocities.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
     
     // Launch kernel
-    Kernel::ker_p_applyVelocity<PrecT><<< CSIM_CUDA_BLOCKS, CSIM_CUDA_THREADS_PER_BLOCK >>>( d_positions, d_velocities );
+    Kernel::ker_p_applyTemporallyLinearChange<PrecT><<< CSIM_CUDA_BLOCKS, CSIM_CUDA_THREADS_PER_BLOCK >>>( d_positions, d_velocities );
 
     cudaMemcpy( positions.arenaPtr, d_positions, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
     cudaMemcpy( velocities.arenaPtr, d_velocities, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
@@ -99,7 +89,7 @@ namespace CSIM::CSIM_CUDA {
     cudaMemcpy( d_accelerations, accelerations.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
     
     // Launch kernel
-    Kernel::ker_p_applyAcceleration<PrecT><<< CSIM_CUDA_BLOCKS, CSIM_CUDA_THREADS_PER_BLOCK >>>( d_velocities, d_accelerations );
+    Kernel::ker_p_applyTemporallyLinearChange<PrecT><<< CSIM_CUDA_BLOCKS, CSIM_CUDA_THREADS_PER_BLOCK >>>( d_velocities, d_accelerations );
 
     cudaMemcpy( velocities.arenaPtr, d_velocities, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
     cudaMemcpy( accelerations.arenaPtr, d_accelerations, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
