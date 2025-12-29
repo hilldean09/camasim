@@ -45,7 +45,6 @@ namespace CSIM {
       // Methods //
       void doStep();
 
-`
     private:
       // Attributes //
       std::default_random_engine m_randomEngine;

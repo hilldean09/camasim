@@ -8,6 +8,7 @@
 #include <numbers>
 
 #include "structs.hpp"
+#include "cuda/csim_cuda.hpp"
 
 namespace CSIM {
   

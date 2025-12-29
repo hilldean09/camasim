@@ -105,13 +105,13 @@ namespace CSIM {
   }
 
   template <class PrecT>
-  void Recorder<PreceT>::startRecording() {
+  void Recorder<PrecT>::startRecording() {
     writeOutputHeader();
     writeFrameData();
 
     for( unsigned long long int frameIdx = 0;
          frameIdx < m_totalFrames;
-         frameIdx++; ) {
+         frameIdx++ ) {
       m_managerPtr->doStep();
       
       if( frameIdx % m_framesPerSample == 0 ) {
