@@ -1,4 +1,6 @@
 
+#include <iostream>
+
 #include "core/interpreter.hpp"
 #include "core/manager.hpp"
 #include "core/recorder.hpp"
@@ -10,6 +12,8 @@ int main() {
 
   CSIM::Manager<float> manager;
 
+  std::cout << "Initialising particle cloud" << std::endl;
+
   manager.initialiseParticleNumber( 100'000 ); // Must be >= 204 for some reason
   manager.initialiseWithSeed( 4 );
 
@@ -17,23 +21,35 @@ int main() {
   manager.initialiseParticleDistribution( 'r', 1000, 10000 );
 
   manager.initialiseParticleCloud();
+
+  std::cout << "Particle cloud intialised" << std::endl;
+
   manager.initialiseCentralBody( 1'000'000, 1'000'000 );
 
   manager.initialiseSimulation( 0.0001 );
+
+  std::cout << "Manager fully initialised" << std::endl;
 
   CSIM::Recorder<float> recorder;
 
   recorder.initialiseManager( &manager );
   recorder.initialiseOutputFile( "testOuts" );
-  recorder.initialiseLengthWithTime( 1'000'000 );
-  recorder.initialiseSamplingWithFrames( 1'000'000'000 );
+  recorder.initialiseLengthWithTime( 1'000 );
+  recorder.initialiseSamplingWithFrames( 100'000 );
+
+  std::cout << "Recorder initialised" << std::endl;
+  std::cout << "Beginning recording" << std::endl;
 
   recorder.startRecording();
+
+  std::cout << "Recording complete" << std::endl;
+  std::cout << "Interpreting" << std::endl;
 
   CSIM::Interpreter<float> interpreter;
   interpreter.initialise( "testOuts.bin" );
   interpreter.interpretToVtk();
 
+  std::cout << "Interpretation complete" << std::endl;
 
   return 0;
 }

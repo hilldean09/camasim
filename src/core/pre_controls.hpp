@@ -28,6 +28,7 @@
 // CUDA
 #define CSIM_USE_CUDA 1
 #define CSIM_CUDA_THREADS_PER_BLOCK 256
+#define CSIM_CUDA_BLOCKS 16
 
 // Debug
 #define CSIM_DEBUG 1

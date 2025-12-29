@@ -7,6 +7,7 @@
 #include <random>
 #include <numbers>
 
+#include "pre_controls.hpp"
 #include "structs.hpp"
 #include "cuda/csim_cuda.hpp"
 
@@ -251,7 +252,7 @@ namespace CSIM {
   // Methods //
   template <class PrecT>
   void Particle_Cloud<PrecT>::setCudaConstants( PrecT step ) {
-    #if( CSIM_CUDA == 1 )
+    #if( CSIM_USE_CUDA == 1 )
     CSIM_CUDA::cu_p_setConstants( step, m_p_number );
     #endif
   }

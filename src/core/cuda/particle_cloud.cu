@@ -48,11 +48,7 @@ namespace CSIM::CSIM_CUDA {
     cudaMemcpy( d_velocities, velocities.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
     
     // Launch kernel
-    unsigned long long int neededBlocks;
-    neededBlocks = ( unsigned long long int ) 
-                   ( 3 * p_number + CSIM_CUDA_THREADS_PER_BLOCK - 1 ) / CSIM_CUDA_THREADS_PER_BLOCK;
-
-    Kernel::ker_p_applyVelocity<PrecT><<< neededBlocks, CSIM_CUDA_THREADS_PER_BLOCK >>>( positions.arenaPtr, velocities.arenaPtr );
+    Kernel::ker_p_applyVelocity<PrecT><<< CSIM_CUDA_BLOCKS, CSIM_CUDA_THREADS_PER_BLOCK >>>( positions.arenaPtr, velocities.arenaPtr );
 
     // Clean up
     cudaFree( d_positions );
