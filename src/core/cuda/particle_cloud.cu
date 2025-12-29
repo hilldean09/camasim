@@ -55,48 +55,38 @@ namespace CSIM::CSIM_CUDA {
 
   }
 
-  template <class PrecT>
-  void cu_p_applyVelocity<PrecT>( Vec_Arrs<PrecT> positions, Vec_Arrs<PrecT> velocities, unsigned long long int p_number ) {
-    // Device memory initialisation
-    PrecT* d_positions; 
-    cudaMalloc( &d_positions, 3 * p_number * sizeof( PrecT ) );
-    cudaMemcpy( d_positions, positions.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
-
-    PrecT* d_velocities;
-    cudaMalloc( &d_velocities, 3 * p_number * sizeof( PrecT ) );
-    cudaMemcpy( d_velocities, velocities.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+  template <class PrecT, bool preMemcpy, bool postMemcpy>
+  void cu_p_applyVelocity<PrecT>( Vec_Arrs<PrecT> positions, PrecT* d_positions,
+                                  Vec_Arrs<PrecT> velocities, PrecT* d_velocities,
+                                  unsigned long long int p_number ) {
+    if( preMemcpy ) {
+      cudaMemcpy( d_positions, positions.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+      cudaMemcpy( d_velocities, velocities.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+    }
     
     // Launch kernel
     Kernel::ker_p_applyTemporallyLinearChange<PrecT><<< CSIM_CUDA_BLOCKS, CSIM_CUDA_THREADS_PER_BLOCK >>>( d_positions, d_velocities );
 
-    cudaMemcpy( positions.arenaPtr, d_positions, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
-    cudaMemcpy( velocities.arenaPtr, d_velocities, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
-
-    // Clean up
-    cudaFree( d_positions );
-    cudaFree( d_velocities );
+    if( postMemcpy ) {
+      cudaMemcpy( positions.arenaPtr, d_positions, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
+    }
   }
 
-  template <class PrecT>
-  void cu_p_applyAcceleration<PrecT>( Vec_Arrs<PrecT> velocities, Vec_Arrs<PrecT> accelerations, unsigned long long int p_number ) {
-    // Device memory initialisation
-    PrecT* d_velocities; 
-    cudaMalloc( &d_velocities, 3 * p_number * sizeof( PrecT ) );
-    cudaMemcpy( d_velocities, velocities.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
-
-    PrecT* d_accelerations;
-    cudaMalloc( &d_accelerations, 3 * p_number * sizeof( PrecT ) );
-    cudaMemcpy( d_accelerations, accelerations.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+  template <class PrecT, bool preMemcpy, bool postMemcpy>
+  void cu_p_applyAcceleration<PrecT>( Vec_Arrs<PrecT> velocities, PrecT* d_velocities,
+                                      Vec_Arrs<PrecT> accelerations, PrecT* d_accelerations,
+                                      unsigned long long int p_number ) {
+    if( preMemcpy ) {
+      cudaMemcpy( d_velocities, velocities.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+      cudaMemcpy( d_accelerations, accelerations.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+    }
     
     // Launch kernel
     Kernel::ker_p_applyTemporallyLinearChange<PrecT><<< CSIM_CUDA_BLOCKS, CSIM_CUDA_THREADS_PER_BLOCK >>>( d_velocities, d_accelerations );
 
-    cudaMemcpy( velocities.arenaPtr, d_velocities, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
-    cudaMemcpy( accelerations.arenaPtr, d_accelerations, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
-
-    // Clean up
-    cudaFree( d_velocities );
-    cudaFree( d_accelerations );
+    if( postMemcpy ) {
+      cudaMemcpy( velocities.arenaPtr, d_velocities, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
+    }
   }
   
 
@@ -104,8 +94,16 @@ namespace CSIM::CSIM_CUDA {
 
 #define CSIM_CUDA_INSTANTIATE( x ) \
             template void cu_p_setConstants< x >( x step, unsigned long long int p_number ); \
-            template void cu_p_applyVelocity< x >( Vec_Arrs< x > positions, Vec_Arrs< x > velocities, unsigned long long int p_number ); \
-            template void cu_p_applyAcceleration< x >( Vec_Arrs< x > velocities, Vec_Arrs< x > accelerations, unsigned long long int p_number );
+            template void cu_p_allocateBuffers< x >( x* d_positions, x* d_velocities, x* d_accelerations, x* d_forces, unsigned long long int p_number  ); \
+            template void cu_p_applyVelocity< x, false, false >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
+            template void cu_p_applyVelocity< x, false, true >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
+            template void cu_p_applyVelocity< x, true, false >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
+            template void cu_p_applyVelocity< x, true, true >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
+            template void cu_p_applyAcceleration< x, false, false >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); 
+            template void cu_p_applyAcceleration< x, false, true >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); 
+            template void cu_p_applyAcceleration< x, true, false >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); 
+            template void cu_p_applyAcceleration< x, true, true >( Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, unsigned long long int p_number ); 
+
 
   CSIM_CUDA_INSTANTIATE( float )
 
