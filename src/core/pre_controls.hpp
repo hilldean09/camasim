@@ -4,6 +4,15 @@
 
 #include <iostream>
 
+// Debug
+#define CSIM_DEBUG 1
+#define CSIM_M_DEBUG_LOG( message ) std::cout << message << std::endl
+
+// Logging
+#define CSIM_VERBOSITY 2
+#define CSIM_LOG_HEADER( func ) "[CSIM] " << func << " : "
+
+
 /* 
 * Ignore the unfortunate American spelling. Done for 
 * consistency with VTK
@@ -29,10 +38,6 @@
 #define CSIM_USE_CUDA 1
 #define CSIM_CUDA_THREADS_PER_BLOCK 256
 #define CSIM_CUDA_BLOCKS 16
-
-// Debug
-#define CSIM_DEBUG 1
-#define CSIM_M_DEBUG_LOG( message ) std::cout << message << std::endl
 
 
 #endif

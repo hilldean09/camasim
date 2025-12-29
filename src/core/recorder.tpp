@@ -112,9 +112,18 @@ namespace CSIM {
     for( unsigned long long int frameIdx = 0;
          frameIdx < m_totalFrames;
          frameIdx++ ) {
+      #if( CSIM_VERBOSITY > 1 )
+      std::cout << "\r" << CSIM_LOG_HEADER( "Recorder::startRecording" ) 
+                << "Calculating frame " << std::to_string( frameIdx );
+      #endif
+
       m_managerPtr->doStep();
       
       if( frameIdx % m_framesPerSample == 0 ) {
+        #if( CSIM_VERBOSITY > 1 )
+        std::cout << std::endl << CSIM_LOG_HEADER( "Recorder::startRecording" ) 
+                  << "Recording frame " << std::to_string( frameIdx ) << std::endl;
+        #endif
         writeFrameData();
       }
 
