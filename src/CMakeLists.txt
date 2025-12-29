@@ -63,6 +63,7 @@ target_sources( main
 
 target_link_libraries( main PRIVATE 
   ${CSIM_EXEC_MODULES}
+  csim_cuda
 )
 
 
