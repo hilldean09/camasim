@@ -1,4 +1,6 @@
 
+add_subdirectory( cuda )
+
 add_library( camasim_core INTERFACE )
 
 target_include_directories( camasim_core

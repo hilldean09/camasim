@@ -1,9 +1,13 @@
 cmake_minimum_required( VERSION 4.2.0 )
-project( camasim )
+project( camasim LANGUAGES C CXX CUDA )
 
 set( CMAKE_CXX_STANDARD 23 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_CXX_EXTENSIONS OFF )
+
+set( CMAKE_CUDA_STANDARD 20 )
+set( CMAKE_CUDA_STANDARD_REQUIRED ON )
+set( CMAKE_CUDA_EXTENSIONS OFF )
 
 set( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic" )
 
@@ -13,7 +17,7 @@ find_package( CLI11 CONFIG REQUIRED )
 find_package( Viskores CONFIG REQUIRED )
 find_package( X11 REQUIRED )
 find_package( Freetype REQUIRED )
-find_package( MPI )
+find_package( MPI REQUIRED COMPONENTS C CXX )
 
 # VTK
 find_package( nlohmann_json REQUIRED )
@@ -39,10 +43,15 @@ set( CSIM_VTK_MODULES
   VTK::ParallelMPI
 )
 
+set( CSIM_EXEC_MODULES 
+  ParaView::VTKExtensionsIOCore 
+  MPI::MPI_CXX
+  ${CSIM_VTK_MODULES}
+)
+
 
 # Libraries
 add_subdirectory( core )
-
 
 # Main
 add_executable( main )
@@ -53,9 +62,7 @@ target_sources( main
 )
 
 target_link_libraries( main PRIVATE 
-  ParaView::VTKExtensionsIOCore 
-  MPI::MPI_CXX
-  ${CSIM_VTK_MODULES}
+  ${CSIM_EXEC_MODULES}
 )
 
 
@@ -68,9 +75,7 @@ target_sources( visualise
 )
 
 target_link_libraries( visualise PRIVATE 
-  ParaView::VTKExtensionsIOCore 
-  MPI::MPI_CXX
-  ${CSIM_VTK_MODULES}
+  ${CSIM_EXEC_MODULES}
 )
 
 
