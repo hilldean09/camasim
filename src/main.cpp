@@ -19,6 +19,7 @@ int main() {
 
   manager.initialiseParticleDistribution( 'p', 30'000'000, 5'000'000 );
   manager.initialiseParticleDistribution( 'r', 1000, 10000 );
+  manager.initialiseParticleDistribution( 'v', 10000000, 10000 );
 
   manager.initialiseParticleCloud();
 
@@ -34,8 +35,8 @@ int main() {
 
   recorder.initialiseManager( &manager );
   recorder.initialiseOutputFile( "testOuts" );
-  recorder.initialiseLengthWithTime( 1'000 );
-  recorder.initialiseSamplingWithFrames( 100'000 );
+  recorder.initialiseLengthWithTime( 30 );
+  recorder.initialiseSamplingWithFrames( 5'000 );
 
   std::cout << "Recorder initialised" << std::endl;
   std::cout << "Beginning recording" << std::endl;

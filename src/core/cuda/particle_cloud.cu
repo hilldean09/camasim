@@ -17,7 +17,7 @@ namespace CSIM::CSIM_CUDA {
   
       // Grid-stride loop
       for( unsigned long long int pid = threadIdx.x + blockIdx.x * blockDim.x;
-           pid < ker_p_number;
+           pid < 3 * ker_p_number;
            pid += stride ) {
 
         positions[ pid ] += velocities[ pid ] * ker_step<PrecT>;

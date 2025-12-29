@@ -74,7 +74,7 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::initAnglesDistribution() {
-    m_anglesDistribution = std::uniform_real_distribution<PrecT>( -1.0 * std::numbers::pi_v<PrecT>, std::numbers::pi_v<PrecT> );
+    m_anglesDistribution = std::uniform_real_distribution<PrecT>( -2.0 * std::numbers::pi_v<PrecT>, 2.0 * std::numbers::pi_v<PrecT> );
   }
 
   template <class PrecT>
@@ -165,7 +165,7 @@ namespace CSIM {
     // Assigning new values
     m_positions.x[ idx ] = newVector.x;
     m_positions.y[ idx ] = newVector.y;
-    m_positions.z[ idx ] =  newVector.z;
+    m_positions.z[ idx ] = newVector.z;
   }
 
   template <class PrecT>

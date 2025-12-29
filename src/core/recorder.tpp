@@ -128,6 +128,10 @@ namespace CSIM {
       }
 
     }
+
+    #if( CSIM_VERBOSITY > 1 )
+    std::cout << std::endl;
+    #endif 
   }
 
   template <class PrecT>

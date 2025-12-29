@@ -26,9 +26,9 @@ namespace CSIM {
     Vector<PrecT> getCartesian() {
       Vector<PrecT> output = { 0.f, 0.f, 0.f };
 
-      PrecT newX = std::cos( azimuth ) * radius;
-      PrecT newY = std::sin( azimuth ) * radius;
-      PrecT newZ = std::sin( polar ) * radius;
+      PrecT newX = std::sin( polar ) * std::cos( azimuth ) * radius;
+      PrecT newY = std::sin( polar ) * std::sin( azimuth ) * radius;
+      PrecT newZ = std::cos( polar ) * radius;
 
       output = { newX, newY, newZ };
 
