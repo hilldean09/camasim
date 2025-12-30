@@ -1,3 +1,6 @@
+---
+Created: 2025-12-?
+---
 
 # CUDA Structure
 CUDA related functionality will be compiler into static libraries such that the non-CUDA functionality of the project can be compiled with the most modern C++ features.

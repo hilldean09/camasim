@@ -53,8 +53,23 @@ namespace CSIM::CSIM_CUDA {
     cudaMalloc( &d_forces, 3 * p_number * sizeof( PrecT ) );
   }
 
+  // TODO: initialise buffers
   template <class PrecT>
-  void cu_p_freeBuffers( PrecT* d_positions,
+  void cu_p_initialiseBuffers<PrecT>( Vec_Arrs<PrecT> positions, PrecT* d_positions,
+                                      Vec_Arrs<PrecT> velocities, PrecT* d_velocities,
+                                      Vec_Arrs<PrecT> accelerations, PrecT* d_accelerations,
+                                      Vec_Arrs<PrecT> forces, PrecT* d_forces,
+                                      unsigned long long int p_number ) {
+    cudaMemcpy( d_positions, positions.arenaPtr, 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+    cudaMemcpy( d_velocities, velocities.arenaPtr, 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+    cudaMemcpy( d_accelerations, accelerations.arenaPtr, 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+    cudaMemcpy( d_forces, forces.arenaPtr, 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
+
+  }
+
+
+  template <class PrecT>
+  void cu_p_freeBuffers<PrecT>( PrecT* d_positions,
                          PrecT* d_velocities,
                          PrecT* d_accelerations,
                          PrecT* d_forces ) {
@@ -107,6 +122,7 @@ namespace CSIM::CSIM_CUDA {
 #define CSIM_CUDA_INSTANTIATE( x ) \
             template void cu_p_setConstants< x >( x step, unsigned long long int p_number ); \
             template void cu_p_allocateBuffers< x >( x* d_positions, x* d_velocities, x* d_accelerations, x* d_forces, unsigned long long int p_number  ); \
+            template void cu_p_initialiseBuffers< x >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x x> accelerations, x* d_accelerations, Vec_Arrs< x x> forces, x* d_forces, unsigned long long int p_number ); \
             template void cu_p_freeBuffers< x >( x* d_positions, x* d_velocities, x* d_accelerations, x* d_forces ); \
             template void cu_p_applyVelocity< x, false, false >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
             template void cu_p_applyVelocity< x, false, true >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
