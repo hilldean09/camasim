@@ -47,6 +47,11 @@ namespace CSIM {
     m_accelerations = { nullptr, nullptr, nullptr, nullptr };
     m_forces = { nullptr, nullptr, nullptr, nullptr };
 
+    m_d_positions = nullptr;
+    m_d_velocities = nullptr;
+    m_d_accelerations = nullptr;
+    m_d_forces = nullptr;
+
     m_masses = nullptr;
     m_radii = nullptr;
     m_partial_restitutions = nullptr;
@@ -248,6 +253,23 @@ namespace CSIM {
 
   }
 
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::initCudaBuffers() {
+    #if( CSIM_USE_CUDA == 1 )
+    
+    cu_p_allocateBuffers<PrecT>( m_d_positions, 
+                          m_d_velocities,
+                          m_d_accelerations,
+                          m_d_forces );
+
+    cu_p_initialiseBuffers<PrecT>( m_positions, m_d_positions,
+                            m_velocities, m_d_velocities,
+                            m_accelerations, m_d_accelerations,
+                            m_forces, m_d_forces );
+
+    #endif
+  }
+
   
   // Methods //
   template <class PrecT>
@@ -257,10 +279,23 @@ namespace CSIM {
     #endif
   }
 
-  template <class PrecT>
-  void Particle_Cloud<PrecT>::applyVelocity() {
+  template <class PrecT, bool preMemcpy, bool postMemcpy>
+  void Particle_Cloud<PrecT>::applyVelocity<preMemcpy, postMemcpy>() {
     #if( CSIM_USE_CUDA == 1 )
-    CSIM_CUDA::cu_p_applyVelocity( m_positions, m_velocities, m_p_number );
+    CSIM_CUDA::cu_p_applyVelocity<PrecT, preMemcpy, postMemcpy>( m_positions, m_d_positions,
+                                                                 m_velocities, m_d_velocities,
+                                                                 m_p_number );
+    #else
+    // TODO: Add CPU version
+    #endif
+  }
+
+  template <class PrecT, bool preMemcpy, bool postMemcpy>
+  void Particle_Cloud<PrecT>::applyAcceleration<preMemcpy, postMemcpy>() {
+    #if( CSIM_USE_CUDA == 1 )
+    CSIM_CUDA::cu_p_applyAcceleration<PrecT, preMemcpy, postMemcpy>( m_velocities, m_d_velocities,
+                                                                     m_accelerations, m_d_accelerations,
+                                                                     m_p_number );
     #else
     // TODO: Add CPU version
     #endif

@@ -53,7 +53,6 @@ namespace CSIM::CSIM_CUDA {
     cudaMalloc( &d_forces, 3 * p_number * sizeof( PrecT ) );
   }
 
-  // TODO: initialise buffers
   template <class PrecT>
   void cu_p_initialiseBuffers<PrecT>( Vec_Arrs<PrecT> positions, PrecT* d_positions,
                                       Vec_Arrs<PrecT> velocities, PrecT* d_velocities,
@@ -67,7 +66,6 @@ namespace CSIM::CSIM_CUDA {
 
   }
 
-
   template <class PrecT>
   void cu_p_freeBuffers<PrecT>( PrecT* d_positions,
                          PrecT* d_velocities,
@@ -80,7 +78,6 @@ namespace CSIM::CSIM_CUDA {
   }
 
   // TODO: implement allocate once structure
-
 
   template <class PrecT, bool preMemcpy, bool postMemcpy>
   void cu_p_applyVelocity<PrecT>( Vec_Arrs<PrecT> positions, PrecT* d_positions,

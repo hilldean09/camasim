@@ -30,7 +30,8 @@ namespace CSIM {
 
       // Methods //
       void setCudaConstants( PrecT step );
-      void applyVelocity();
+      template <bool preMemcpy, bool postMemcpy> void applyVelocity();
+      template <bool preMemcpy, bool postMemcpy> void applyAcceleration();
 
 
       // Misc //
@@ -41,9 +42,13 @@ namespace CSIM {
       // Attributes //
       Vec_Arrs<PrecT> m_positions;
       Vec_Arrs<PrecT> m_velocities;
-
       Vec_Arrs<PrecT> m_accelerations;
       Vec_Arrs<PrecT> m_forces;
+
+      PrecT* m_d_positions;
+      PrecT* m_d_velocities;
+      PrecT* m_d_accelerations;
+      PrecT* m_d_forces;
       
       PrecT* m_masses;
       PrecT* m_radii;
@@ -91,6 +96,7 @@ namespace CSIM {
       void generateRandomRadius( unsigned long long int idx);
       void generateRandomPartialRestitution( unsigned long long int idx );
 
+      void initCudaBuffers();
   };
 
 }
