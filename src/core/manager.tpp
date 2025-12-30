@@ -96,7 +96,8 @@ namespace CSIM {
   template <class PrecT>
   void Manager<PrecT>::doStep() {
     m_particleCloud.setCudaConstants( m_step );
-    m_particleCloud.applyVelocity();
+    // m_particleCloud.template applyAcceleration< false, false >();
+    m_particleCloud.template applyVelocity< false, true >();
 
   }
 

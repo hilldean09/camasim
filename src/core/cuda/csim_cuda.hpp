@@ -14,10 +14,10 @@ namespace CSIM::CSIM_CUDA {
   void cu_p_setConstants( PrecT step, unsigned long long int p_number );
   
   template <class PrecT>
-  void cu_p_allocateBuffers( PrecT* d_positions,
-                             PrecT* d_velocities,
-                             PrecT* d_accelerations,
-                             PrecT* d_forces, 
+  void cu_p_allocateBuffers( PrecT*& d_positions,
+                             PrecT*& d_velocities,
+                             PrecT*& d_accelerations,
+                             PrecT*& d_forces, 
                              unsigned long long int p_number );
 
   template <class PrecT>

@@ -36,21 +36,36 @@ namespace CSIM::CSIM_CUDA {
   template <class PrecT>
   void cu_p_setConstants<PrecT>( PrecT step, unsigned long long int p_number ) {
     // Symbol initialisation 
+    #if( CSIM_DEBUG == 1 )
+    CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaMemcpyToSymbol( Kernel::ker_step<PrecT>, &step, sizeof( PrecT ) ),
+                                 "cu_p_setConstants",
+                                 "Step copy to symbol failed" );
+    CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaMemcpyToSymbol( Kernel::ker_p_number, &p_number, sizeof( unsigned long long int ) ),
+                                 "cu_p_setConstants",
+                                 "Number copy to symbol failed" );
+    #else
     cudaMemcpyToSymbol( Kernel::ker_step<PrecT>, &step, sizeof( PrecT ) );
-    cudaMemcpyToSymbol( Kernel::ker_p_number, &p_number, sizeof( PrecT ) );
+    cudaMemcpyToSymbol( Kernel::ker_p_number, &p_number, sizeof( unsigned long long int ) );
+    #endif
   }
 
   template <class PrecT>
-  void cu_p_allocateBuffers<Prect>( PrecT* d_positions,
-                                    PrecT* d_velocities,
-                                    PrecT* d_accelerations,
-                                    PrecT* d_forces,
+  void cu_p_allocateBuffers<PrecT>( PrecT*& d_positions,
+                                    PrecT*& d_velocities,
+                                    PrecT*& d_accelerations,
+                                    PrecT*& d_forces,
                                     unsigned long long int p_number ) {
-    
+    #if( CSIM_DEBUG == 1 )
+    CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaMalloc( &d_positions, 3 * p_number * sizeof( PrecT ) ), "cu_p_allocateBuffers", "cudaMalloc() error" );
+    CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaMalloc( &d_velocities, 3 * p_number * sizeof( PrecT ) ), "cu_p_allocateBuffers", "cudaMalloc() error" );
+    CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaMalloc( &d_accelerations, 3 * p_number * sizeof( PrecT ) ), "cu_p_allocateBuffers", "cudaMalloc() error" );
+    CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaMalloc( &d_forces, 3 * p_number * sizeof( PrecT ) ), "cu_p_allocateBuffers", "cudaMalloc() error" );
+    #else
     cudaMalloc( &d_positions, 3 * p_number * sizeof( PrecT ) );
     cudaMalloc( &d_velocities, 3 * p_number * sizeof( PrecT ) );
     cudaMalloc( &d_accelerations, 3 * p_number * sizeof( PrecT ) );
     cudaMalloc( &d_forces, 3 * p_number * sizeof( PrecT ) );
+    #endif
   }
 
   template <class PrecT>
@@ -83,16 +98,30 @@ namespace CSIM::CSIM_CUDA {
   void cu_p_applyVelocity<PrecT>( Vec_Arrs<PrecT> positions, PrecT* d_positions,
                                   Vec_Arrs<PrecT> velocities, PrecT* d_velocities,
                                   unsigned long long int p_number ) {
-    if( preMemcpy ) {
+    if( preMemcpy == true ) {
       cudaMemcpy( d_positions, positions.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
       cudaMemcpy( d_velocities, velocities.arenaPtr , 3 * p_number * sizeof( PrecT ), cudaMemcpyHostToDevice );
     }
+
+    #if( CSIM_VERBOSITY > 5 )
+    std::cout << CSIM_LOG_HEADER( "cu_p_applyVelocity" ) << "Entering Kernel" << std::endl;
+    #endif
     
     // Launch kernel
     Kernel::ker_p_applyTemporallyLinearChange<PrecT><<< CSIM_CUDA_BLOCKS, CSIM_CUDA_THREADS_PER_BLOCK >>>( d_positions, d_velocities );
 
-    if( postMemcpy ) {
+    if( postMemcpy == true ) {
+      #if( CSIM_VERBOSITY > 5 )
+      std::cout << CSIM_LOG_HEADER( "cu_p_applyVelocity" ) << "Copying to host" << std::endl;
+      #endif
+      
+      #if( CSIM_DEBUG == 1 )
+      CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaMemcpy( positions.arenaPtr, d_positions, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost ), 
+                                   "cu_p_applyVelocity",
+                                   "Copy to host failed" );
+      #else
       cudaMemcpy( positions.arenaPtr, d_positions, 3 * p_number * sizeof( PrecT), cudaMemcpyDeviceToHost );
+      #endif
     }
   }
 
@@ -118,8 +147,8 @@ namespace CSIM::CSIM_CUDA {
 
 #define CSIM_CUDA_INSTANTIATE( x ) \
             template void cu_p_setConstants< x >( x step, unsigned long long int p_number ); \
-            template void cu_p_allocateBuffers< x >( x* d_positions, x* d_velocities, x* d_accelerations, x* d_forces, unsigned long long int p_number  ); \
-            template void cu_p_initialiseBuffers< x >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x x> accelerations, x* d_accelerations, Vec_Arrs< x x> forces, x* d_forces, unsigned long long int p_number ); \
+            template void cu_p_allocateBuffers< x >( x*& d_positions, x*& d_velocities, x*& d_accelerations, x*& d_forces, unsigned long long int p_number  ); \
+            template void cu_p_initialiseBuffers< x >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, Vec_Arrs< x > accelerations, x* d_accelerations, Vec_Arrs< x > forces, x* d_forces, unsigned long long int p_number ); \
             template void cu_p_freeBuffers< x >( x* d_positions, x* d_velocities, x* d_accelerations, x* d_forces ); \
             template void cu_p_applyVelocity< x, false, false >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \
             template void cu_p_applyVelocity< x, false, true >( Vec_Arrs< x > positions, x* d_positions, Vec_Arrs< x > velocities, x* d_velocities, unsigned long long int p_number ); \

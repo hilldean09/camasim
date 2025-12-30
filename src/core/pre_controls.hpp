@@ -6,7 +6,8 @@
 
 // Debug
 #define CSIM_DEBUG 1
-#define CSIM_M_DEBUG_LOG( message ) std::cout << message << std::endl
+#define CSIM_M_DEBUG_LOG( message ) std::cout << "#CSIM# " << message << std::endl
+#define CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaExpr, func, message ) if( ( cudaExpr )!= cudaSuccess ) { std::cout << "#CSIM# " << func << " : " << "CUDA error detected\n" << "\t" << message << std::endl; } 
 
 // Logging
 #define CSIM_VERBOSITY 2

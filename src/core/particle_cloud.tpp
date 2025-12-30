@@ -33,7 +33,8 @@ namespace CSIM {
     initMasses();
     initRadii();
     initPartialRestitutions();
-
+  
+    initCudaBuffers();
   }
 
   template <class PrecT>
@@ -257,15 +258,17 @@ namespace CSIM {
   void Particle_Cloud<PrecT>::initCudaBuffers() {
     #if( CSIM_USE_CUDA == 1 )
     
-    cu_p_allocateBuffers<PrecT>( m_d_positions, 
+    CSIM_CUDA::cu_p_allocateBuffers<PrecT>( m_d_positions, 
                           m_d_velocities,
                           m_d_accelerations,
-                          m_d_forces );
+                          m_d_forces,
+                          m_p_number );
 
-    cu_p_initialiseBuffers<PrecT>( m_positions, m_d_positions,
+    CSIM_CUDA::cu_p_initialiseBuffers<PrecT>( m_positions, m_d_positions,
                             m_velocities, m_d_velocities,
                             m_accelerations, m_d_accelerations,
-                            m_forces, m_d_forces );
+                            m_forces, m_d_forces,
+                            m_p_number );
 
     #endif
   }
@@ -279,9 +282,15 @@ namespace CSIM {
     #endif
   }
 
-  template <class PrecT, bool preMemcpy, bool postMemcpy>
-  void Particle_Cloud<PrecT>::applyVelocity<preMemcpy, postMemcpy>() {
+  template <class PrecT>
+  template <bool preMemcpy, bool postMemcpy>
+  void Particle_Cloud<PrecT>::applyVelocity() {
     #if( CSIM_USE_CUDA == 1 )
+
+    #if( CSIM_VERBOSITY > 3 )
+    std::cout << CSIM_LOG_HEADER( "Particle_Cloud::applyVelocity" ) << "Using CUDA" << std::endl;
+    #endif
+
     CSIM_CUDA::cu_p_applyVelocity<PrecT, preMemcpy, postMemcpy>( m_positions, m_d_positions,
                                                                  m_velocities, m_d_velocities,
                                                                  m_p_number );
@@ -290,8 +299,9 @@ namespace CSIM {
     #endif
   }
 
-  template <class PrecT, bool preMemcpy, bool postMemcpy>
-  void Particle_Cloud<PrecT>::applyAcceleration<preMemcpy, postMemcpy>() {
+  template <class PrecT>
+  template <bool preMemcpy, bool postMemcpy>
+  void Particle_Cloud<PrecT>::applyAcceleration() {
     #if( CSIM_USE_CUDA == 1 )
     CSIM_CUDA::cu_p_applyAcceleration<PrecT, preMemcpy, postMemcpy>( m_velocities, m_d_velocities,
                                                                      m_accelerations, m_d_accelerations,
