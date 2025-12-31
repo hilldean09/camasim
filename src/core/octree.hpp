@@ -4,6 +4,7 @@
 
 #include "./pre_controls.hpp"
 #include "./structs.hpp"
+#include "./particle_cloud.hpp"
 
 namespace CSIM::Octree {
   
@@ -15,7 +16,8 @@ namespace CSIM::Octree {
 
       
       // Initialisers //
-      void initialise( PrecT* pidBufferPtr, unsigned long long int pidBufferSize );
+      void initialise( Particle_Cloud<PrecT> particleCloudPointer,
+                       PrecT* pidBufferPtr, unsigned long long int pidBufferSize );
 
 
       // Accessors //
@@ -33,8 +35,10 @@ namespace CSIM::Octree {
 
     private:
       // Attributes //
+      Particle_Cloud<PrecT>* m_particleCloudPtr;
       unsigned long long int* m_pidBufferPtr;
       unsigned long long int m_pidBufferSize;
+
 
       Octant* m_rootOctant;
       
