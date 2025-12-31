@@ -62,8 +62,6 @@ int main() {
   mapper->SetScaleArrayComponent( 0.0 );
   mapper->SetScaleFactor( 10.0 );
   
-  // Optional emmissive
-  
   // Actor propoerties
   vtkNew<vtkProperty> actorProperty;
   actorProperty->SetColor( colors->GetColor3d( "Peru" ).GetData() );
