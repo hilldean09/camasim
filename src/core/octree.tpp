@@ -101,7 +101,7 @@ namespace CSIM::Octree {
     if( output < 8 ) { CSIM_M_DEBUG_LOG( "Octant::getChildMinPidIdx : Bounds size < 8" ); }
     #endif
 
-    output = m_minPidIdx + ( octanntIdx * 
+    output = m_minPidIdx + ( octantIdx * 
              ( ( unsigned long long int output ) ( output / 8 ) ) );
 
     return output;
@@ -129,10 +129,53 @@ namespace CSIM::Octree {
   }
 
   template <class PrecT>
-  Vector<PrecT> Octree<PrecT>::getChildMinCorner( char octantIdx );
+  Vector<PrecT> Octree<PrecT>::getChildMinCorner( char octantIdx ) {
+    Vector<PrecT> output = m_minCorner;
+    PrecT halfLength = ( m_maxCorner.x - m_minCorner.x ) / 2;
+
+    // Afforeded by octant indexing structure
+    if( octantIdx >= 4 ) {
+      output.x += halfLength;
+      octantIdx -= 4;
+    }
+    if( octantIdx >= 2 ) {
+      output.y += halfLength;
+      octantIdx -= 2:
+    }
+    if( octantIdx >= 1 ) {
+      output.z += halfLength;
+      octantIdx -= 1:
+
+  }
 
   template <class PrecT>
-  Vector<PrecT> Octree<PrecT>::getChildMaxCorner( char octantIdx );
+  Vector<PrecT> Octree<PrecT>::getChildMaxCorner( char octantIdx ) {
+    Vector<PrecT> output = m_maxCorner;
+    PrecT halfLength = ( m_maxCorner.x - m_minCorner.x ) / 2;
+
+    // Afforeded by octant indexing structure
+    if( octantIdx >= 4 ) {
+      octantIdx -= 4;
+    }
+    else {
+      output.x -= halfLength;
+    }
+
+    if( octantIdx >= 2 ) {
+      octantIdx -= 2:
+    }
+    else {
+      output.y -= halfLength;
+    }
+
+    if( octantIdx >= 1 ) {
+      octantIdx -= 1:
+    }
+    else {
+      output.z -= halfLength;
+    }
+
+  }
 
 }
 
