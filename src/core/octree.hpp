@@ -25,9 +25,10 @@ namespace CSIM::Octree {
       unsigned long long int* getPidBufferPointer() { return m_pidBufferPtr; }
       unsigned long long int getPidBufferSize() { return m_pidBufferSize; }
 
+      Octant* getRootOctant() { return m_rootOctant; }
+
 
       // Methods //
-      void generateTree();
       void stripTree();
 
     
@@ -39,7 +40,6 @@ namespace CSIM::Octree {
       Particle_Cloud<PrecT>* m_particleCloudPtr;
       unsigned long long int* m_pidBufferPtr;
       unsigned long long int m_pidBufferSize;
-
 
       Octant* m_rootOctant;
       
@@ -60,26 +60,37 @@ namespace CSIM::Octree {
               unsigned long long int minPidIdx, unsigned long long int maxPidIdx,
               Vector<PrecT> minCorner, Vector<PrecT>, maxCorner );
 
-      
-      // Methods //
-      void generateChildren();
     
+      // Accessors //
+      Octant** getChildrenArray() { return m_childrenArray; }
+
+      unsigned long long int getMinPidIdx() { return m_minPidIdx; }
+      unsigned long long int getMaxPidIdx() { return m_maxPidIdx; }
+
+      Vector<PrecT> getMinCorner() { return m_minCorner; }
+      Vector<PrecT> getMaxCorner() { return m_maxCorner; }
+
       PrecT getNetMass() { return m_netMass; }
       Vector<PrecT> getCentreOfMass() { return m_centreOfMass; }
+      
 
+      // Methods //
+      bool subdivide();
+    
 
       // Misc //
       ~Octant();
 
+
     private:
       // Attributes //
-      unsigned long long int m_minPidIdx;
-      unsigned long long int m_maxPidIdx;
-
       Octree* m_octree;
       Octant* m_parent;
-      Octant** m_childrenArray;
+      Octant* m_childrenArray[ 8 ];
       bool m_isRoot;
+
+      unsigned long long int m_minPidIdx;
+      unsigned long long int m_maxPidIdx;
 
       Vector<PrecT> m_minCorner;
       Vector<PrecT> m_maxCorner;
