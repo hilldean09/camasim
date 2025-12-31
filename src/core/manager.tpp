@@ -101,6 +101,8 @@ namespace CSIM {
 
   }
 
+  // TODO: Free device memory
+
 }
 
 #endif
