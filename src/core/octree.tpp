@@ -89,11 +89,44 @@ namespace CSIM::Octree {
 
   template <class PrecT>
   unsigned long long int Octree<PrecT>::getChildMinPidIdx( char octantIdx ) {
-    unsigned long long int boundsSize = m_maxPidIdx - m_minPidIdx;
+    /*
+     * Condensed down into a single variabel declaration for better
+     * parallel memory use.
+     */
+    unsigned long long int output = m_maxPidIdx - m_minPidIdx;
+
+    // Assumes a CSIM_OCTANT_PARTICLE_CUTOFF value of greater than 8
+    
+    #if( CSIM_DEBUG == 1 )
+    if( output < 8 ) { CSIM_M_DEBUG_LOG( "Octant::getChildMinPidIdx : Bounds size < 8" ); }
+    #endif
+
+    output = m_minPidIdx + ( octanntIdx * 
+             ( ( unsigned long long int output ) ( output / 8 ) ) );
+
+    return output;
   }
 
   template <class PrecT>
-  unsigned long long int Octree<PrecT>::getChildMaxPidIdx( char octantIdx );
+  unsigned long long int Octree<PrecT>::getChildMaxPidIdx( char octantIdx ) {
+    // See getChildMinPidIdx
+    unsigned long long int output = m_maxPidIdx - m_minPidIdx;
+
+    #if( CSIM_DEBUG == 1 )
+    if( output < 8 ) { CSIM_M_DEBUG_LOG( "Octant::getChildMinPidIdx : Bounds size < 8" ); }
+    #endif
+
+    if( octantIdx != 8 ) {
+      output = m_minPidIdx + ( ( octantIdx + 1 ) * 
+               ( ( unsigned long long int output ) ( output / 8 ) ) );
+    }
+    else {
+      // Guaranteeing proper coverage
+      output = m_maxPidIdx;
+    }
+
+    return output;
+  }
 
   template <class PrecT>
   Vector<PrecT> Octree<PrecT>::getChildMinCorner( char octantIdx );
