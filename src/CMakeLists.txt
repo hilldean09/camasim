@@ -18,6 +18,7 @@ find_package( Viskores CONFIG REQUIRED )
 find_package( X11 REQUIRED )
 find_package( Freetype REQUIRED )
 find_package( MPI REQUIRED COMPONENTS C CXX )
+find_package( OpenMP REQUIRED )
 
 # VTK
 find_package( nlohmann_json REQUIRED )
@@ -46,6 +47,7 @@ set( CSIM_VTK_MODULES
 set( CSIM_EXEC_MODULES 
   ParaView::VTKExtensionsIOCore 
   MPI::MPI_CXX
+  OpenMP::OpemMP_CXX
   ${CSIM_VTK_MODULES}
 )
 

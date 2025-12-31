@@ -24,6 +24,7 @@
 
 #define CSIM_VTK_FRAME_NUMBER_PADDING 6
 
+
 // Rendering
 #define CSIM_PARTICLE_COLOR "Peru"
 #define CSIM_CENTRAL_BODY_COLOR "Maroon"
@@ -35,10 +36,15 @@
 
 #define CSIM_POINT_SCALE_FACTOR 10.0
 
+
 // CUDA
 #define CSIM_USE_CUDA 1
 #define CSIM_CUDA_THREADS_PER_BLOCK 256
 #define CSIM_CUDA_BLOCKS 64 
+
+
+// Octree 
+#define CSIM_OCTANT_PARTICLE_CUTOFF 16
 
 
 #endif

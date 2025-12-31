@@ -17,13 +17,15 @@ namespace CSIM::Octree {
       
       // Initialisers //
       void initialise( Particle_Cloud<PrecT> particleCloudPointer,
-                       PrecT* pidBufferPtr, unsigned long long int pidBufferSize );
+                       unsigned long long int pidBufferSize );
 
 
       // Accessors //
       Particle_Cloud<PrecT>* getParticleCloudPointer() { return m_particleCloudPtr; }
-      unsigned long long int* getPidBufferPointer() { return m_pidBufferPtr; }
+      unsigned long long int* getPidBufferPointer() { return m_pidBuffer; }
       unsigned long long int getPidBufferSize() { return m_pidBufferSize; }
+
+      unsigned long long int getPidTmpBufferPointer() { return m_pidTmpBuffer; }
 
       Octant* getRootOctant() { return m_rootOctant; }
 
@@ -38,8 +40,10 @@ namespace CSIM::Octree {
     private:
       // Attributes //
       Particle_Cloud<PrecT>* m_particleCloudPtr;
-      unsigned long long int* m_pidBufferPtr;
+      unsigned long long int* m_pidBuffer;
       unsigned long long int m_pidBufferSize;
+
+      unsigned long long int* m_pidTmpBuffer;
 
       Octant* m_rootOctant;
       
@@ -76,7 +80,7 @@ namespace CSIM::Octree {
 
       // Methods //
       bool subdivide();
-    
+
 
       // Misc //
       ~Octant();
@@ -97,6 +101,13 @@ namespace CSIM::Octree {
 
       PrecT m_netMass;
       Vector<PrecT> m_centreOfMass;
+
+  
+      // Methods //
+      Vector<PrecT> getChildMinCorner( char octantIdx, 
+                                       Vector<PrecT> minCorner, 
+                                       PrecT halfLength );
+
   };
 
 }
