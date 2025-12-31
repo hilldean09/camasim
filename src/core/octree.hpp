@@ -21,6 +21,7 @@ namespace CSIM::Octree {
 
 
       // Accessors //
+      Particle_Cloud<PrecT>* getParticleCloudPointer() { return m_particleCloudPtr; }
       unsigned long long int* getPidBufferPointer() { return m_pidBufferPtr; }
       unsigned long long int getPidBufferSize() { return m_pidBufferSize; }
 
