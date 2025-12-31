@@ -76,16 +76,31 @@ namespace CSIM::Octree {
   template <class PrecT>
   bool Octree<PrecT>::subdivide() {
     if( ( m_maxPidIdx - m_minPidIdx ) > CSIM_OCTANT_PARTICLE_CUTOFF ) {
-
-      PrecT halfLength = ( m_maxCorner.x - m_minCorner.x ) / 2;
       
       for( char octantIdx = 0; octantIdx < 8; octantIdx++ ) {
-        m_childrenArray[ octantIdx ] = Octant( m_octree, &this, 
-          
-
+        m_childrenArray[ octantIdx ] = Octant( m_octree, this, 
+                                               getChildMinPidIdx( octantIdx ),
+                                               getChildMaxPidIdx( octantIdx ),
+                                               getChildMinCorner( octantIdx ),
+                                               getChildMaxCorner( octantIdx ) )
       }
     }
   }
+
+  template <class PrecT>
+  unsigned long long int Octree<PrecT>::getChildMinPidIdx( char octantIdx ) {
+    unsigned long long int boundsSize = m_maxPidIdx - m_minPidIdx;
+  }
+
+  template <class PrecT>
+  unsigned long long int Octree<PrecT>::getChildMaxPidIdx( char octantIdx );
+
+  template <class PrecT>
+  Vector<PrecT> Octree<PrecT>::getChildMinCorner( char octantIdx );
+
+  template <class PrecT>
+  Vector<PrecT> Octree<PrecT>::getChildMaxCorner( char octantIdx );
+
 }
 
 #endif

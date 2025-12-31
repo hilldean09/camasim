@@ -62,7 +62,7 @@ namespace CSIM::Octree {
       // Constructuors //
       Octant( Octree* octree, Octant* parent,
               unsigned long long int minPidIdx, unsigned long long int maxPidIdx,
-              Vector<PrecT> minCorner, Vector<PrecT>, maxCorner );
+              Vector<PrecT> minCorner, Vector<PrecT> maxCorner );
 
     
       // Accessors //
@@ -104,10 +104,11 @@ namespace CSIM::Octree {
 
   
       // Methods //
-      Vector<PrecT> getChildMinCorner( char octantIdx, 
-                                       Vector<PrecT> minCorner, 
-                                       PrecT halfLength );
+      unsigned long long int getChildMinPidIdx( char octantIdx );
+      unsigned long long int getChildMaxPidIdx( char octantIdx );
 
+      Vector<PrecT> getChildMinCorner( char octantIdx );
+      Vector<PrecT> getChildMaxCorner( char octantIdx );
   };
 
 }
