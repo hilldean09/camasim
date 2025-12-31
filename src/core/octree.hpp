@@ -53,8 +53,7 @@ namespace CSIM::Octree {
       // Constructuors //
       Octant( Octree* octree, Octant* parent,
               unsigned long long int minPidIdx, unsigned long long int maxPidIdx,
-              Vector<PrecT> minCorner, Vector<PrecT>, maxCorner,
-              bool isRoot );
+              Vector<PrecT> minCorner, Vector<PrecT>, maxCorner );
 
       
       // Methods //
