@@ -33,9 +33,9 @@ namespace CSIM::Octree {
   template <class PrecT>
   void Octree<PrecT>::initDefaults() {
     m_particleCloudPtr = nullptr;
-    m_pidBuffer = nullptr;
     m_pidBufferSize = 0;
 
+    m_pidBuffer = nullptr;
     m_pidTmpBuffer = nullptr;
 
     m_octantHistogramBuffer = nullptr;
@@ -43,10 +43,29 @@ namespace CSIM::Octree {
     m_rootOctant = nullptr;
   }
 
+  
+  // Methods //
+  template <class PrecT>
+  void Octree<PrecT>::stripTree() {
+
+    if( m_rootOctant != nullptr ) {
+      m_rootOctant->~Octant();
+    }
+
+  }
+
+
+  // Misc //
   template <class PrecT>
   Octree<PrecT>::~Octree() {
+
     std::free( m_pidBuffer );
     std::free( m_pidTmpBuffer );
+    std::free( m_octantHistogramBuffer );
+
+    if( m_rootOctant != nullptr ) {
+      m_rootOctant->~Octant();
+    }
   }
 
   
@@ -61,6 +80,8 @@ namespace CSIM::Octree {
     // Detecting if root octant //
     if( parent == nullptr ) { m_isRoot = true; }
     else { m_isRoot = false; }
+
+    m_isParent = false;
 
     for( char idx = 0; idx < 8; idx++ ) {
       m_childrenArray[ idx ] = nullptr;
@@ -81,21 +102,29 @@ namespace CSIM::Octree {
   
   // Methods //
   template <class PrecT>
-  bool Octree<PrecT>::subdivide() {
+  bool Octant<PrecT>::subdivide() {
+    bool output = false; 
+
     if( ( m_maxPidIdx - m_minPidIdx ) > CSIM_OCTANT_PARTICLE_CUTOFF ) {
-      
+
       for( char octantIdx = 0; octantIdx < 8; octantIdx++ ) {
-        m_childrenArray[ octantIdx ] = Octant( m_octree, this, 
+        m_childrenArray[ octantIdx ] = new Octant( m_octree, this, 
                                                getChildMinPidIdx( octantIdx ),
                                                getChildMaxPidIdx( octantIdx ),
                                                getChildMinCorner( octantIdx ),
                                                getChildMaxCorner( octantIdx ) )
       }
+
+      m_isParent = true;
+      output = true;
+
     }
+
+    return output;
   }
 
   template <class PrecT>
-  unsigned long long int Octree<PrecT>::getChildMinPidIdx( char octantIdx ) {
+  unsigned long long int Octant<PrecT>::getChildMinPidIdx( char octantIdx ) {
     /*
      * Condensed down into a single variabel declaration for better
      * parallel memory use.
@@ -115,7 +144,7 @@ namespace CSIM::Octree {
   }
 
   template <class PrecT>
-  unsigned long long int Octree<PrecT>::getChildMaxPidIdx( char octantIdx ) {
+  unsigned long long int Octant<PrecT>::getChildMaxPidIdx( char octantIdx ) {
     // See getChildMinPidIdx
     unsigned long long int output = m_maxPidIdx - m_minPidIdx;
 
@@ -136,7 +165,7 @@ namespace CSIM::Octree {
   }
 
   template <class PrecT>
-  Vector<PrecT> Octree<PrecT>::getChildMinCorner( char octantIdx ) {
+  Vector<PrecT> Octant<PrecT>::getChildMinCorner( char octantIdx ) {
     Vector<PrecT> output = m_minCorner;
     PrecT halfLength = ( m_maxCorner.x - m_minCorner.x ) / 2;
 
@@ -156,7 +185,7 @@ namespace CSIM::Octree {
   }
 
   template <class PrecT>
-  Vector<PrecT> Octree<PrecT>::getChildMaxCorner( char octantIdx ) {
+  Vector<PrecT> Octant<PrecT>::getChildMaxCorner( char octantIdx ) {
     Vector<PrecT> output = m_maxCorner;
     PrecT halfLength = ( m_maxCorner.x - m_minCorner.x ) / 2;
 
@@ -182,6 +211,18 @@ namespace CSIM::Octree {
       output.z -= halfLength;
     }
 
+  }
+
+  template <class PrecT>
+  Octant<PrecT>::~Octant() {
+    if( isParent() == true ) {
+      for( int octantIdx = 0; octantIdx < 8; octantIdx++ ) {
+
+        m_childrenArray[ octantIdx ]->~Octant();
+        delete m_childrenArray[ octantIdx ];
+
+      }
+    }
   }
 
 }

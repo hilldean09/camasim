@@ -40,10 +40,12 @@ namespace CSIM::Octree {
     private:
       // Attributes //
       Particle_Cloud<PrecT>* m_particleCloudPtr;
-      unsigned long long int* m_pidBuffer;
       unsigned long long int m_pidBufferSize;
 
+      unsigned long long int* m_pidBuffer;
       unsigned long long int* m_pidTmpBuffer;
+
+      char* m_octantHistogramBuffer;
 
       Octant* m_rootOctant;
       
@@ -92,7 +94,9 @@ namespace CSIM::Octree {
       Octree* m_octree;
       Octant* m_parent;
       Octant* m_childrenArray[ 8 ];
+
       bool m_isRoot;
+      bool m_isParent;
 
       unsigned long long int m_minPidIdx;
       unsigned long long int m_maxPidIdx;
