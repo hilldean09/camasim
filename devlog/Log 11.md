@@ -15,3 +15,5 @@ Octants will continue sub-dividing until the number of particles it contains is 
 The octant class structure will need to have member variables for its **bounding indexes within the PID array**, **its parent octant** (except for the root octant which will use its own variation on the structure), **its children**, **it's centre of mass**, and it's **spatial bounds** (defined using two opposite corners).
 
 Note that moving PID's through large octant bounds will be particularly costly at, $$ O \left( n \right) $$  per relocation. A possible optimisation is batching relocations, which does not improve time-complexity will decrease the number of memory swaps needed at the cost of more memory and arithmetic overhead. Hopefully, a sufficient batch size can hide the overhead, especially for lower level (and thus more dense) octants.
+>[!failure]
+>This turned out to be pretty much flat out silly, using a temporary array for storing desired states is likely to be significantly easier and probably performant. A case of KISS.
