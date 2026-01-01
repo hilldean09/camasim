@@ -69,6 +69,10 @@ namespace CSIM::Octree {
     m_minCorner = minCorner;
     m_maxCorner = maxCorner;
 
+    m_centre = { ( m_maxCorner.x - m_minCorner.x ) / 2,
+                 ( m_maxCorner.y - m_minCorner.y ) / 2, 
+                 ( m_maxCorner.z - m_minCorner.z ) / 2 );
+
   }
 
   

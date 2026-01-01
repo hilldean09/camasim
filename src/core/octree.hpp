@@ -74,6 +74,8 @@ namespace CSIM::Octree {
       Vector<PrecT> getMinCorner() { return m_minCorner; }
       Vector<PrecT> getMaxCorner() { return m_maxCorner; }
 
+      Vector<PrecT> getCentre() { return m_centre; }
+
       PrecT getNetMass() { return m_netMass; }
       Vector<PrecT> getCentreOfMass() { return m_centreOfMass; }
       
@@ -98,6 +100,8 @@ namespace CSIM::Octree {
 
       Vector<PrecT> m_minCorner;
       Vector<PrecT> m_maxCorner;
+
+      Vector<PrecT> m_centre;
 
       PrecT m_netMass;
       Vector<PrecT> m_centreOfMass;
