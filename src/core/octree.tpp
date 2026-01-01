@@ -23,9 +23,10 @@ namespace CSIM::Octree {
     m_particleCloudPtr = particleCloudPointer;
     m_pidBufferSize = pidBufferSize;
 
-    m_pidBuffer = std::malloc( pidBufferSize * sizeof( unsigned long long int ) );
-    m_pidTmpBuffer = std::malloc( pidBufferSize * sizeof( unsigned long long int ) );
-    // TODO: Investigate collapsing into a single malloc
+    m_pidBuffer = std::malloc( 2 * pidBufferSize * sizeof( unsigned long long int ) );
+    m_pidTmpBuffer = ( m_pidBuffer + pidBufferSize );
+
+    m_octantHistogramBuffer = std::malloc( pidBufferSize * sizeof( char ) );
 
   }
 
@@ -36,6 +37,8 @@ namespace CSIM::Octree {
     m_pidBufferSize = 0;
 
     m_pidTmpBuffer = nullptr;
+
+    m_octantHistogramBuffer = nullptr;
 
     m_rootOctant = nullptr;
   }
@@ -71,7 +74,7 @@ namespace CSIM::Octree {
 
     m_centre = { ( m_maxCorner.x - m_minCorner.x ) / 2,
                  ( m_maxCorner.y - m_minCorner.y ) / 2, 
-                 ( m_maxCorner.z - m_minCorner.z ) / 2 );
+                 ( m_maxCorner.z - m_minCorner.z ) / 2 };
 
   }
 

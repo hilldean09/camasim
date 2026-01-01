@@ -6,6 +6,7 @@
 #include "structs.hpp"
 #include "particle_cloud.hpp"
 #include "central_body.hpp"
+#include "./octree.hpp"
 
 namespace CSIM {
 
@@ -39,6 +40,7 @@ namespace CSIM {
 
       Vec_Arrs<PrecT> getPositions() { return m_particleCloud.getPositions(); }
 
+      Octree::Octree<PrecT>* getOctree() { return &m_octree; }
       Central_Body<PrecT>* getCentralBody() { return &m_centralBody; }
 
 
@@ -51,6 +53,7 @@ namespace CSIM {
 
       Particle_Cloud<PrecT> m_particleCloud;
       Central_Body<PrecT> m_centralBody;
+      Octree::Octree<PrecT> m_octree;
 
       unsigned long long int m_p_number;
 
@@ -63,6 +66,7 @@ namespace CSIM {
 
       // Initialisers //
       void initDefaults();
+      void initOctree();
 
       void initRandomEngine( unsigned int seed );
 

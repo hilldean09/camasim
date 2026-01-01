@@ -5,6 +5,7 @@
 #include "pre_controls.hpp"
 #include "structs.hpp"
 #include "particle_cloud.hpp"
+#include "./octree.hpp"
 
 #include <random>
 #include <chrono>
@@ -45,6 +46,8 @@ namespace CSIM {
     if( m_isPNumberInitialised && m_isRandomEngineInitialised ) {
       m_particleCloud.initialise( m_p_number, &m_randomEngine );
     }
+
+    initOctree();
   }
 
   template <class PrecT>
@@ -70,6 +73,12 @@ namespace CSIM {
     m_isRandomEngineInitialised = false;
     m_isSimulationInitialised = false;
 
+  }
+
+  template <class PrecT>
+  void Manager<PrecT>::initOctree() {
+    m_octree.initialise( &m_particleCloud,
+                         m_p_number );
   }
 
   template <class PrecT>

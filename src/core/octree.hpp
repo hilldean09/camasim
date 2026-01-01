@@ -63,7 +63,6 @@ namespace CSIM::Octree {
       Octant( Octree* octree, Octant* parent,
               unsigned long long int minPidIdx, unsigned long long int maxPidIdx,
               Vector<PrecT> minCorner, Vector<PrecT> maxCorner );
-
     
       // Accessors //
       Octant** getChildrenArray() { return m_childrenArray; }
