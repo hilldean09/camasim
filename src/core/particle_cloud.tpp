@@ -311,6 +311,12 @@ namespace CSIM {
     #endif
   }
 
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::generateOctree( Octree::Octree<PrecT>* octreePtr ) {
+
+  }
+
+
   // Misc //
   template <class PrecT>
   Particle_Cloud<PrecT>::~Particle_Cloud() {

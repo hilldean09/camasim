@@ -33,6 +33,8 @@ namespace CSIM {
       template <bool preMemcpy, bool postMemcpy> void applyVelocity();
       template <bool preMemcpy, bool postMemcpy> void applyAcceleration();
 
+      void generateOctree( Octree::Octree<PrecT>* octreePtr );
+
 
       // Misc //
       ~Particle_Cloud();

@@ -46,6 +46,20 @@ namespace CSIM::Octree {
   
   // Methods //
   template <class PrecT>
+  void Octree<PrecT>::generateRoot() {
+    
+    m_rootOctant = new Octant( this, nullptr,
+                               0, m_pidBufferSize,
+                               { -CSIM_OCTREE_BOUNDS_HALF_LENGTH,
+                                 -CSIM_OCTREE_BOUNDS_HALF_LENGTH,
+                                 -CSIM_OCTREE_BOUNDS_HALF_LENGTH },
+                               { CSIM_OCTREE_BOUNDS_HALF_LENGTH,
+                                 CSIM_OCTREE_BOUNDS_HALF_LENGTH,
+                                 CSIM_OCTREE_BOUNDS_HALF_LENGTH } );
+
+  }
+
+  template <class PrecT>
   void Octree<PrecT>::stripTree() {
 
     if( m_rootOctant != nullptr ) {

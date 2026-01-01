@@ -31,6 +31,7 @@ namespace CSIM::Octree {
 
 
       // Methods //
+      void generateRoot();
       void stripTree();
 
     
