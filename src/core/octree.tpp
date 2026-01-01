@@ -140,11 +140,11 @@ namespace CSIM::Octree {
     }
     if( octantIdx >= 2 ) {
       output.y += halfLength;
-      octantIdx -= 2:
+      octantIdx -= 2;
     }
     if( octantIdx >= 1 ) {
       output.z += halfLength;
-      octantIdx -= 1:
+      octantIdx -= 1;
 
   }
 
