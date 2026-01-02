@@ -313,7 +313,7 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateOctree( Octree::Octree<PrecT>* octreePtr ) {
-
+    octreePtr->generateRoot();
   }
 
 

@@ -26,6 +26,12 @@ namespace CSIM::Octree {
     m_pidBuffer = std::malloc( 2 * pidBufferSize * sizeof( unsigned long long int ) );
     m_pidTmpBuffer = ( m_pidBuffer + pidBufferSize );
 
+    // Populating pidBuffer
+    #pragma omp parallel for
+    for( int idx = 0; idx < pidBufferSize; idx++ ) {
+      pidBufferSize[ idx ] = idx;
+    }
+
     m_octantHistogramBuffer = std::malloc( pidBufferSize * sizeof( char ) );
 
   }
@@ -46,7 +52,7 @@ namespace CSIM::Octree {
   
   // Methods //
   template <class PrecT>
-  void Octree<PrecT>::generateRoot() {
+  Octant* Octree<PrecT>::generateRoot() {
     
     m_rootOctant = new Octant( this, nullptr,
                                0, m_pidBufferSize,
@@ -57,6 +63,7 @@ namespace CSIM::Octree {
                                  CSIM_OCTREE_BOUNDS_HALF_LENGTH,
                                  CSIM_OCTREE_BOUNDS_HALF_LENGTH } );
 
+    return m_rootOctant;
   }
 
   template <class PrecT>
@@ -79,6 +86,8 @@ namespace CSIM::Octree {
 
     if( m_rootOctant != nullptr ) {
       m_rootOctant->~Octant();
+
+      delete m_rootOctant;
     }
   }
 
