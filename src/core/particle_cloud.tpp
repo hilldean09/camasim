@@ -3,6 +3,7 @@
 #define CSIM_PARTICLE_CLOUD_TPP
 
 #include <cstdlib>
+#include <cstring>
 #include <cmath>
 #include <random>
 #include <numbers>
@@ -331,11 +332,11 @@ namespace CSIM {
   template <bool UseTempBuffer>
   void Particle_Cloud<PrecT>::rec_populateOctant( Octree::Octree<PrecT>* octreePtr, 
                                                   Octree::Octant<PrecT>* octantPtr ) {
+    // Local constants
+    unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
+    unsigned long long int maxPidIdx = octantPtr->getMinPidIdx();
     
     if( octantPtr->subdivide() == true ) {
-      // Local constants
-      unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
-      unsigned long long int maxPidIdx = octantPtr->getMinPidIdx();
 
       unsigned long long int* activePidBuffer;
       unsigned long long int* writeBuffer;
@@ -412,10 +413,24 @@ namespace CSIM {
         if( octantIdxHistogram[ octantIdx ] > 0 ) {
           childOctantPtr = childrenArray[ octantIdx ];
 
-          #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr )
-          rec_populateOctant( octreePtr, childOctantPtr );
-
+          if( UseTempBuffer == false ) {
+            #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr )
+            rec_populateOctant<true>( octreePtr, childOctantPtr );
+          }
+          else {
+            #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr )
+            rec_populateOctant<false>( octreePtr, childOctantPtr );
+          }
         }
+      }
+
+    }
+    else {
+      // Ensuring up to date memory in the pid buffer
+      if( UseTempBuffer == true ) {
+        std::memcpy( octreePtr->getPidBufferPtr()[ minPidIdx ],
+                     octreePtr->getPidTmpBufferPtr()[ minPidIdx ],
+                     ( maxPidIdx - minPidIdx ) * sizeof( unsigned long long int ) );
       }
 
     }
