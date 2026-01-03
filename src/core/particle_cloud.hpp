@@ -105,7 +105,7 @@ namespace CSIM {
       // Methods //
       template <bool UseTempBuffer>
       void rec_populateOctant( Octree::Octree<PrecT>* octreePtr,
-                               Octree::Octant<PrecT>* octantPtr );
+                               Octree::Octant<PrecT>* octantPtr, int recusiveDepth = 0 );
       
       char getOctantIdx( unsigned long long int pid, Vector<PrecT> centre ) const;
 

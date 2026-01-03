@@ -106,6 +106,12 @@ namespace CSIM {
 
   template <class PrecT>
   void Recorder<PrecT>::startRecording() {
+
+    #if( CSIM_VERBOSITY > 1 )
+    std::cout << "\r" << CSIM_LOG_HEADER( "Recorder::startRecording" ) 
+              << "Writing output header and initial frame" << std::endl;
+    #endif
+
     writeOutputHeader();
     writeFrameData();
 

@@ -14,7 +14,7 @@ int main() {
 
   std::cout << "Initialising particle cloud" << std::endl;
 
-  manager.initialiseParticleNumber( 100'000 ); // Must be >= 204 for some reason
+  manager.initialiseParticleNumber( 500 ); // Must be >= 204 for some reason
   manager.initialiseWithSeed( 4 );
 
   manager.initialiseParticleDistribution( 'p', 30'000'000, 5'000'000 );
@@ -35,8 +35,8 @@ int main() {
 
   recorder.initialiseManager( &manager );
   recorder.initialiseOutputFile( "testOuts" );
-  recorder.initialiseLengthWithTime( 30 );
-  recorder.initialiseSamplingWithFrames( 5'000 );
+  recorder.initialiseLengthWithTime( 1 );
+  recorder.initialiseSamplingWithFrames( 1'000 );
 
   std::cout << "Recorder initialised" << std::endl;
   std::cout << "Beginning recording" << std::endl;

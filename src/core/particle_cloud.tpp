@@ -337,7 +337,8 @@ namespace CSIM {
   template <class PrecT>
   template <bool UseTempBuffer>
   void Particle_Cloud<PrecT>::rec_populateOctant( Octree::Octree<PrecT>* octreePtr, 
-                                                  Octree::Octant<PrecT>* octantPtr ) {
+                                                  Octree::Octant<PrecT>* octantPtr, 
+                                                  int recursiveDepth ) {
     // Local constants
     unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
     unsigned long long int maxPidIdx = octantPtr->getMaxPidIdx();
@@ -346,7 +347,7 @@ namespace CSIM {
     std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_populateOctant" ) << "Bounds are ( " << std::to_string( minPidIdx ) << ", " << std::to_string( maxPidIdx ) << ")" << std::endl;
     #endif
 
-    if( octantPtr->subdivide() == true ) {
+    if( octantPtr->subdivide() == true && recursiveDepth < CSIM_OCTREE_MAX_RECURSIVE_DEPTH ) {
       #if( CSIM_VERBOSITY > 4 )
       std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_populateOctant" ) << "Internal node reached" << std::endl;
       #endif
@@ -436,12 +437,12 @@ namespace CSIM {
           childOctantPtr = childrenArray[ ( int ) octantIdx ];
 
           if( UseTempBuffer == false ) {
-            #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr )
-            rec_populateOctant<true>( octreePtr, childOctantPtr );
+            #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr, recursiveDepth )
+            rec_populateOctant<true>( octreePtr, childOctantPtr, recursiveDepth + 1 );
           }
           else {
-            #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr )
-            rec_populateOctant<false>( octreePtr, childOctantPtr );
+            #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr, recursiveDepth )
+            rec_populateOctant<false>( octreePtr, childOctantPtr, recursiveDepth + 1 );
           }
         }
 
@@ -452,11 +453,21 @@ namespace CSIM {
       #if( CSIM_VERBOSITY > 4 )
       std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_populateOctant" ) << "Leaf reached" << std::endl;
       #endif
+
+      #if( CSIM_WARNINGS == 1 )
+      if( recursiveDepth >= CSIM_OCTREE_MAX_RECURSIVE_DEPTH ) {
+        CSIM_M_DEBUG_LOG( "Particle_Cloud::rec_populateOctant : Max recusrive depth exceeded" );
+      }
+      #endif
+
+      unsigned long long int* pidBufferPtr = octreePtr->getPidBufferPointer();
+      unsigned long long int* pidTmpBufferPtr = octreePtr->getPidTmpBufferPointer();
+  
       // Ensuring up to date memory in the pid buffer
       if( UseTempBuffer == true ) {
-        std::memcpy( ( void* ) octreePtr->getPidBufferPointer()[ minPidIdx ],
-                     ( void* ) octreePtr->getPidTmpBufferPointer()[ minPidIdx ],
-                     ( maxPidIdx - minPidIdx ) * sizeof( unsigned long long int ) );
+        for( unsigned long long int pidIdx = minPidIdx; pidIdx < maxPidIdx; pidIdx++ ) {
+          pidBufferPtr[ pidIdx ] = pidTmpBufferPtr[ pidIdx ];
+        }
       }
 
     }

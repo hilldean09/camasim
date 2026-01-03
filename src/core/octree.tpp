@@ -67,7 +67,10 @@ namespace CSIM::Octree {
   void Octree<PrecT>::stripTree() {
 
     if( m_rootOctant != nullptr ) {
+
       m_rootOctant->~Octant();
+      m_rootOctant = nullptr;
+
     }
 
   }
@@ -82,10 +85,9 @@ namespace CSIM::Octree {
     std::free( m_octantIdxBuffer );
 
     if( m_rootOctant != nullptr ) {
-      m_rootOctant->~Octant();
-
       delete m_rootOctant;
     }
+
   }
 
   
@@ -252,7 +254,6 @@ namespace CSIM::Octree {
     if( isParent() == true ) {
       for( int octantIdx = 0; octantIdx < 8; octantIdx++ ) {
 
-        m_childrenArray[ octantIdx ]->~Octant();
         delete m_childrenArray[ octantIdx ];
 
       }
