@@ -99,6 +99,15 @@ namespace CSIM {
       void generateRandomPartialRestitution( unsigned long long int idx );
 
       void initCudaBuffers();
+
+
+      // Methods //
+      template <bool UseTempBuffer>
+      void rec_populateOctant( Octree::Octree<PrecT>* octreePtr,
+                               Octree::Octant<PrecT>* octantPtr );
+      
+      char getOctantIdx( unsigned long long int pid ) const;
+
   };
 
 }

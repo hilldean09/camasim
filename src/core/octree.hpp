@@ -21,13 +21,15 @@ namespace CSIM::Octree {
 
 
       // Accessors //
-      Particle_Cloud<PrecT>* getParticleCloudPointer() { return m_particleCloudPtr; }
-      unsigned long long int* getPidBufferPointer() { return m_pidBuffer; }
-      unsigned long long int getPidBufferSize() { return m_pidBufferSize; }
+      Particle_Cloud<PrecT>* getParticleCloudPointer() const { return m_particleCloudPtr; }
+      unsigned long long int getPidBufferSize() const { return m_pidBufferSize; }
 
-      unsigned long long int getPidTmpBufferPointer() { return m_pidTmpBuffer; }
+      unsigned long long int* getPidBufferPointer() const { return m_pidBuffer; }
+      unsigned long long int getPidTmpBufferPointer() const { return m_pidTmpBuffer; }
+      
+      char* getOctantIdxBuffer() const { return m_octantIdxBuffer; }
 
-      Octant* getRootOctant() { return m_rootOctant; }
+      Octant* getRootOctant() const { return m_rootOctant; }
 
 
       // Methods //
@@ -46,7 +48,7 @@ namespace CSIM::Octree {
       unsigned long long int* m_pidBuffer;
       unsigned long long int* m_pidTmpBuffer;
 
-      char* m_octantHistogramBuffer;
+      char* m_octantIdxBuffer;
 
       Octant* m_rootOctant;
       
@@ -68,18 +70,21 @@ namespace CSIM::Octree {
               Vector<PrecT> minCorner, Vector<PrecT> maxCorner );
     
       // Accessors //
-      Octant** getChildrenArray() { return m_childrenArray; }
+      Octree<PrecT>* getOctree() const { return m_octree; }
+      Octant<PrecT>* getParent() const { return m_parent; }
+      Octant<Prect>** getChildrenArray() const { return m_childrenArray; }
 
-      unsigned long long int getMinPidIdx() { return m_minPidIdx; }
-      unsigned long long int getMaxPidIdx() { return m_maxPidIdx; }
+      unsigned long long int getMinPidIdx() const { return m_minPidIdx; }
+  
+      unsigned long long int getMaxPidIdx() const { return m_maxPidIdx; }
 
-      Vector<PrecT> getMinCorner() { return m_minCorner; }
-      Vector<PrecT> getMaxCorner() { return m_maxCorner; }
+      Vector<PrecT> getMinCorner() const { return m_minCorner; }
+      Vector<PrecT> getMaxCorner() const { return m_maxCorner; }
 
-      Vector<PrecT> getCentre() { return m_centre; }
+      Vector<PrecT> getCentre() const { return m_centre; }
 
-      PrecT getNetMass() { return m_netMass; }
-      Vector<PrecT> getCentreOfMass() { return m_centreOfMass; }
+      PrecT getNetMass() const { return m_netMass; }
+      Vector<PrecT> getCentreOfMass() const { return m_centreOfMass; }
       
 
       // Methods //

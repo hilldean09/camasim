@@ -313,7 +313,56 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateOctree( Octree::Octree<PrecT>* octreePtr ) {
-    octreePtr->generateRoot();
+    Octree::Octant<PrecT>* rootOctantPtr = octreePtr->generateRoot();
+    
+    rec_populateOctant( octreePtr, rootOctantPtr );
+  }
+
+  template <class PrecT>
+  template <bool UseTempBuffer>
+  void Particle_Cloud<PrecT>::rec_populateOctant( Octree::Octree<PrecT>* octreePtr, 
+                                                  Octree::Octant<PrecT>* octantPtr ) {
+    
+    if( octantPtr->subdivide() == true ) {
+      // Local constants
+      Vector<PrecT> octantCentre = octantPtr->getCentre();
+      unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
+      unsigned long long int maxPidIdx = octantPtr->getMinPidIdx();
+      
+      unsigned long long int* activePidBuffer;
+      unsigned long long int* writeBuffer;
+      if( UseTempBuffer == false ) {
+        activePidBuffer = octreePtr->getPidBufferPtr();
+        writeBuffer = octreePtr->getPidTmpBufferPtr();
+      }
+      else {
+        activePidBuffer = octreePtr->getPidTmpBufferPtr();
+        writeBuffer = octreePtr->getPidBufferPtr();
+      }
+
+      char* octantIdxBuffer = octreePtr->getOctantIdxBuffer();
+
+      // "Local" mutables
+      unsigned long long int octantIdxHistogram[ 8 ] = { 0, 0, 0, 0,
+                                                         0, 0, 0, 0 };
+      Octree::Octant<PrecT>** childrenArray = octreePtr->getChildrenAray();
+
+      for( unsigned long long int pidIdx = minPidIdx;
+           pidIdx < maxPidIdx;
+           pidIdx++ ) {
+        /* A funny naming convension here but it means to to say
+         * the octantIdx of this pidIdx is [x], this is to keep 
+         * consistency with the octantIdxBuffer
+         */
+        char pidIdxOctantIdx = getOctantIdx( activePidBuffer[ pidIdx ] );
+
+        octantIdxHistogram[ pidIdxOctantIdx ]++;
+        octantIdxBuffer[ pidIdx ] = pidIdxOctantIdx;
+
+      }
+
+    }
+
   }
 
 

@@ -32,7 +32,7 @@ namespace CSIM::Octree {
       pidBufferSize[ idx ] = idx;
     }
 
-    m_octantHistogramBuffer = std::malloc( pidBufferSize * sizeof( char ) );
+    m_octantIdxBuffer = std::malloc( pidBufferSize * sizeof( char ) );
 
   }
 
@@ -44,7 +44,7 @@ namespace CSIM::Octree {
     m_pidBuffer = nullptr;
     m_pidTmpBuffer = nullptr;
 
-    m_octantHistogramBuffer = nullptr;
+    m_octantIdxBuffer = nullptr;
 
     m_rootOctant = nullptr;
   }
@@ -82,7 +82,7 @@ namespace CSIM::Octree {
 
     std::free( m_pidBuffer );
     std::free( m_pidTmpBuffer );
-    std::free( m_octantHistogramBuffer );
+    std::free( m_octantIdxBuffer );
 
     if( m_rootOctant != nullptr ) {
       m_rootOctant->~Octant();
