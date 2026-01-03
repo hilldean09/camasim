@@ -10,7 +10,7 @@
 #define CSIM_M_DEBUG_CUDA_ERROR_LOG( cudaExpr, func, message ) if( ( cudaExpr )!= cudaSuccess ) { std::cout << "#CSIM# " << func << " : " << "CUDA error detected\n" << "\t" << message << std::endl; } 
 
 // Logging
-#define CSIM_VERBOSITY 2
+#define CSIM_VERBOSITY 6
 #define CSIM_LOG_HEADER( func ) "[CSIM] " << func << " : "
 
 

@@ -316,14 +316,16 @@ namespace CSIM {
   template <class PrecT>
   void Particle_Cloud<PrecT>::generateOctree( Octree::Octree<PrecT>* octreePtr ) {
     Octree::Octant<PrecT>* rootOctantPtr = octreePtr->generateRoot();
+
+    #if( CSIM_VERBOSITY > 3 ) 
+    std::cout << CSIM_LOG_HEADER( "Particle_Cloud::generateOctree" ) << "Generating octree" << std::endl;
+    #endif
     
     #pragma omp parallel 
     {
       #pragma omp single nowait
       rec_populateOctant< false >( octreePtr, rootOctantPtr );
     }
-
-    std::cout << std::to_string( octreePtr->getPidBufferPointer()[ 10 ] ) << std::endl; // DEBUG
 
     // TODO: Add centre of mass calculation
   }
@@ -338,9 +340,16 @@ namespace CSIM {
                                                   Octree::Octant<PrecT>* octantPtr ) {
     // Local constants
     unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
-    unsigned long long int maxPidIdx = octantPtr->getMinPidIdx();
-    
+    unsigned long long int maxPidIdx = octantPtr->getMaxPidIdx();
+
+    #if( CSIM_VERBOSITY > 4 )
+    std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_populateOctant" ) << "Bounds are ( " << std::to_string( minPidIdx ) << ", " << std::to_string( maxPidIdx ) << ")" << std::endl;
+    #endif
+
     if( octantPtr->subdivide() == true ) {
+      #if( CSIM_VERBOSITY > 4 )
+      std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_populateOctant" ) << "Internal node reached" << std::endl;
+      #endif
 
       unsigned long long int* activePidBuffer;
       unsigned long long int* writeBuffer;
@@ -373,6 +382,10 @@ namespace CSIM {
         * consistency with the octantIdxBuffer
         */
         pidIdxOctantIdx = getOctantIdx( activePidBuffer[ pidIdx ], octantPtr->getCentre() );
+
+        #if( CSIM_VERBOSITY > 6 )
+        std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_populateOctant" ) << "Incrementing octant " << std::to_string( pidIdxOctantIdx ) << std::endl;
+        #endif
 
         octantIdxHistogram[ ( int ) pidIdxOctantIdx ]++;
         octantIdxBuffer[ ( int ) pidIdx ] = pidIdxOctantIdx;
@@ -413,7 +426,12 @@ namespace CSIM {
       // Recursion
       CSIM::Octree::Octant<PrecT>* childOctantPtr;
 
+      #if( CSIM_VERBOSITY > 5 ) 
+      std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_populateOctant" ) << "Histogram is\n" << "\t" << std::to_string( octantIdxHistogram[ 0 ] ) << ", " << std::to_string( octantIdxHistogram[ 1 ] ) << ", " << std::to_string( octantIdxHistogram[ 2 ] ) << ", " << std::to_string( octantIdxHistogram[ 3 ] ) << ", " << std::to_string( octantIdxHistogram[ 4 ] ) << ",\t\n\t" << std::to_string( octantIdxHistogram[ 5 ] ) << ", " << std::to_string( octantIdxHistogram[ 6 ] ) << ", " << std::to_string( octantIdxHistogram[ 7 ] ) << std::endl;
+      #endif
+
       for( char octantIdx = 0; octantIdx < 8; octantIdx ++ ) {
+
         if( octantIdxHistogram[ ( int ) octantIdx ] > 0 ) {
           childOctantPtr = childrenArray[ ( int ) octantIdx ];
 
@@ -431,6 +449,9 @@ namespace CSIM {
 
     }
     else {
+      #if( CSIM_VERBOSITY > 4 )
+      std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_populateOctant" ) << "Leaf reached" << std::endl;
+      #endif
       // Ensuring up to date memory in the pid buffer
       if( UseTempBuffer == true ) {
         std::memcpy( ( void* ) octreePtr->getPidBufferPointer()[ minPidIdx ],

@@ -125,6 +125,10 @@ namespace CSIM::Octree {
   bool Octant<PrecT>::subdivide() {
     bool output = false; 
 
+    #if( CSIM_VERBOSITY > 5 )
+    std::cout << CSIM_LOG_HEADER( "Octant::subdivide" ) << "Bounds size is " << std::to_string( m_maxPidIdx - m_minPidIdx ) << std::endl;
+    #endif
+
     if( ( m_maxPidIdx - m_minPidIdx ) > CSIM_OCTANT_PARTICLE_CUTOFF ) {
 
       for( char octantIdx = 0; octantIdx < 8; octantIdx++ ) {
