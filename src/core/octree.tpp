@@ -211,7 +211,7 @@ namespace CSIM::Octree {
     if( octantIdx >= 1 ) {
       output.z += halfLength;
       octantIdx -= 1;
-
+    }
   }
 
   template <class PrecT>

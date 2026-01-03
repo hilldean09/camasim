@@ -10,6 +10,7 @@
 
 #include "pre_controls.hpp"
 #include "structs.hpp"
+#include "./octree.hpp"
 #include "cuda/csim_cuda.hpp"
 
 namespace CSIM {
@@ -422,6 +423,7 @@ namespace CSIM {
             rec_populateOctant<false>( octreePtr, childOctantPtr );
           }
         }
+
       }
 
     }

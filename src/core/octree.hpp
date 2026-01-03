@@ -6,7 +6,12 @@
 #include "./structs.hpp"
 #include "./particle_cloud.hpp"
 
+
 namespace CSIM::Octree {
+
+  // Forward declaration?
+  template <class PrecT>
+  class CSIM::Octree::Octant;
   
   template <class PrecT>
   class Octree {
@@ -29,11 +34,11 @@ namespace CSIM::Octree {
       
       char* getOctantIdxBuffer() const { return m_octantIdxBuffer; }
 
-      Octant* getRootOctant() const { return m_rootOctant; }
+      Octant<PrecT>* getRootOctant() const { return m_rootOctant; }
 
 
       // Methods //
-      Octant* generateRoot();
+      Octant<PrecT>* generateRoot();
       void stripTree();
 
     
@@ -50,7 +55,7 @@ namespace CSIM::Octree {
 
       char* m_octantIdxBuffer;
 
-      Octant* m_rootOctant;
+      Octant<PrecT>* m_rootOctant;
       
       // Initialisers //
       void initDefaults();
@@ -65,14 +70,14 @@ namespace CSIM::Octree {
   class Octant {
     public:
       // Constructuors //
-      Octant( Octree* octree, Octant* parent,
+      Octant( Octree<PrecT>* octree, Octant<PrecT>* parent,
               unsigned long long int minPidIdx, unsigned long long int maxPidIdx,
               Vector<PrecT> minCorner, Vector<PrecT> maxCorner );
     
       // Accessors //
       Octree<PrecT>* getOctree() const { return m_octree; }
       Octant<PrecT>* getParent() const { return m_parent; }
-      Octant<Prect>** getChildrenArray() const { return m_childrenArray; }
+      Octant<PrecT>** getChildrenArray() const { return m_childrenArray; }
 
       unsigned long long int getMinPidIdx() const { return m_minPidIdx; }
       unsigned long long int getMaxPidIdx() const { return m_maxPidIdx; }
@@ -99,9 +104,9 @@ namespace CSIM::Octree {
 
     private:
       // Attributes //
-      Octree* m_octree;
-      Octant* m_parent;
-      Octant* m_childrenArray[ 8 ];
+      Octree<PrecT>* m_octree;
+      Octant<PrecT>* m_parent;
+      Octant<PrecT>* m_childrenArray[ 8 ];
 
       bool m_isRoot;
       bool m_isParent;

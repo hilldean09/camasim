@@ -47,7 +47,7 @@ set( CSIM_VTK_MODULES
 set( CSIM_EXEC_MODULES 
   ParaView::VTKExtensionsIOCore 
   MPI::MPI_CXX
-  OpenMP::OpemMP_CXX
+  OpenMP::OpenMP_CXX
   ${CSIM_VTK_MODULES}
 )
 

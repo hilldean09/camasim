@@ -3,6 +3,7 @@
 #define CSIM_PARTICLE_CLOUD_HPP
 
 #include "structs.hpp"
+#include "./octree.hpp"
 
 #include <cstdlib>
 #include <random>
