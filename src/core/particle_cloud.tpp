@@ -315,7 +315,11 @@ namespace CSIM {
   void Particle_Cloud<PrecT>::generateOctree( Octree::Octree<PrecT>* octreePtr ) {
     Octree::Octant<PrecT>* rootOctantPtr = octreePtr->generateRoot();
     
-    rec_populateOctant( octreePtr, rootOctantPtr );
+    #pragma omp parallel {
+      #pragma omp single nowait
+      rec_populateOctant( octreePtr, rootOctantPtr );
+    }
+
   }
 
   /*
@@ -397,15 +401,27 @@ namespace CSIM {
                      octantIdxLocalOffsets[ pidIdxOctantIdx ] ] = activePidBuffer[ pidIdx ];
 
         octantIdxLocalOffsets[ pidIdxOctantIdx ]++;
+
       }
 
-      for( char octantIdx = 0; octantIdx < 8; octantIdx ++ ) {
+      // Recursion
+      Octant* childOctantPtr;
 
+      for( char octantIdx = 0; octantIdx < 8; octantIdx ++ ) {
+        if( octantIdxHistogram[ octantIdx ] > 0 ) {
+          childOctantPtr = childrenArray[ octantIdx ];
+
+          #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr )
+          rec_populateOctant( octreePtr, childOctantPtr );
+
+        }
       }
 
     }
 
   }
+
+  // TODO: Add centre of mass calculation
 
 
   // Misc //
