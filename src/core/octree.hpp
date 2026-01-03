@@ -27,7 +27,7 @@ namespace CSIM::Octree {
       unsigned long long int getPidBufferSize() const { return m_pidBufferSize; }
 
       unsigned long long int* getPidBufferPointer() const { return m_pidBuffer; }
-      unsigned long long int getPidTmpBufferPointer() const { return m_pidTmpBuffer; }
+      unsigned long long int* getPidTmpBufferPointer() const { return m_pidTmpBuffer; }
       
       char* getOctantIdxBuffer() const { return m_octantIdxBuffer; }
 
@@ -73,9 +73,10 @@ namespace CSIM::Octree {
       // Accessors //
       Octree<PrecT>* getOctree() const { return m_octree; }
       Octant<PrecT>* getParent() const { return m_parent; }
-      Octant<PrecT>** getChildrenArray() const { return m_childrenArray; }
+      Octant<PrecT>** getChildrenArray() { return m_childrenArray; }
 
       unsigned long long int getMinPidIdx() const { return m_minPidIdx; }
+      unsigned long long int getMaxPidIdx() const { return m_maxPidIdx; }
 
       Vector<PrecT> getMinCorner() const { return m_minCorner; }
       Vector<PrecT> getMaxCorner() const { return m_maxCorner; }
@@ -86,6 +87,7 @@ namespace CSIM::Octree {
       Vector<PrecT> getCentreOfMass() const { return m_centreOfMass; }
       
       bool isRoot() const { return m_isRoot; }
+      bool isParent() const { return m_isParent; }
 
       // Methods //
       bool subdivide();

@@ -317,10 +317,13 @@ namespace CSIM {
   void Particle_Cloud<PrecT>::generateOctree( Octree::Octree<PrecT>* octreePtr ) {
     Octree::Octant<PrecT>* rootOctantPtr = octreePtr->generateRoot();
     
-    #pragma omp parallel {
+    #pragma omp parallel 
+    {
       #pragma omp single nowait
-      rec_populateOctant( octreePtr, rootOctantPtr );
+      rec_populateOctant< false >( octreePtr, rootOctantPtr );
     }
+
+    std::cout << std::to_string( octreePtr->getPidBufferPointer()[ 10 ] ) << std::endl; // DEBUG
 
     // TODO: Add centre of mass calculation
   }
@@ -343,12 +346,12 @@ namespace CSIM {
       unsigned long long int* writeBuffer;
 
       if( UseTempBuffer == false ) {
-        activePidBuffer = octreePtr->getPidBufferPtr();
-        writeBuffer = octreePtr->getPidTmpBufferPtr();
+        activePidBuffer = octreePtr->getPidBufferPointer();
+        writeBuffer = octreePtr->getPidTmpBufferPointer();
       }
       else {
-        activePidBuffer = octreePtr->getPidTmpBufferPtr();
-        writeBuffer = octreePtr->getPidBufferPtr();
+        activePidBuffer = octreePtr->getPidTmpBufferPointer();
+        writeBuffer = octreePtr->getPidBufferPointer();
       }
 
       char* octantIdxBuffer = octreePtr->getOctantIdxBuffer();
@@ -356,7 +359,7 @@ namespace CSIM {
       // "Local" mutables
       unsigned long long int octantIdxHistogram[ 8 ] = { 0, 0, 0, 0,
                                                          0, 0, 0, 0 };
-      Octree::Octant<PrecT>** childrenArray = octreePtr->getChildrenAray();
+      Octree::Octant<PrecT>** childrenArray = octantPtr->getChildrenArray();
 
       // Classification TODO: Contemplate OpenMP taskloop after benchmarking
       char pidIdxOctantIdx = 0;
@@ -371,8 +374,8 @@ namespace CSIM {
         */
         pidIdxOctantIdx = getOctantIdx( activePidBuffer[ pidIdx ], octantPtr->getCentre() );
 
-        octantIdxHistogram[ pidIdxOctantIdx ]++;
-        octantIdxBuffer[ pidIdx ] = pidIdxOctantIdx;
+        octantIdxHistogram[ ( int ) pidIdxOctantIdx ]++;
+        octantIdxBuffer[ ( int ) pidIdx ] = pidIdxOctantIdx;
 
       }
 
@@ -382,11 +385,11 @@ namespace CSIM {
       childrenArray[ 0 ]->setPidIdxBounds( minPidIdx, octantIdxHistogram[ 0 ] );
 
       for( char octantIdx = 1; octantIdx < 8; octantIdx++ ) {
-        octantIdxOffsets[ octantIdx ] = octantIdxOffsets[ octantIdx - 1 ] + 
-                                        octantIdxHistogram[ octantIdx - 1 ];
+        octantIdxOffsets[ ( int ) octantIdx ] = octantIdxOffsets[ ( int ) octantIdx - 1 ] + 
+                                        octantIdxHistogram[ ( int ) octantIdx - 1 ];
         
-        childrenArray[ octantIdx ]->setPidIdxBounds( minPidIdx + octantIdxOffsets [ octantIdx ],
-                                                     minPidIdx + octantIdxOffsets [ octantIdx ] + octantIdxHistogram[ octantIdx ] );
+        childrenArray[ ( int ) octantIdx ]->setPidIdxBounds( minPidIdx + octantIdxOffsets [ ( int ) octantIdx ],
+                                                     minPidIdx + octantIdxOffsets [ ( int ) octantIdx ] + octantIdxHistogram[ ( int ) octantIdx ] );
 
       }
 
@@ -394,25 +397,25 @@ namespace CSIM {
       unsigned long long int octantIdxLocalOffsets[ 8 ] = { 0, 0, 0, 0,
                                                             0, 0, 0, 0 };
 
-      for( unsigned long long int pidIdx = minPidIDx;
+      for( unsigned long long int pidIdx = minPidIdx;
            pidIdx < maxPidIdx;
            pidIdx++ ) {
         // Note, reusing pidIdxOctantIdx declaration from previous
         pidIdxOctantIdx = octantIdxBuffer[ pidIdx ];
 
-        writeBuffer[ minPidIdx + octantIdxOffsets[ pidIdxOctantIdx ] +
-                     octantIdxLocalOffsets[ pidIdxOctantIdx ] ] = activePidBuffer[ pidIdx ];
+        writeBuffer[ minPidIdx + octantIdxOffsets[ ( int ) pidIdxOctantIdx ] +
+                     octantIdxLocalOffsets[ ( int ) pidIdxOctantIdx ] ] = activePidBuffer[ pidIdx ];
 
-        octantIdxLocalOffsets[ pidIdxOctantIdx ]++;
+        octantIdxLocalOffsets[ ( int ) pidIdxOctantIdx ]++;
 
       }
 
       // Recursion
-      Octant* childOctantPtr;
+      CSIM::Octree::Octant<PrecT>* childOctantPtr;
 
       for( char octantIdx = 0; octantIdx < 8; octantIdx ++ ) {
-        if( octantIdxHistogram[ octantIdx ] > 0 ) {
-          childOctantPtr = childrenArray[ octantIdx ];
+        if( octantIdxHistogram[ ( int ) octantIdx ] > 0 ) {
+          childOctantPtr = childrenArray[ ( int ) octantIdx ];
 
           if( UseTempBuffer == false ) {
             #pragma omp task default( none ) firstprivate( octreePtr, childOctantPtr )
@@ -430,8 +433,8 @@ namespace CSIM {
     else {
       // Ensuring up to date memory in the pid buffer
       if( UseTempBuffer == true ) {
-        std::memcpy( octreePtr->getPidBufferPtr()[ minPidIdx ],
-                     octreePtr->getPidTmpBufferPtr()[ minPidIdx ],
+        std::memcpy( ( void* ) octreePtr->getPidBufferPointer()[ minPidIdx ],
+                     ( void* ) octreePtr->getPidTmpBufferPointer()[ minPidIdx ],
                      ( maxPidIdx - minPidIdx ) * sizeof( unsigned long long int ) );
       }
 
@@ -446,9 +449,9 @@ namespace CSIM {
     /* The bitwise OR combination operator is used to implement
      * a base-8 octant ID system
      */
-    if( m_positions.x[ pid ] > cemtre.x ) output |= 4;
-    if( m_positions.y[ pid ] > cemtre.y ) output |= 2;
-    if( m_positions.z[ pid ] > cemtre.z ) output |= 1;
+    if( m_positions.x[ pid ] > centre.x ) output |= 4;
+    if( m_positions.y[ pid ] > centre.y ) output |= 2;
+    if( m_positions.z[ pid ] > centre.z ) output |= 1;
 
     return output;
   }

@@ -21,16 +21,16 @@ namespace CSIM::Octree {
   void Octree<PrecT>::initialise( unsigned long long int pidBufferSize ) {
     m_pidBufferSize = pidBufferSize;
 
-    m_pidBuffer = std::malloc( 2 * pidBufferSize * sizeof( unsigned long long int ) );
+    m_pidBuffer = ( unsigned long long int* ) std::malloc( 2 * pidBufferSize * sizeof( unsigned long long int ) );
     m_pidTmpBuffer = ( m_pidBuffer + pidBufferSize );
 
     // Populating pidBuffer
     #pragma omp parallel for
-    for( int idx = 0; idx < pidBufferSize; idx++ ) {
-      pidBufferSize[ idx ] = idx;
+    for( unsigned long long int idx = 0; idx < pidBufferSize; idx++ ) {
+      m_pidBuffer[ idx ] = idx;
     }
 
-    m_octantIdxBuffer = std::malloc( pidBufferSize * sizeof( char ) );
+    m_octantIdxBuffer = ( char* ) std::malloc( pidBufferSize * sizeof( char ) );
 
   }
 
@@ -49,9 +49,9 @@ namespace CSIM::Octree {
   
   // Methods //
   template <class PrecT>
-  Octant* Octree<PrecT>::generateRoot() {
+  Octant<PrecT>* Octree<PrecT>::generateRoot() {
     
-    m_rootOctant = new Octant( this, nullptr,
+    m_rootOctant = new Octant<PrecT>( this, nullptr,
                                0, m_pidBufferSize,
                                { -CSIM_OCTREE_BOUNDS_HALF_LENGTH,
                                  -CSIM_OCTREE_BOUNDS_HALF_LENGTH,
@@ -91,9 +91,9 @@ namespace CSIM::Octree {
   
   ///// OCTANT /////
   template <class PrecT>
-  Octant<PrecT>::Octant( Octree* octree, Octant* parent,
+  Octant<PrecT>::Octant( Octree<PrecT>* octree, Octant<PrecT>* parent,
                          unsigned long long int minPidIdx, unsigned long long int maxPidIdx,
-                         Vector<PrecT> minCorner, Vector<PrecT>, maxCorner ) {
+                         Vector<PrecT> minCorner, Vector<PrecT> maxCorner ) {
     m_octree = octree;
     m_parent = parent;
     
@@ -104,7 +104,7 @@ namespace CSIM::Octree {
     m_isParent = false;
 
     for( char idx = 0; idx < 8; idx++ ) {
-      m_childrenArray[ idx ] = nullptr;
+      m_childrenArray[ ( int ) idx ] = nullptr;
     }
 
     m_minPidIdx = minPidIdx;
@@ -128,11 +128,11 @@ namespace CSIM::Octree {
     if( ( m_maxPidIdx - m_minPidIdx ) > CSIM_OCTANT_PARTICLE_CUTOFF ) {
 
       for( char octantIdx = 0; octantIdx < 8; octantIdx++ ) {
-        m_childrenArray[ octantIdx ] = new Octant( m_octree, this, 
+        m_childrenArray[ ( int ) octantIdx ] = new Octant( m_octree, this, 
                                                getChildMinPidIdx( octantIdx ),
                                                getChildMaxPidIdx( octantIdx ),
                                                getChildMinCorner( octantIdx ),
-                                               getChildMaxCorner( octantIdx ) )
+                                               getChildMaxCorner( octantIdx ) );
       }
 
       m_isParent = true;
@@ -165,7 +165,7 @@ namespace CSIM::Octree {
     #endif
 
     output = m_minPidIdx + ( octantIdx * 
-             ( ( unsigned long long int output ) ( output / 8 ) ) );
+             ( ( unsigned long long int ) ( output / 8 ) ) );
 
     return output;
   }
@@ -181,7 +181,7 @@ namespace CSIM::Octree {
 
     if( octantIdx != 8 ) {
       output = m_minPidIdx + ( ( octantIdx + 1 ) * 
-               ( ( unsigned long long int output ) ( output / 8 ) ) );
+               ( ( unsigned long long int ) ( output / 8 ) ) );
     }
     else {
       // Guaranteeing proper coverage
@@ -209,6 +209,8 @@ namespace CSIM::Octree {
       output.z += halfLength;
       octantIdx -= 1;
     }
+
+    return output;
   }
 
   template <class PrecT>
@@ -225,19 +227,20 @@ namespace CSIM::Octree {
     }
 
     if( octantIdx >= 2 ) {
-      octantIdx -= 2:
+      octantIdx -= 2;
     }
     else {
       output.y -= halfLength;
     }
 
     if( octantIdx >= 1 ) {
-      octantIdx -= 1:
+      octantIdx -= 1;
     }
     else {
       output.z -= halfLength;
     }
 
+    return output;
   }
 
   template <class PrecT>
