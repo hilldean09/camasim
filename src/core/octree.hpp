@@ -6,12 +6,11 @@
 #include "./structs.hpp"
 #include "./particle_cloud.hpp"
 
-
 namespace CSIM::Octree {
 
   // Forward declaration?
   template <class PrecT>
-  class CSIM::Octree::Octant;
+  class Octant;
   
   template <class PrecT>
   class Octree {
@@ -21,12 +20,10 @@ namespace CSIM::Octree {
 
       
       // Initialisers //
-      void initialise( Particle_Cloud<PrecT> particleCloudPointer,
-                       unsigned long long int pidBufferSize );
+      void initialise( unsigned long long int pidBufferSize );
 
 
       // Accessors //
-      Particle_Cloud<PrecT>* getParticleCloudPointer() const { return m_particleCloudPtr; }
       unsigned long long int getPidBufferSize() const { return m_pidBufferSize; }
 
       unsigned long long int* getPidBufferPointer() const { return m_pidBuffer; }
@@ -47,7 +44,6 @@ namespace CSIM::Octree {
 
     private:
       // Attributes //
-      Particle_Cloud<PrecT>* m_particleCloudPtr;
       unsigned long long int m_pidBufferSize;
 
       unsigned long long int* m_pidBuffer;
@@ -80,7 +76,6 @@ namespace CSIM::Octree {
       Octant<PrecT>** getChildrenArray() const { return m_childrenArray; }
 
       unsigned long long int getMinPidIdx() const { return m_minPidIdx; }
-      unsigned long long int getMaxPidIdx() const { return m_maxPidIdx; }
 
       Vector<PrecT> getMinCorner() const { return m_minCorner; }
       Vector<PrecT> getMaxCorner() const { return m_maxCorner; }

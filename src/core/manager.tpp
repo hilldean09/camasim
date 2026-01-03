@@ -77,8 +77,7 @@ namespace CSIM {
 
   template <class PrecT>
   void Manager<PrecT>::initOctree() {
-    m_octree.initialise( &m_particleCloud,
-                         m_p_number );
+    m_octree.initialise( m_p_number );
   }
 
   template <class PrecT>

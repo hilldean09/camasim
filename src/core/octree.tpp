@@ -18,9 +18,7 @@ namespace CSIM::Octree {
 
   // Initialisers //
   template <class PrecT>
-  void Octree<PrecT>::initialise( Particle_Cloud<PrecT>* particleCloudPointer,
-                                  unsigned long long int pidBufferSize ) {
-    m_particleCloudPtr = particleCloudPointer;
+  void Octree<PrecT>::initialise( unsigned long long int pidBufferSize ) {
     m_pidBufferSize = pidBufferSize;
 
     m_pidBuffer = std::malloc( 2 * pidBufferSize * sizeof( unsigned long long int ) );
@@ -38,7 +36,6 @@ namespace CSIM::Octree {
 
   template <class PrecT>
   void Octree<PrecT>::initDefaults() {
-    m_particleCloudPtr = nullptr;
     m_pidBufferSize = 0;
 
     m_pidBuffer = nullptr;
