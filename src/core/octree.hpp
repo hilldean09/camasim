@@ -75,7 +75,6 @@ namespace CSIM::Octree {
       Octant<Prect>** getChildrenArray() const { return m_childrenArray; }
 
       unsigned long long int getMinPidIdx() const { return m_minPidIdx; }
-  
       unsigned long long int getMaxPidIdx() const { return m_maxPidIdx; }
 
       Vector<PrecT> getMinCorner() const { return m_minCorner; }
@@ -86,9 +85,12 @@ namespace CSIM::Octree {
       PrecT getNetMass() const { return m_netMass; }
       Vector<PrecT> getCentreOfMass() const { return m_centreOfMass; }
       
+      bool isRoot() const { return m_isRoot; }
 
       // Methods //
       bool subdivide();
+      void setPidIdxBounds( unsigned long long int minPidIdx,
+                            unsigned long long int maxPidIdx );
 
 
       // Misc //

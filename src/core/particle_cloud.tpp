@@ -318,6 +318,10 @@ namespace CSIM {
     rec_populateOctant( octreePtr, rootOctantPtr );
   }
 
+  /*
+   * I am aware this is a huge function, however, given the massive
+   * amount of parallelism and functions, some is to reduce overhead
+   */
   template <class PrecT>
   template <bool UseTempBuffer>
   void Particle_Cloud<PrecT>::rec_populateOctant( Octree::Octree<PrecT>* octreePtr, 
@@ -328,7 +332,7 @@ namespace CSIM {
       Vector<PrecT> octantCentre = octantPtr->getCentre();
       unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
       unsigned long long int maxPidIdx = octantPtr->getMinPidIdx();
-      
+
       unsigned long long int* activePidBuffer;
       unsigned long long int* writeBuffer;
       if( UseTempBuffer == false ) {
@@ -347,17 +351,55 @@ namespace CSIM {
                                                          0, 0, 0, 0 };
       Octree::Octant<PrecT>** childrenArray = octreePtr->getChildrenAray();
 
+      // Classification TODO: Contemplate OpenMP taskloop after benchmarking
+      char pidIdxOctantIdx = 0;
+
+      #pragma omp parallel for if( octantPtr->isRoot() == true )
       for( unsigned long long int pidIdx = minPidIdx;
-           pidIdx < maxPidIdx;
-           pidIdx++ ) {
+          pidIdx < maxPidIdx;
+          pidIdx++ ) {
         /* A funny naming convension here but it means to to say
-         * the octantIdx of this pidIdx is [x], this is to keep 
-         * consistency with the octantIdxBuffer
-         */
-        char pidIdxOctantIdx = getOctantIdx( activePidBuffer[ pidIdx ] );
+        * the octantIdx of this pidIdx is [x], this is to keep 
+        * consistency with the octantIdxBuffer
+        */
+        pidIdxOctantIdx = getOctantIdx( activePidBuffer[ pidIdx ] );
 
         octantIdxHistogram[ pidIdxOctantIdx ]++;
         octantIdxBuffer[ pidIdx ] = pidIdxOctantIdx;
+
+      }
+
+      // Calculating write offsets, applying child bounds
+      unsigned long long int octantIdxOffsets[ 8 ];
+      octantIdxOffsets[ 0 ] = 0;
+      childrenArray[ 0 ]->setPidIdxBounds( minPidIdx, octantIdxHistogram[ 0 ] );
+
+      for( char octantIdx = 1; octantIdx < 8; octantIdx++ ) {
+        octantIdxOffsets[ octantIdx ] = octantIdxOffsets[ octantIdx - 1 ] + 
+                                        octantIdxHistogram[ octantIdx - 1 ];
+        
+        childrenArray[ octantIdx ]->setPidIdxBounds( minPidIdx + octantIdxOffsets [ octantIdx ],
+                                                     minPidIdx + octantIdxOffsets [ octantIdx ] + octantIdxHistogram[ octantIdx ] );
+
+      }
+
+      // Writing to writeBuffer
+      unsigned long long int octantIdxLocalOffsets[ 8 ] = { 0, 0, 0, 0,
+                                                            0, 0, 0, 0 };
+
+      for( unsigned long long int pidIdx = minPidIDx;
+           pidIdx < maxPidIdx;
+           pidIdx++ ) {
+        // Note, reusing pidIdxOctantIdx declaration from previous
+        pidIdxOctantIdx = octantIdxBuffer[ pidIdx ];
+
+        writeBuffer[ minPidIdx + octantIdxOffsets[ pidIdxOctantIdx ] +
+                     octantIdxLocalOffsets[ pidIdxOctantIdx ] ] = activePidBuffer[ pidIdx ];
+
+        octantIdxLocalOffsets[ pidIdxOctantIdx ]++;
+      }
+
+      for( char octantIdx = 0; octantIdx < 8; octantIdx ++ ) {
 
       }
 

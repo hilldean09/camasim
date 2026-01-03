@@ -147,6 +147,13 @@ namespace CSIM::Octree {
   }
 
   template <class PrecT>
+  void Octant<PrecT>::setPidIdxBounds( unsigned long long int minPidIdx, 
+                                       unsigned long long int maxPidIdx ) {
+    m_minPidIdx = minPidIdx;
+    m_maxPidIdx = maxPidIdx;
+  }
+
+  template <class PrecT>
   unsigned long long int Octant<PrecT>::getChildMinPidIdx( char octantIdx ) {
     /*
      * Condensed down into a single variabel declaration for better
