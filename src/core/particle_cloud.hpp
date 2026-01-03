@@ -106,7 +106,7 @@ namespace CSIM {
       void rec_populateOctant( Octree::Octree<PrecT>* octreePtr,
                                Octree::Octant<PrecT>* octantPtr );
       
-      char getOctantIdx( unsigned long long int pid ) const;
+      char getOctantIdx( unsigned long long int pid, Vector<PrecT> centre ) const;
 
   };
 

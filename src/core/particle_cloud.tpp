@@ -320,6 +320,7 @@ namespace CSIM {
       rec_populateOctant( octreePtr, rootOctantPtr );
     }
 
+    // TODO: Add centre of mass calculation
   }
 
   /*
@@ -333,12 +334,12 @@ namespace CSIM {
     
     if( octantPtr->subdivide() == true ) {
       // Local constants
-      Vector<PrecT> octantCentre = octantPtr->getCentre();
       unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
       unsigned long long int maxPidIdx = octantPtr->getMinPidIdx();
 
       unsigned long long int* activePidBuffer;
       unsigned long long int* writeBuffer;
+
       if( UseTempBuffer == false ) {
         activePidBuffer = octreePtr->getPidBufferPtr();
         writeBuffer = octreePtr->getPidTmpBufferPtr();
@@ -366,7 +367,7 @@ namespace CSIM {
         * the octantIdx of this pidIdx is [x], this is to keep 
         * consistency with the octantIdxBuffer
         */
-        pidIdxOctantIdx = getOctantIdx( activePidBuffer[ pidIdx ] );
+        pidIdxOctantIdx = getOctantIdx( activePidBuffer[ pidIdx ], octantPtr->getCentre() );
 
         octantIdxHistogram[ pidIdxOctantIdx ]++;
         octantIdxBuffer[ pidIdx ] = pidIdxOctantIdx;
@@ -421,7 +422,19 @@ namespace CSIM {
 
   }
 
-  // TODO: Add centre of mass calculation
+  template <class PrecT>
+  char Particle_Cloud<PrecT>::getOctantIdx( unsigned long long int pid, Vector<PrecT> centre ) const {
+    char output = 0;
+
+    /* The bitwise OR combination operator is used to implement
+     * a base-8 octant ID system
+     */
+    if( m_positions.x[ pid ] > cemtre.x ) output |= 4;
+    if( m_positions.y[ pid ] > cemtre.y ) output |= 2;
+    if( m_positions.z[ pid ] > cemtre.z ) output |= 1;
+
+    return output;
+  }
 
 
   // Misc //
