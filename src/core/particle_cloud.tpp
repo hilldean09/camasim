@@ -545,6 +545,38 @@ namespace CSIM {
     return output;
   }
 
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::handleCollision( unsigned long long int mainPidIdx,
+                                               unsigned long long int otherPidIdx ) {
+    PrecT mainMass = m_masses[ mainPidIDx ];
+    PrecT otherMass = m_masses[ otherPidIdx ];
+
+    PrecT mainPartialRestitution = m_partial_restitutions[ mainPidIdx ];
+    PrecT otherPartialRestitution = m_partial_restitutions[ otherPidIdx ];
+
+    m_velocities.x[ mainPidIDx ] = singleAxisCollisionEquation( m_velocities.x[ mainPidIDx ], m_velocities.x[ otherPidIdx ],
+                                                                mainMass, otherMass,
+                                                                mainPartialRestitution, otherPartialRestitution );
+    m_velocities.y[ mainPidIDx ] = singleAxisCollisionEquation( m_velocities.y[ mainPidIDx ], m_velocities.y[ otherPidIdx ],
+                                                                mainMass, otherMass,
+                                                                mainPartialRestitution, otherPartialRestitution );
+    m_velocities.z[ mainPidIDx ] = singleAxisCollisionEquation( m_velocities.z[ mainPidIDx ], m_velocities.z[ otherPidIdx ],
+                                                                mainMass, otherMass,
+                                                                mainPartialRestitution, otherPartialRestitution );
+
+  }
+
+  template <class PrecT>
+  PrecT Particle_Cloud<PrecT>::singleAxisCollisionFunction( PrecT mainVelocity, PrecT otherVelocity,
+                                          PrecT mainMass, PrecT otherMass,
+                                          PrecT mainPartialRestitution, PrecT otherPartialRestitution ) {
+    PrecT output;
+
+    output = ( ( ( ( mainPartialRestitution + otherPartialRestitution ) / 2 ) * otherMass * ( otherVelocity - mainVelocity ) ) + ( mainMass * mainVelocity ) + ( otherMass * otherVelocity ) ) 
+             / ( mainMass + otherMass );
+
+    return output;
+  }
 
   // Misc //
   template <class PrecT>

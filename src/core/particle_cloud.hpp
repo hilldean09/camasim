@@ -116,6 +116,9 @@ namespace CSIM {
                               unsigned long long int otherPidIdx );
       void handleCollision( unsigned long long int mainPidIdx,
                             unsigned long long int otherPidIdx );
+      inline PrecT singleAxisCollisionFunction( PrecT mainVelocity, PrecT otherVelocity,
+                                                PrecT mainMass, PrecT otherMass,
+                                                PrecT mainPartialRestitution, PrecT otherPartialRestitution );
 
   };
 
