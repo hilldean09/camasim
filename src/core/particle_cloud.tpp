@@ -493,10 +493,46 @@ namespace CSIM {
     bool continueTraversal;
     Octree:Octant<PrecT>* rootOctantPtr = octreePtr->getRootOctant();
 
-    while( continueTraversal == true ) {
-      
+    rec_applyCollisions( octreePtr, rootOctantPtr );
 
+  }
+
+  template <class PrecT>
+  void Particle_Cloud::rec_applyCollisions( Octree::Octree<PrecT>* octreePtr,
+                                            Octree::Octant<PrecT>* octantPtr ) {
+    unsigned long long int* pidBuffer = octreePtr->getPidBufferPointer();
+
+    unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
+    unsigned long long int maxPidIdx = octantPtr->getMaxPidIdx();
+
+    if( octantPtr->isParent() == true ) {
+      // TODO: Octree traversal
     }
+    else {
+      // This nesting hurts my soul
+      for( unsigned long long int mainPidIdx = minPidIdx;
+           mainPidIdx < maxPidIdx;
+           mainPidIdx++ ) {
+
+        for( unsigned long long int otherPidIdx = minPidIdx;
+             otherPidIdx < maxPidIdx;
+             otherPidIdx++ ) {
+          if( mainPidIdx != otherPidIdx ) {
+
+            if( checkForCollision( mainPidIdx, otherPidIdx ) == true ) {
+              handleCollision( mainPidIdx, otherPidIdx );
+            }
+          }
+        }
+      }
+    }
+
+  }
+  
+  template <class PrecT>
+  bool Particle_Cloud<PrecT>::checkForCollision( unsigned long long int mainPidIdx,
+                                                 unsigned long long int otherPidIdx ) {
+
   }
 
 
