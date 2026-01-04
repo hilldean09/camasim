@@ -532,7 +532,17 @@ namespace CSIM {
   template <class PrecT>
   bool Particle_Cloud<PrecT>::checkForCollision( unsigned long long int mainPidIdx,
                                                  unsigned long long int otherPidIdx ) {
+    bool output = false;
 
+    PrecT distance = std::hypot( ( m_positions.x[ mainPidIdx ] - m_positions.x[ otherPidIdx ] ),
+                                 ( m_positions.y[ mainPidIdx ] - m_positions.y[ otherPidIdx ] ),
+                                 ( m_positions.z[ mainPidIdx ] - m_positions.z[ otherPidIdx ] ) );
+
+    if( distance <= ( m_radii[ mainPidIdx ] + m_radii[ otherRadius ] ) ) {
+      output = true;
+    }
+
+    return output;
   }
 
 
