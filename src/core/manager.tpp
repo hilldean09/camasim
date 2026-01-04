@@ -106,8 +106,9 @@ namespace CSIM {
     m_particleCloud.setCudaConstants( m_step );
 
     m_particleCloud.generateOctree( &m_octree );
+    m_particleCloud.applyCollisions( &m_octree );
 
-    m_particleCloud.template applyAcceleration< false, false >();
+    m_particleCloud.template applyAcceleration< true, true>();
     m_particleCloud.template applyVelocity< false, true >();
 
     m_octree.stripTree();

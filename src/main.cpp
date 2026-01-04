@@ -14,12 +14,12 @@ int main() {
 
   std::cout << "Initialising particle cloud" << std::endl;
 
-  manager.initialiseParticleNumber( 500 ); // Must be >= 204 for some reason
+  manager.initialiseParticleNumber( 1'000 ); // Must be >= 204 for some reason
   manager.initialiseWithSeed( 4 );
 
-  manager.initialiseParticleDistribution( 'p', 30'000'000, 5'000'000 );
-  manager.initialiseParticleDistribution( 'r', 1000, 10000 );
-  manager.initialiseParticleDistribution( 'v', 10000000, 10000 );
+  manager.initialiseParticleDistribution( 'p', 5'000'000, 5'000'000 );
+  manager.initialiseParticleDistribution( 'r', 1'000, 10'000 );
+  manager.initialiseParticleDistribution( 'v', 10'000'000, 10'000 );
 
   manager.initialiseParticleCloud();
 
@@ -35,7 +35,7 @@ int main() {
 
   recorder.initialiseManager( &manager );
   recorder.initialiseOutputFile( "testOuts" );
-  recorder.initialiseLengthWithTime( 1 );
+  recorder.initialiseLengthWithTime( 10 );
   recorder.initialiseSamplingWithFrames( 1'000 );
 
   std::cout << "Recorder initialised" << std::endl;

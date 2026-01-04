@@ -35,6 +35,7 @@ namespace CSIM {
       template <bool preMemcpy, bool postMemcpy> void applyAcceleration();
 
       void generateOctree( Octree::Octree<PrecT>* octreePtr );
+      void applyCollisions( Octree::Octree<PrecT>* octreePtr );
 
 
       // Misc //
@@ -108,6 +109,17 @@ namespace CSIM {
                                Octree::Octant<PrecT>* octantPtr, int recusiveDepth = 0 );
       
       char getOctantIdx( unsigned long long int pid, Vector<PrecT> centre ) const;
+
+      void rec_applyCollisions( Octree::Octree<PrecT>* octreePtr,
+                                Octree::Octant<PrecT>* octantPtr,
+                                unsigned long long int recusiveDepth = 0 );
+      bool checkForCollision( unsigned long long int mainPidIdx,
+                              unsigned long long int otherPidIdx );
+      void handleCollision( unsigned long long int mainPidIdx,
+                            unsigned long long int otherPidIdx );
+      inline PrecT singleAxisCollisionFunction( PrecT mainVelocity, PrecT otherVelocity,
+                                                PrecT mainMass, PrecT otherMass,
+                                                PrecT mainPartialRestitution, PrecT otherPartialRestitution );
 
   };
 
