@@ -628,6 +628,8 @@ namespace CSIM {
                                                                 mainMass, otherMass,
                                                                 mainPartialRestitution, otherPartialRestitution );
 
+    // TODO: Add repositioning
+
   }
 
   template <class PrecT>
