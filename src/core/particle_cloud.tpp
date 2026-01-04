@@ -488,6 +488,17 @@ namespace CSIM {
     return output;
   }
 
+  template <class PrecT>
+  void Particle_Cloud<PrecT>::applyCollisions( Octree::Octree<PrecT>* octreePtr ) {
+    bool continueTraversal;
+    Octree:Octant<PrecT>* rootOctantPtr = octreePtr->getRootOctant();
+
+    while( continueTraversal == true ) {
+      
+
+    }
+  }
+
 
   // Misc //
   template <class PrecT>

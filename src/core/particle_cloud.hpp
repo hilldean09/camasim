@@ -35,6 +35,7 @@ namespace CSIM {
       template <bool preMemcpy, bool postMemcpy> void applyAcceleration();
 
       void generateOctree( Octree::Octree<PrecT>* octreePtr );
+      void applyCollisions( Octree::Octree<PrecT>* octreePtr );
 
 
       // Misc //
