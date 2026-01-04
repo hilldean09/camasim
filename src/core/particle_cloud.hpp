@@ -111,7 +111,8 @@ namespace CSIM {
       char getOctantIdx( unsigned long long int pid, Vector<PrecT> centre ) const;
 
       void rec_applyCollisions( Octree::Octree<PrecT>* octreePtr,
-                                Octree::Octant<PrecT>* octantPtr );
+                                Octree::Octant<PrecT>* octantPtr,
+                                unsigned long long int recusiveDepth = 0 );
       bool checkForCollision( unsigned long long int mainPidIdx,
                               unsigned long long int otherPidIdx );
       void handleCollision( unsigned long long int mainPidIdx,

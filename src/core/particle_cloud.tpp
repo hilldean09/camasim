@@ -490,25 +490,66 @@ namespace CSIM {
 
   template <class PrecT>
   void Particle_Cloud<PrecT>::applyCollisions( Octree::Octree<PrecT>* octreePtr ) {
-    bool continueTraversal;
-    Octree:Octant<PrecT>* rootOctantPtr = octreePtr->getRootOctant();
+    Octree::Octant<PrecT>* rootOctantPtr = octreePtr->getRootOctant();
 
-    rec_applyCollisions( octreePtr, rootOctantPtr );
+    #pragma omp parallel 
+    {
+      #pragma omp single nowait
+      rec_applyCollisions( octreePtr, rootOctantPtr );
+    }
 
   }
 
   template <class PrecT>
-  void Particle_Cloud::rec_applyCollisions( Octree::Octree<PrecT>* octreePtr,
-                                            Octree::Octant<PrecT>* octantPtr ) {
+  void Particle_Cloud<PrecT>::rec_applyCollisions( Octree::Octree<PrecT>* octreePtr,
+                                            Octree::Octant<PrecT>* octantPtr,
+                                            unsigned long long int recursiveDepth ) {
     unsigned long long int* pidBuffer = octreePtr->getPidBufferPointer();
 
     unsigned long long int minPidIdx = octantPtr->getMinPidIdx();
     unsigned long long int maxPidIdx = octantPtr->getMaxPidIdx();
 
+  /*
+    if( recursiveDepth > CSIM_OCTREE_MAX_RECURSIVE_DEPTH ) {
+      #if( CSIM_DEBUG == 1 )
+      CSIM_M_DEBUG_LOG( "Particle_Cloud::rec_applyCollisions : Max recursive depth exceeded" );
+      #endif
+
+      return;
+    }
+  */
+
     if( octantPtr->isParent() == true ) {
-      // TODO: Octree traversal
+      #if( CSIM_VERBOSITY > 6 )
+      std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_applyCollisions" ) << "Internal node reached" << std::endl;
+      #endif
+      Octree::Octant<PrecT>** childrenArray = octantPtr->getChildrenArray();
+      Octree::Octant<PrecT>* childOctant;
+
+      for( int octantIdx = 0; octantIdx < 8; octantIdx++ ) {
+        childOctant = childrenArray[ octantIdx ];
+        if( childOctant->getMinPidIdx() != childOctant->getMaxPidIdx() ) {
+
+          #pragma omp task default( none ) firstprivate( octreePtr, childOctant, recursiveDepth )
+          rec_applyCollisions( octreePtr, childOctant, recursiveDepth + 1 );
+
+        }
+        #if( CSIM_VERBOSITY > 6 )
+        else {
+          std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_applyCollisions" ) << "Child node of 0 size" << std::endl;
+        }
+        #endif
+      }
+
     }
     else {
+      unsigned long long int mainPid;
+      unsigned long long int otherPid;
+
+      #if( CSIM_VERBOSITY > 6 )
+      std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_applyCollisions" ) << "Leaf reached" << std::endl;
+      #endif
+
       // This nesting hurts my soul
       for( unsigned long long int mainPidIdx = minPidIdx;
            mainPidIdx < maxPidIdx;
@@ -518,17 +559,36 @@ namespace CSIM {
              otherPidIdx < maxPidIdx;
              otherPidIdx++ ) {
           if( mainPidIdx != otherPidIdx ) {
+            mainPid = pidBuffer[ mainPidIdx ];
+            otherPid = pidBuffer[ otherPidIdx ];
 
-            if( checkForCollision( mainPidIdx, otherPidIdx ) == true ) {
-              handleCollision( mainPidIdx, otherPidIdx );
+            if( checkForCollision( mainPid, otherPid ) == true ) {
+              #if( CSIM_VERBOSITY > 5 )
+              std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_applyCollisions" ) << "Collision detected (" << std::to_string( mainPid ) << ", " << std::to_string( otherPid ) << ")" << std::endl;
+              #endif
+
+              handleCollision( mainPid, otherPid );
             }
+            #if( CSIM_VERBOSITY > 6 )
+            else {
+              std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_applyCollisions" ) << "Collision aborted (not detected) (" << std::to_string( mainPid ) << ", " << std::to_string( otherPid ) << ")" << std::endl;
+            }
+            #endif
+
           }
+          #if( CSIM_VERBOSITY > 6 )
+          else {
+            std::cout << CSIM_LOG_HEADER( "Particle_Cloud::rec_applyCollisions" ) << "Collision aborted (matching indexes of (" << std::to_string( mainPidIdx ) << ", " << std::to_string( otherPidIdx ) << ") )" << std::endl;
+          }
+          #endif
+
         }
       }
     }
 
   }
   
+  // Note the use of ...PidIdx in the following two functions is incorrect
   template <class PrecT>
   bool Particle_Cloud<PrecT>::checkForCollision( unsigned long long int mainPidIdx,
                                                  unsigned long long int otherPidIdx ) {
@@ -538,9 +598,13 @@ namespace CSIM {
                                  ( m_positions.y[ mainPidIdx ] - m_positions.y[ otherPidIdx ] ),
                                  ( m_positions.z[ mainPidIdx ] - m_positions.z[ otherPidIdx ] ) );
 
-    if( distance <= ( m_radii[ mainPidIdx ] + m_radii[ otherRadius ] ) ) {
+    if( distance <= ( m_radii[ mainPidIdx ] + m_radii[ otherPidIdx ] ) ) {
       output = true;
     }
+    
+    #if( CSIM_VERBOSITY > 6 )
+    std::cout << CSIM_LOG_HEADER( "Particle_Cloud::checkForCollision" ) << "\n\tOutput : " << std::to_string( output ) << "\n\tDistance : " << std::to_string( distance ) << "\n\tRadii Sum : " << std::to_string( ( m_radii[ mainPidIdx ] + m_radii[ otherPidIdx ] ) ) << std::endl;
+    #endif
 
     return output;
   }
@@ -548,19 +612,19 @@ namespace CSIM {
   template <class PrecT>
   void Particle_Cloud<PrecT>::handleCollision( unsigned long long int mainPidIdx,
                                                unsigned long long int otherPidIdx ) {
-    PrecT mainMass = m_masses[ mainPidIDx ];
+    PrecT mainMass = m_masses[ mainPidIdx ];
     PrecT otherMass = m_masses[ otherPidIdx ];
 
     PrecT mainPartialRestitution = m_partial_restitutions[ mainPidIdx ];
     PrecT otherPartialRestitution = m_partial_restitutions[ otherPidIdx ];
 
-    m_velocities.x[ mainPidIDx ] = singleAxisCollisionEquation( m_velocities.x[ mainPidIDx ], m_velocities.x[ otherPidIdx ],
+    m_velocities.x[ mainPidIdx ] = singleAxisCollisionFunction( m_velocities.x[ mainPidIdx ], m_velocities.x[ otherPidIdx ],
                                                                 mainMass, otherMass,
                                                                 mainPartialRestitution, otherPartialRestitution );
-    m_velocities.y[ mainPidIDx ] = singleAxisCollisionEquation( m_velocities.y[ mainPidIDx ], m_velocities.y[ otherPidIdx ],
+    m_velocities.y[ mainPidIdx ] = singleAxisCollisionFunction( m_velocities.y[ mainPidIdx ], m_velocities.y[ otherPidIdx ],
                                                                 mainMass, otherMass,
                                                                 mainPartialRestitution, otherPartialRestitution );
-    m_velocities.z[ mainPidIDx ] = singleAxisCollisionEquation( m_velocities.z[ mainPidIDx ], m_velocities.z[ otherPidIdx ],
+    m_velocities.z[ mainPidIdx ] = singleAxisCollisionFunction( m_velocities.z[ mainPidIdx ], m_velocities.z[ otherPidIdx ],
                                                                 mainMass, otherMass,
                                                                 mainPartialRestitution, otherPartialRestitution );
 
@@ -576,6 +640,7 @@ namespace CSIM {
              / ( mainMass + otherMass );
 
     return output;
+
   }
 
   // Misc //
