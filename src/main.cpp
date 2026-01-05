@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <string>
+#include <algorithm>
 
 #include "core/interpreter.hpp"
 #include "core/manager.hpp"
@@ -33,8 +35,11 @@ int main() {
 
   CSIM::Recorder<float> recorder;
 
+  std::string binaryFileName = "csim_binary_output_";
+  binaryFileName += std::format( "{:%Y%m%d_%H%M%S}", std::chrono::system_clock::now() );
+
   recorder.initialiseManager( &manager );
-  recorder.initialiseOutputFile( "testOuts" );
+  recorder.initialiseOutputFile( binaryFileName.c_str() );
   recorder.initialiseLengthWithTime( 10 );
   recorder.initialiseSamplingWithFrames( 1'000 );
 
@@ -47,7 +52,10 @@ int main() {
   std::cout << "Interpreting" << std::endl;
 
   CSIM::Interpreter<float> interpreter;
-  interpreter.initialise( "testOuts.bin" );
+
+  binaryFileName += ".bin";
+
+  interpreter.initialise( binaryFileName.c_str() );
   interpreter.interpretToVtk();
 
   std::cout << "Interpretation complete" << std::endl;

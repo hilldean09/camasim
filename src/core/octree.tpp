@@ -81,7 +81,6 @@ namespace CSIM::Octree {
   Octree<PrecT>::~Octree() {
 
     std::free( m_pidBuffer );
-    std::free( m_pidTmpBuffer );
     std::free( m_octantIdxBuffer );
 
     if( m_rootOctant != nullptr ) {
