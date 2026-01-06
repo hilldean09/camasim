@@ -231,6 +231,7 @@ namespace CSIM {
   // Mutators //
   template <class PrecT>
   void Particle_Cloud<PrecT>::setDistribution( const char distribution, PrecT mean, PrecT standardDeviation ) {
+
     /* 'p' for postion, 'v' for velocity,
      * 'm' for mass. 'r' for radius, and
      * 'e' for partial restitution (elasticity).
