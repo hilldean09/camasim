@@ -30,4 +30,13 @@ To visualise the simulation run the ```visualise``` executable followed by the p
 After that, enjoy the show, when the animation stops you can move the camera to more closely inspect the final state.
 
 # Screenshots
+Twenty thousand particle simulation:
+![[twenty_thousand_particles.png]]
+
+Ten million (I think) particle simulation:
+![[ten_million_particles.png]]
+
+An exaggerated demonstration of particle collisions:
+![[collision_chaos.png]]
+
 
