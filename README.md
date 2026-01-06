@@ -31,12 +31,11 @@ After that, enjoy the show, when the animation stops you can move the camera to 
 
 # Screenshots
 Twenty thousand particle simulation:
-![[twenty_thousand_particles.png]]
+<img width="1038" height="933" alt="twenty_thousand_particles" src="https://github.com/user-attachments/assets/4ed5b3eb-7227-4407-9cfa-cc04ef24a74d" />
+
 
 Ten million (I think) particle simulation:
-![[ten_million_particles.png]]
+<img width="1083" height="1017" alt="ten_million_particles" src="https://github.com/user-attachments/assets/46d73ef3-d544-471c-9f5d-35bb0c64c2c3" />
 
 An exaggerated demonstration of particle collisions:
-![[collision_chaos.png]]
-
-
+<img width="1480" height="735" alt="collision_chaos" src="https://github.com/user-attachments/assets/96100ba2-d8b0-462a-8c2b-c3108b784e47" />
