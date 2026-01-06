@@ -1,6 +1,7 @@
 ---
 Created: 2025-11-19
 ---
+
 # Restructuring
 While contemplating the most efficient way to handle the massive amounts of ```Entity``` I realised the massive inefficiency that using a separate object for every particle would cause. I had originally planned to use an arena allocator (allocating a large amount of hopefully contiguous memory to read cold reads). From a CPU standard I do believe this would still have been a viable options, however, I forget this would be massively inefficient in regards to GPU programming (i.e. the whole base of this project).
 

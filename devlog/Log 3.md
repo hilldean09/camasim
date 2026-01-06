@@ -1,6 +1,7 @@
 ---
 Created: 2025-11-21
 ---
+
 # Collision Simulation
 To round out the attributes of ```Particle_Cloud```, variables related to collision handling will be required. In researching this, I have found the following [equations for calculating the velocity of two bodies after collision with variable elasticity](https://www.mathsisfun.com/physics/collisions.html):
 $$v_{a}=\frac{elast \times m_{b} \left( v_{b} - v_{a} \right) + m_{a}v_{a} + m_{b}v_{b}}{ m_{a} + m_{b} }$$

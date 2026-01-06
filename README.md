@@ -7,9 +7,9 @@ CAMASIM is currently still in development with imminent improvements including:
 - VTK video file output.
 
 # Build
-CAMASIM uses CMake for it's build system. To generate build files, use CMake to build the ```src``` directory, then use your build system of choice to build the ```main``` and ```visualise``` executables. The build type is set to "Release" by default, however, should you wish to, include the command line flag ```-DCMAKE_BUILD_TYPE=``` followed by either ```Release``` or ```Debug``` to select the build configuration. Note that CAMASIM as of currently requires a number of dependencies, and has also not yet been tested for Windows or ARM architectures, only x86_64 linux.
+CAMASIM uses CMake for it's build system. To generate build files, use CMake to build the ```src``` directory, then use your build system of choice to build the ```main``` and ```visualise``` executables. The build type is set to "Release" by default, however, should you wish to, include the command line flag ```-DCMAKE_BUILD_TYPE=``` followed by either ```Release``` or ```Debug``` to select the build configuration. 
 
-Alternatively, see the available release for the pre-compiled executables.
+Note that CAMASIM as of currently requires a number of dependencies, and has also not yet been tested for Windows or ARM architectures, only x86_64 linux. Portability is currently lacking and improvements such as app-images will be included in the future.
 
 # Configuration
 CAMASIM's configuration is not yet refined, however, can be done via modifying values in ```src/main.cpp``` and ```src/core/pre_controls.hpp``` (Note, ```pre_controls.hpp``` refers to pre-processor controls). Verbosity can be modified in ```pre_controls.hpp``` with values between 0 and 7, though 2 is recommended. This system has also not yet been refined.

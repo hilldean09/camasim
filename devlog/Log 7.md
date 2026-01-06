@@ -1,6 +1,7 @@
 ---
 Created: 2025-12-11
 ---
+
 Firstly, note the lack of progress in the last few days was due to studying VTK more thoroughly.
 
 # VTK Guassian Splat Rendering
